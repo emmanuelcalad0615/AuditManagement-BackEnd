@@ -1,13 +1,30 @@
-git init
-echo -e "
-__pycache__/\n*.pyc\n*.pyo\n*.pyd\n
+# Ignorar archivos compilados de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-venv/\n.env/\n
+# Ignorar el entorno virtual
+venv/
+.env/
 
-*.env\n*.venv\nPipfile\nPipfile.lock\npoetry.lock\n
+# Archivos de entorno específicos
+*.env
+*.venv
+Pipfile
+Pipfile.lock
+poetry.lock
 
-logs/\n*.log\ndebug.log\n
+# Archivos de logs
+logs/
+*.log
+debug.log
 
-.vscode/\n.idea/\n*.sublime-workspace\n
+# Archivos de configuración de editores/IDEs
+.vscode/
+.idea/
+*.sublime-workspace
 
-.DS_Store\nThumbs.db" > .gitignore
+# Archivos de sistema de MacOS y Windows
+.DS_Store
+Thumbs.db
