@@ -19,7 +19,7 @@ class SectorService:
 
 
     def save(self, sector):
-        obj = Aspecto()
+        obj = Sector()
         for key, value in sector.items():
             if hasattr(obj, key):
                 setattr(obj, key, value)
@@ -30,7 +30,7 @@ class SectorService:
         return {"id eliminado": self.repository.delete(id)}
 
     def update(self, sector):
-        obj = Aspecto()
+        obj = Sector()
         for key, value in sector.items():
             if hasattr(obj, key):
                 setattr(obj, key, value)
