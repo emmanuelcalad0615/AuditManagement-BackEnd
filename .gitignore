@@ -1,30 +1,29 @@
-# Ignorar archivos compilados de Python
+
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Ignorar el entorno virtual
 venv/
 .env/
 
-# Archivos de entorno específicos
+
 *.env
 *.venv
 Pipfile
 Pipfile.lock
 poetry.lock
 
-# Archivos de logs
+
 logs/
 *.log
 debug.log
 
-# Archivos de configuración de editores/IDEs
+
 .vscode/
 .idea/
 *.sublime-workspace
 
-# Archivos de sistema de MacOS y Windows
+
 .DS_Store
 Thumbs.db
