@@ -6,3 +6,4 @@ class Sector(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     nombre = Column(String(50))
+    
