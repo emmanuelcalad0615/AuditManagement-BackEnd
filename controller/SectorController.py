@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from service import SectorService
 
+
 """
 INSTRUCCIONES:
 Cambiar todo lo que diga Sector, por el nombre de la nueva clase con la primera en mayuscula. Verificar mayusculas
@@ -14,7 +15,6 @@ Cambiar todo lo que diga sector, por el nombre de la nueva clase con todo en min
 # Definir el Blueprint
 sector = Blueprint('sector', __name__)
 sectorService = SectorService()
-
 @sector.route('/getAll', methods=['GET'])
 def getAll():
     return sectorService.getAll()

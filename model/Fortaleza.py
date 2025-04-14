@@ -6,5 +6,5 @@ class Fortaleza(Base):
 
     id = Column(Integer, primary_key=True)
     id_auditoria = Column(Integer)
-    virtud = Column(String)
+    virtud = Column(String(255))
 

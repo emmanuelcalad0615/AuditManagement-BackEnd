@@ -6,10 +6,10 @@ class Itinerario(Base):
 
     id = Column(Integer, primary_key=True)
     id_plan = Column(Integer)
-    actividad = Column(String)
-    auditado = Column(String)
-    auditor = Column(String)
+    actividad = Column(String(50))
+    auditado = Column(String(100))
+    auditor = Column(String(100))
     inicio = Column(Time)
     fin = Column(Time)
-    lugar = Column(String)
+    lugar = Column(String(50))
 

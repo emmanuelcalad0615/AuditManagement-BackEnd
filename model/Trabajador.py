@@ -6,6 +6,6 @@ class Trabajador(Base):
 
     id = Column(Integer, primary_key=True)
     id_sector = Column(Integer)
-    nombre = Column(String)
-    celular = Column(String)
-    correo = Column(String)
+    nombre = Column(String(50))
+    celular = Column(String(10))
+    correo = Column(String(50))

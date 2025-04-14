@@ -13,5 +13,5 @@ from .PersonalAuditor import PersonalAuditor
 from .Plan import Plan
 from .Proposito import Proposito
 from .Reunion import Reunion
-from .Sector import Sector
+from .Sector import Aspecto
 from .Trabajador import Trabajador

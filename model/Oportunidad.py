@@ -6,4 +6,4 @@ class Oportunidad(Base):
 
     id = Column(Integer, primary_key=True)
     id_auditoria = Column(Integer)
-    oportunidad = Column(String)
+    oportunidad = Column(String(255))

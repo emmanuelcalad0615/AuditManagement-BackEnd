@@ -8,6 +8,6 @@ class Reunion(Base):
     id_plan = Column(Integer)
     fecha = Column(Date)
     hora = Column(Time)
-    lugar = Column(String)
+    lugar = Column(String(50))
     apertura = Column(Boolean)
 

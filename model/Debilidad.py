@@ -6,4 +6,4 @@ class Debilidad(Base):
 
     id = Column(Integer, primary_key=True)
     id_auditoria = Column(Integer)
-    falta = Column(String)
+    falta = Column(String(255))

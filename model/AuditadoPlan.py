@@ -7,7 +7,7 @@ from repository.connector.Connector import Base
 class AuditadoPlan(Base):
     __tablename__ = "auditado_plan"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     id_auditoria = Column(Integer)
-    auditado = Column(String)
+    auditado = Column(String(255))
 

@@ -6,6 +6,6 @@ class Compromiso(Base):
 
     id = Column(Integer, primary_key=True)
     id_auditoria = Column(Integer)
-    compromiso = Column(String)
+    compromiso = Column(String(255))
     fecha_limite = Column(DateTime)
-    responsable = Column(String)
+    responsable = Column(String(255))

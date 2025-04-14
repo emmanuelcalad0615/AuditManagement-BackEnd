@@ -6,6 +6,6 @@ class Documento(Base):
 
     id = Column(Integer, primary_key=True)
     id_plan = Column(Integer)
-    name = Column(String)
+    name = Column(String(100))
     document = Column(BLOB)
 

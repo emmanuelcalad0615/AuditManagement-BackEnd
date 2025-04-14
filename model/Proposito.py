@@ -6,6 +6,6 @@ class Proposito(Base):
 
     id = Column(Integer, primary_key=True)
     id_plan = Column(Integer)
-    descripcion = Column(String)
+    descripcion = Column(String(255))
 
 

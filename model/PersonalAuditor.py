@@ -7,4 +7,4 @@ class PersonalAuditor(Base):
 
     id = Column(Integer, primary_key=True)
     id_plan = Column(Integer)
-    personal = Column(String)
+    personal = Column(String(255))
