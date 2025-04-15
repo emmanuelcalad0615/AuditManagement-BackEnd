@@ -1,15 +1,15 @@
 import json
-from model import Documento
-from repository.mysql.DocumentoRepository import DocumentoRepository
+from model import Fortaleza
+from repository.mysql.FortalezaRepository import FortalezaRepository
 
-class DocumentoService:
+class FortalezaService:
 
     def __init__(self):
-        self.repository = DocumentoRepository()
+        self.repository = FortalezaRepository()
 
-    def save(self, documento):
-        obj = Documento()
-        for key, value in documento.items():
+    def save(self, fortaleza):
+        obj = Fortaleza()
+        for key, value in fortaleza.items():
             if hasattr(obj, key):
                 setattr(obj, key, value)
         return json.dumps(vars(self.repository.save(obj)))
@@ -17,9 +17,9 @@ class DocumentoService:
     def delete(self, id):
         return {"id eliminado": self.repository.delete(id)}
 
-    def update(self, documento):
-        obj = Documento()
-        for key, value in documento.items():
+    def update(self, fortaleza):
+        obj = Fortaleza()
+        for key, value in fortaleza.items():
             if hasattr(obj, key):
                 setattr(obj, key, value)
         return json.dumps(vars(self.repository.update(obj)))

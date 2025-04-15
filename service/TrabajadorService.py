@@ -1,15 +1,15 @@
 import json
-from model import Documento
-from repository.mysql.DocumentoRepository import DocumentoRepository
+from model import Trabajador
+from repository.mysql.TrabajadorRepository import TrabajadorRepository
 
-class DocumentoService:
+class TrabajadorService:
 
     def __init__(self):
-        self.repository = DocumentoRepository()
+        self.repository = TrabajadorRepository()
 
-    def save(self, documento):
-        obj = Documento()
-        for key, value in documento.items():
+    def save(self, trabajador):
+        obj = Trabajador()
+        for key, value in trabajador.items():
             if hasattr(obj, key):
                 setattr(obj, key, value)
         return json.dumps(vars(self.repository.save(obj)))
@@ -17,9 +17,9 @@ class DocumentoService:
     def delete(self, id):
         return {"id eliminado": self.repository.delete(id)}
 
-    def update(self, documento):
-        obj = Documento()
-        for key, value in documento.items():
+    def update(self, trabajador):
+        obj = Trabajador()
+        for key, value in trabajador.items():
             if hasattr(obj, key):
                 setattr(obj, key, value)
         return json.dumps(vars(self.repository.update(obj)))

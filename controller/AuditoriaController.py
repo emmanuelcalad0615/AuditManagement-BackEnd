@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from service.AuditoriaService import AuditoriaService
 
-# Definir el Blueprint
+
 auditoria = Blueprint('auditoria', __name__)
 auditoriaService = AuditoriaService()
 

@@ -1,7 +1,6 @@
 from flask import Blueprint, request
 from service.DebilidadService import DebilidadService
 
-# Definir el Blueprint
 debilidad = Blueprint('debilidad', __name__)
 debilidadService = DebilidadService()
 

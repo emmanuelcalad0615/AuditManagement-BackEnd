@@ -2,14 +2,6 @@ from sqlalchemy.orm import Session
 from model import Sector
 from repository.connector.Connector import SessionLocal
 
-"""
-INSTRUCCIONES:
-Cambiar todo lo que diga Sector, por el nombre de la nueva clase con la primera en mayuscula. Verificar mayusculas
-Cambiar todo lo que diga sector, por el nombre de la nueva clase con todo en minuscula. Verificar minusculas
-"""
-
-# clase de modelo: Sector
-# nombre variable: sector
 
 class SectorRepository:
 

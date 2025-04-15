@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from service.CompromisoService import CompromisoService
 
-# Definir el Blueprint
+
 compromiso = Blueprint('compromiso', __name__)
 compromisoService = CompromisoService()
 
