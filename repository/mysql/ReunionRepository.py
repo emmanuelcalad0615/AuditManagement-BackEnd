@@ -40,4 +40,7 @@ class ReunionRepository:
 
     def getAll(self):
         with SessionLocal() as session:
-            lista
+            lista = session.query(Reunion).all()
+            for reunion in lista:
+                reunion.__delattr__('_sa_instance_state')
+            return lista
