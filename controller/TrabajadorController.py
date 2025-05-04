@@ -22,4 +22,4 @@ def get_id(id):
 
 @trabajador.route('/getAll', methods=['GET'])
 def get_all():
-    return {'data': service.getAll()}
+    return service.getAll()

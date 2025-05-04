@@ -30,4 +30,6 @@ class ListaVerificacionService:
         return json.dumps(vars(self.repository.getId(id)))
 
     def getAll(self):
-        return [json.dumps(vars(objeto)) for objeto in self.repository.getAll()]
+        data = [json.dumps(vars(objeto)) for objeto in self.repository.getAll()]
+        parsed_data = [json.loads(item) for item in data]
+        return json.dumps(parsed_data, indent=4)
