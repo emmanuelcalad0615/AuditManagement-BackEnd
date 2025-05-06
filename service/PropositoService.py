@@ -13,6 +13,11 @@ class PropositoService:
             if hasattr(obj, key):
                 setattr(obj, key, value)
         return json.dumps(vars(self.repository.save(obj)))
+    
+    def getByPlan(self, id):
+        data = [json.dumps(vars(objeto)) for objeto in self.repository.getByPlan(id)]
+        parsed_data = [json.loads(item) for item in data]
+        return json.dumps(parsed_data, indent=4)
 
     def delete(self, id):
         return {"id eliminado": self.repository.delete(id)}

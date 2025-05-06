@@ -13,6 +13,10 @@ def get_all():
 def get_id(id):
     return propositoService.get_id(id)
 
+@proposito.route('getByPlan/<int:id>', methods=['GET'])
+def getByPlan(id):
+    return propositoService.getByPlan(id)
+
 @proposito.route('/save', methods=['POST'])
 def save():
     return propositoService.save(request.get_json())

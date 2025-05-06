@@ -29,13 +29,13 @@ class PlanRepository:
             existing.__delattr__('_sa_instance_state')
             return existing
 
-    def get_id(self, id):
+    def getId(self, id):
         with SessionLocal() as session:
             plan = session.query(Plan).filter(Plan.id == id).first()
             plan.__delattr__('_sa_instance_state')
             return plan
 
-    def get_all(self):
+    def getAll(self):
         with SessionLocal() as session:
             lista = session.query(Plan).all()
             for i in lista:

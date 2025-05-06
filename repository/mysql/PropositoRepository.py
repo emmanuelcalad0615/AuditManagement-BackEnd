@@ -31,13 +31,20 @@ class PropositoRepository:
             existing_proposito.__delattr__('_sa_instance_state')
             return existing_proposito
 
-    def get_id(self, id):
+    def getId(self, id):
         with SessionLocal() as session:
             proposito = session.query(Proposito).filter(Proposito.id == id).first()
             proposito.__delattr__('_sa_instance_state')
             return proposito
+        
+    def getByPlan(self, id):
+        with SessionLocal() as session:
+            lista = session.query(Proposito).filter(Proposito.id_plan == id).all()
+            for proposito in lista:
+                proposito.__delattr__('_sa_instance_state')
+            return lista
 
-    def get_all(self):
+    def getAll(self):
         with SessionLocal() as session:
             lista = session.query(Proposito).all()
             for proposito in lista:

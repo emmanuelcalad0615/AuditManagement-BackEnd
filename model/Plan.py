@@ -12,4 +12,6 @@ class Plan(Base):
     auditor_lider = Column(Integer)
     auditor = Column(Integer)
     fecha = Column(DateTime)
+    estado = Column(String(60))
+    subtipo = Column(String(60))
     fecha_control = Column(DateTime)

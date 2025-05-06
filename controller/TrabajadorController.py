@@ -16,7 +16,7 @@ def delete(id):
 def update():
     return service.update(request.json)
 
-@trabajador.route('/get/<int:id>', methods=['GET'])
+@trabajador.route('/getId/<int:id>', methods=['GET'])
 def get_id(id):
     return service.getId(id)
 
