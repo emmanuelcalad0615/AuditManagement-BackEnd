@@ -8,6 +8,6 @@ class AuditadoPlan(Base):
     __tablename__ = "auditado_plan"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    id_auditoria = Column(Integer)
+    id_plan = Column(Integer)
     auditado = Column(String(255))
 

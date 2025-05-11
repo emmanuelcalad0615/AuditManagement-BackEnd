@@ -13,6 +13,10 @@ def getAll():
 def getid(id):
     return itinerarioService.getId(id)
 
+@itinerario.route('getByPlan/<int:id>', methods=['GET'])
+def getByPlan(id):
+    return itinerarioService.getByPlan(id)
+
 @itinerario.route('/save', methods=['POST'])
 def save():
     return itinerarioService.save(request.get_json())

@@ -16,6 +16,10 @@ def getid(id):
     return reunionService.getId(id)
 
 
+@reunion.route('getByPlan/<int:id>', methods=['GET'])
+def getByPlan(id):
+    return reunionService.getByPlan(id)
+
 @reunion.route('/save', methods=['POST'])
 def save():
     return reunionService.save(request.get_json())

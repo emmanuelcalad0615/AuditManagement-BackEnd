@@ -44,3 +44,10 @@ class ReunionRepository:
             for reunion in lista:
                 reunion.__delattr__('_sa_instance_state')
             return lista
+        
+    def getByPlan(self, id):
+        with SessionLocal() as session:
+            lista = session.query(Reunion).filter(Reunion.id_plan == id).all()
+            for reunion in lista:
+                reunion.__delattr__('_sa_instance_state')
+            return lista

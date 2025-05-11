@@ -12,6 +12,10 @@ def getAll():
 def getid(id):
     return auditadoPlanService.getId(id)
 
+@auditado_plan.route('/getidplan/<int:id>', methods=['GET'])
+def getidplan(id):
+    return auditadoPlanService.getIdPlan(id)
+
 @auditado_plan.route('/save', methods=['POST'])
 def save():
     return auditadoPlanService.save(request.get_json())

@@ -33,6 +33,13 @@ class AuditadoPlanRepository:
             auditado_plan = session.query(AuditadoPlan).filter(AuditadoPlan.id == id).first()
             auditado_plan.__delattr__('_sa_instance_state')
             return auditado_plan
+        
+    def getIdPlan(self, id):
+        with SessionLocal() as session:
+            lista = session.query(AuditadoPlan).filter(AuditadoPlan.id_plan == id).all()
+            for i in lista:
+                i.__delattr__('_sa_instance_state')
+            return lista
 
     def getAll(self):
         with SessionLocal() as session:

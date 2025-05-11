@@ -9,6 +9,7 @@ class Plan(Base):
     nombre = Column(String(50))
     proceso = Column(String(30))
     lider_proceso = Column(String(50))
+    alcance = Column(String(200))
     auditor_lider = Column(Integer)
     auditor = Column(Integer)
     fecha = Column(DateTime)

@@ -37,6 +37,6 @@ class PlanService:
         return json.dumps(vars(self.repository.getId(id)), default=serialize_datetime)
 
     def getAll(self):
-        data = [json.dumps(vars(objeto)) for objeto in self.repository.getAll()]
+        data = [json.dumps(vars(objeto), default=serialize_datetime ) for objeto in self.repository.getAll()]
         parsed_data = [json.loads(item) for item in data]
         return json.dumps(parsed_data, indent=4)

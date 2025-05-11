@@ -38,3 +38,8 @@ class ItinerarioService:
 
     def getAll(self):
         return [json.dumps(vars(objeto), default=serialize_time) for objeto in self.repository.getAll()]
+
+    def getByPlan(self, id):
+        data = [json.dumps(vars(objeto), default=serialize_time) for objeto in self.repository.getByPlan(id)]
+        parsed_data = [json.loads(item) for item in data]
+        return json.dumps(parsed_data, indent=4)

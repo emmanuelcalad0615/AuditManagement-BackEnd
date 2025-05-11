@@ -26,6 +26,11 @@ class AuditadoPlanService:
 
     def getId(self, id):
         return json.dumps(vars(self.repository.getId(id)))
+    
+    def getIdPlan(self, id):
+        data = [json.dumps(vars(objeto)) for objeto in self.repository.getIdPlan(id)]
+        parsed_data = [json.loads(item) for item in data]
+        return json.dumps(parsed_data, indent=4)
 
     def getAll(self):
         return [json.dumps(vars(obj)) for obj in self.repository.getAll()]

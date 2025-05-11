@@ -42,3 +42,10 @@ class ItinerarioRepository:
             for obj in lista:
                 obj.__delattr__('_sa_instance_state')
             return lista
+
+    def getByPlan(self, id):
+        with SessionLocal() as session:
+            lista = session.query(Itinerario).filter(Itinerario.id_plan == id).all()
+            for itinerario in lista:
+                itinerario.__delattr__('_sa_instance_state')
+            return lista

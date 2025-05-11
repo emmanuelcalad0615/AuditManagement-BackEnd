@@ -7,7 +7,7 @@ import ListaVerificacion from './modules/lista_verificacion/ListaVerificacion';
 
 function App() {
 
-  const [moduloActual, setModuloActual] = useState("procesos");
+  const [moduloActual, setModuloActual] = useState("planAuditoria");
 
   const renderModulo = () => {
     switch (moduloActual) {
