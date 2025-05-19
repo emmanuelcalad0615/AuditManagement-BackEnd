@@ -74,21 +74,21 @@ const PlanCreate = () => {
 
 
     const agregarReunion = () => {
-        const nuevo = {
-          
-          id_plan: 0, // o usa un UUID si prefieres
-          fecha: "0000-00-00",
-          hora: "00:00:00",
-          lugar: "lugar",
-          apertura: false
-        };
-        setAuditados([...reuniones, nuevo]);
+    const nuevo = {
+      id_plan: 0,
+      fecha: "0000-00-00",
+      hora: "00:00:00",
+      lugar: "lugar",
+      apertura: false
     };
+    setReuniones([...reuniones, nuevo]); // <--- esta es la línea corregida
+};
+
 
 
     return (
         <>
-       
+        
         <div className=" w-full h-full flex flex-col items-center justify-center">
             <div className="mt-10 bg-white w-[90%] rounded-xl">
                 <div
