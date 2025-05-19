@@ -45,42 +45,32 @@ export const traerTodo = async function(){
 
 }
 
-export const guardarSector = async function(){
-    var nombre = document.getElementById("input-nuevo-sector").value;
-    console.log(nombre)
+export const guardarSector = async function(nombre){
+  const raw = JSON.stringify({ nombre });
 
-    const raw = JSON.stringify({
-        "nombre": nombre
-      });
-
-    const requestOptionsPost = {
+  const requestOptionsPost = {
     method: "POST",
     headers: myHeaders,
     body: raw,
     redirect: "follow"
-    };
+  };
 
-    const respuesta = await fetch("http://localhost:5000/sector/save", requestOptionsPost)
-        .then((response) => response.json());
-    return respuesta
-  }
+  const respuesta = await fetch("http://localhost:5000/sector/save", requestOptionsPost)
+    .then(response => response.json());
+  return respuesta;
+}
 
-export const actualizarSector = async function(id){
-    var nombre = document.getElementById("input-editar-sector").value;
-    const raw = JSON.stringify({
-        "id": id,
-        "nombre": nombre
-      });
-      
-      const requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow"
-      };
-      
-    const respuesta = await  fetch("http://localhost:5000/sector/update", requestOptions)
-        .then((response) => response.json());
+export const actualizarSector = async function(id, nombre){
+  const raw = JSON.stringify({ id, nombre });
 
-    return respuesta;
-    }
+  const requestOptions = {
+    method: "PUT",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow"
+  };
+
+  const respuesta = await fetch("http://localhost:5000/sector/update", requestOptions)
+    .then(response => response.json());
+  return respuesta;
+}

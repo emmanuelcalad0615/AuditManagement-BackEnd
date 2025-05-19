@@ -1,224 +1,204 @@
 import React, { useState, useEffect } from 'react';
-import './Trabajador.css'
-import {guardartrabajador,traerSectores, actualizartrabajador, traerID, traerTodo, borrarID} from './metodos.js'
+import './Trabajador.css';
+import {
+  traerID,
+  traerTodo,
+  borrarID,
+  guardartrabajador,
+  actualizartrabajador,
+  traerSectores
+} from './metodos';
+
 const Trabajador = () => {
-
-  const [busqueda, setBusqueda] = useState('');
   const [trabajadores, setTrabajadores] = useState([]);
-  const [sectores, setSectores] = useState([]);
   const [vista, setVista] = useState('principal');
-  const [trabajador, setTrabajador] = useState(1);
-  const [objeto, setObjeto] = useState({})
-
-  const handleReset = () => {
-    setFormData({
-      nombre: '',
-      celular: '',
-      correo: '',
-      sector: 'Seleccionar',
-    });
-  };
+  const [trabajadorId, setTrabajadorId] = useState(null);
+  const [sectores, setSectores] = useState([]);
+  const [form, setForm] = useState({
+    nombre: '',
+    celular: '',
+    correo: '',
+    id_sector: ''
+  });
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
+    traerSectores().then(data => setSectores(data));
+  }, []);
 
-      traerTodo().then(data => {
-        setTrabajadores([...data]);
-        
+  useEffect(() => {
+    if (vista === 'principal') {
+      traerTodo()
+        .then(data => {
+          if (Array.isArray(data)) setTrabajadores(data);
+        })
+        .catch(console.error);
+    }
+  }, [vista, reload]);
+
+  const handleEditar = (id) => {
+    setTrabajadorId(id);
+    traerID(id).then(data => {
+      setForm({
+        nombre: data.nombre,
+        celular: data.celular,
+        correo: data.correo,
+        id_sector: data.id_sector
       });
-      traerSectores().then(data =>
-      {setSectores([...data]);}
-      );
-    
-  }, [vista]);
+    });
+    setVista('editar');
+  };
 
+  const handleBorrar = (id) => {
+    borrarID(id).then(() => setReload(prev => !prev));
+  };
+
+  const handleGuardarEdicion = () => {
+  actualizartrabajador(trabajadorId, form).then(() => {
+    setVista('principal');
+    setReload(prev => !prev);
+  });
+};
+
+  const handleInputChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleReset = (formElement) => {
+    formElement.reset();
+    setVista('principal');
+  };
 
   return (
     <>
-    {vista == 'principal'  && (
-      <section id="trabajadores" className="seccion activa">
-        <div id="contenedor-tabla-trabajadores" 
-        className="flex text-center
-        justify-center flex-col bg-white rounded-2xl m-5">
-        <h2 className="titulo-tabla text-[#1E3766]
-          text-xl">Trabajadores</h2>
-
-          <table className="tabla-trabajadores">
-            <thead className='bg-[#1E3766] text-white'>
-              <tr>
-                <th>Nombre</th>
-                <th>Celular</th>
-                <th>Correo</th>
-                <th>Sector</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tbody-trabajadores">
-              {trabajadores
-                .map((trabajador, index) => (
+      {vista === 'principal' && (
+        <section className="seccion activa p-5">
+          <div className="bg-white rounded-2xl p-5">
+            <h3 className="text-[#1E3766] text-xl font-bold mb-4 text-center">Trabajadores</h3>
+            <table className="tabla-trabajadores w-full text-center mb-4">
+              <thead className="bg-[#1E3766] text-white">
+                <tr>
+                  <th>Nombre</th>
+                  <th>Celular</th>
+                  <th>Correo</th>
+                  <th>Sector</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {trabajadores.map((item, index) => (
                   <tr key={index}>
-                    <td>{trabajador.nombre}</td>
-                    <td>{trabajador.celular}</td>
-                    <td>{trabajador.correo}</td>
-                    <td>{trabajador.id_sector}</td>
-                    <td>
-                      <button 
-                      className="bg-[#1E3766] m-2 p-1 rounded-full text-white text-xl" 
-                      onClick={() => {setTrabajador(trabajador.id); 
-                      traerID(trabajador.id).then((e)=>{setObjeto(e)});
-                      console.log(objeto);
-                      setVista('editar')}}>
-                        Editar</button>
-                      <button 
-                      className="bg-[#1E3766] m-2 p-1 rounded-full text-white text-xl" 
-                      onClick={() => { setVista('formulario'); borrarID(trabajador.id); setVista('principal')}}>
-                        Borrar</button>
-
+                    <td>{item.nombre}</td>
+                    <td>{item.celular}</td>
+                    <td>{item.correo}</td>
+                    <td>{sectores.find(s => s.id === item.id_sector)?.nombre || '—'}</td>
+                    <td className="table-actions">
+                      <button className="btn btn-green" onClick={() => handleEditar(item.id)}>🖉 Editar</button>
+                      <button className="btn btn-red" onClick={() => handleBorrar(item.id)}>🗑️ Borrar</button>
                     </td>
                   </tr>
                 ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="botones">
-        <button
-        id="btn-agregar"
-        className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
-        onClick={() => setVista('formulario')}
-      >
-        Agregar
-      </button>
-        </div>
+              </tbody>
+            </table>
+            <div className="flex justify-end">
+              <button className="btn" onClick={() => setVista('formulario')}>➕ Agregar Trabajador</button>
+            </div>
+          </div>
         </section>
-
-            )}
-
-      { vista === 'formulario' && (     
-        <>
-              <h2 className='bg-[#1E3766] text-white w-full
-      text-xl text-center rounded-xl m-5'>Agregar</h2>
-      <form 
-      className="bg-white rounded-xl m-5 flex 
-      flex-col justify-center text-center" 
-      onSubmit={(e) => {guardartrabajador(e); setVista('principal')}}
-       onReset={handleReset}>
-        <label className='m-2 text-xl'>Nombre
-          <textarea
-            type="text"
-            name="nombre"
-className='text-xl ml-3 bg-gray-100 rounded'
-          />
-        </label>
-        <label className='m-2 text-xl'>Celular
-          <textarea
-            type="text"
-            name="celular"
-className='text-xl ml-3 bg-gray-100 rounded'
-          />
-        </label>
-        <label className='m-2 text-xl'>Correo
-          <textarea
-            type="email"
-            name="correo"
-className='text-xl ml-3 bg-gray-100 rounded'
-          />
-        </label>
-        <label className='m-2 text-xl'>Sector
-          <select
-            name="sector"
-className='text-xl ml-3 bg-gray-100 rounded'
-          >
-            <option>Seleccionar</option>
-            {sectores
-                .map((sector, index) => (
-                  <option key={index} value={sector.id}>{sector.nombre}</option>
-                ))}
-          </select>
-        </label>
-        <div className="botones">
-          <button type="submit" 
-          className="bg-[#1E3766] m-2 p-1 rounded-full text-white text-xl"
-           >Guardar</button>
-          <button type="reset" 
-          className="bg-[#1E3766] m-2 p-1 rounded-full text-white text-xl"
-           onClick={() => setVista('principal')}>Cancelar</button>
-        </div>
-      </form>
-      </>
       )}
 
-        {vista === 'editar' && (
-          <section id="vista-editar-trabajador" 
-          className="flex flex-col text-center justify-center items-center w-full"
-           style={{ padding: '20px' }} >
-            <h2
-            className='bg-[#1E3766] w-full rounded-xl text-white text-xl'
-            >Editar sector</h2>
-  
-            <div 
-            className='m-3 flex flex-col text-center justify-center items-center w-full bg-white
-            rounded-xl'
-            >
-              <div
-                className='flex flex-col text-center justify-center items-center'
-              >
-                <input
-                  type="text"
-                  id="editar-nombre-trabajador"
-                  placeholder={objeto.nombre}
-                  style={{ padding: '10px', width: '300px' }}
-                />
-                                <input
-                  type="text"
-                  id="editar-celular-trabajador"
-                  placeholder={objeto.celular}
-                  style={{ padding: '10px', width: '300px' }}
-                />
-                                <input
-                  type="text"
-                  id="editar-correo-trabajador"
-                  placeholder={objeto.correo}
-                  style={{ padding: '10px', width: '300px' }}
-                />
-
-                <label>Sector
-                <select
-                id="input-editar-sector"  
-                  name="sector"
-                >
-                  <option>Seleccionar</option>
-                  {sectores
-                      .map((sector, index) => (
-                        <option key={index} value={sector.id}>{sector.nombre}</option>
-                      ))}
-                </select>
-              </label>
-
-              </div>
+      {vista === 'formulario' && (
+        <section className="bg-white rounded-xl m-5 p-5">
+          <h2 className="bg-[#1E3766] text-white text-xl text-center rounded-xl mb-4">Agregar</h2>
+          <form
+            onSubmit={async (e) => {
+              await guardartrabajador(e);
+              setVista('principal');
+              setReload(prev => !prev);
+            }}
+            onReset={(e) => handleReset(e.target)}
+            className="flex flex-col items-center gap-4"
+          >
+            <label className="w-full max-w-md">
+              Nombre
+              <input name="nombre" className="input" required />
+            </label>
+            <label className="w-full max-w-md">
+              Celular
+              <input name="celular" type="tel" pattern="[0-9]{9,15}" className="input" required />
+            </label>
+            <label className="w-full max-w-md">
+              Correo
+              <input name="correo" type="email" className="input" required />
+            </label>
+            <label className="w-full max-w-md">
+              Sector
+              <select name="sector" className="input" required>
+                <option value="">Seleccione un sector</option>
+                {sectores.map((sector, index) => (
+                  <option key={index} value={sector.id}>{sector.nombre}</option>
+                ))}
+              </select>
+            </label>
+            <div className="flex gap-4 mt-4">
+              <button type="submit" className="btn">Guardar</button>
+              <button type="reset" className="btn">Cancelar</button>
             </div>
-  
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: '40px',
-              }}
+          </form>
+        </section>
+      )}
+
+      {vista === 'editar' && (
+        <section className="flex flex-col items-center w-full p-5">
+          <h2 className="bg-[#1E3766] text-white text-xl w-full text-center rounded-xl mb-4">
+            Editar Trabajador
+          </h2>
+          <div className="bg-white rounded-xl p-4 w-full max-w-md flex flex-col gap-4">
+            <input
+              id="editar-nombre-trabajador"
+              name="nombre"
+              type="text"
+              value={form.nombre}
+              onChange={handleInputChange}
+              className="input"
+            />
+            <input
+              id="editar-celular-trabajador"
+              name="celular"
+              type="tel"
+              pattern="[0-9]{9,15}"
+              value={form.celular}
+              onChange={handleInputChange}
+              className="input"
+            />
+            <input
+              id="editar-correo-trabajador"
+              name="correo"
+              type="email"
+              value={form.correo}
+              onChange={handleInputChange}
+              className="input"
+            />
+            <select
+              id="input-editar-sector"
+              name="id_sector"
+              value={form.id_sector}
+              onChange={handleInputChange}
+              className="input"
             >
-              <button id="btn-guardar-edicion" 
-              className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
-               onClick={() => {actualizartrabajador(trabajador); setVista('principal')}}>
-                Guardar
-              </button>
-              <button
-                id="btn-cancelar-edicion"
-                className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
-                onClick={() => setVista('principal')}
-              >
-                Cancelar
-              </button>
-            </div>
-          </section>
-        )}
-  </>
+              <option value="">Seleccione un sector</option>
+              {sectores.map((sector, index) => (
+                <option key={index} value={sector.id}>{sector.nombre}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex gap-4 mt-4">
+            <button className="btn" onClick={handleGuardarEdicion}>Guardar</button>
+            <button className="btn" onClick={() => setVista('principal')}>Cancelar</button>
+          </div>
+        </section>
+      )}
+    </>
   );
 };
 

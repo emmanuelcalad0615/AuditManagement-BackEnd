@@ -1,20 +1,20 @@
 import { useState } from 'react'
+import { FaClipboardList, FaUserTie, FaProjectDiagram, FaTasks } from 'react-icons/fa'
 import Proceso from './modules/proceso/Proceso'
+import Trabajador from './modules/trabajador/Trabajador'
+import PlanAuditoria from './modules/plan_auditoria/PlanAuditoria'
+import ListaVerificacion from './modules/lista_verificacion/ListaVerificacion'
 import './App.css'
-import Trabajador from './modules/trabajador/Trabajador';
-import PlanAuditoria from './modules/plan_auditoria/PlanAuditoria';
-import ListaVerificacion from './modules/lista_verificacion/ListaVerificacion';
 
 function App() {
-
   const [moduloActual, setModuloActual] = useState("planAuditoria");
 
   const renderModulo = () => {
     switch (moduloActual) {
       case "planAuditoria":
-        return <PlanAuditoria />; 
+        return <PlanAuditoria />;
       case "trabajadores":
-        return <Trabajador />; 
+        return <Trabajador />;
       case "procesos":
         return <Proceso />;
       case "lista":
@@ -25,47 +25,46 @@ function App() {
   };
 
   return (
-    <div className="flex flex-row">
-      <div className="h-screen w-[20%] bg-[#1E3766] flex text-center flex-col">
-        <h2 className='text-white text-6xl m-5 mt-20 h-[20%]'>El Comité</h2>
+    <div className="flex flex-row h-screen">
+      <div className="sidebar">
+        <h2>El Comité</h2>
         <button
-          className="text-white text-xl m-3"
+          className={`sidebar-button ${moduloActual === 'planAuditoria' ? 'active' : ''}`}
           onClick={() => setModuloActual("planAuditoria")}
         >
-          Planes Auditoría
+          <FaClipboardList /> Planes Auditoría
         </button>
-    
         <button
-          className="text-white text-xl m-3"
+          className={`sidebar-button ${moduloActual === 'trabajadores' ? 'active' : ''}`}
           onClick={() => setModuloActual("trabajadores")}
         >
-          Trabajadores
+          <FaUserTie /> Trabajadores
         </button>
-    
         <button
-          className="text-white text-xl m-3"
+          className={`sidebar-button ${moduloActual === 'procesos' ? 'active' : ''}`}
           onClick={() => setModuloActual("procesos")}
         >
-          Procesos
+          <FaProjectDiagram /> Procesos
         </button>
-  
         <button
-          className="text-white text-xl m-3"
+          className={`sidebar-button ${moduloActual === 'lista' ? 'active' : ''}`}
           onClick={() => setModuloActual("lista")}
         >
-          Lista de Verificación
+          <FaTasks /> Lista de Verificación
         </button>
       </div>
 
-      <div className="h-screen w-[80%] bg-gray-200">
-        <header className="header">
-          <h1>Panel de Control</h1>
+      <div className="w-[82%] bg-gray-100 overflow-auto">
+        <header className="p-4 shadow bg-white">
+          <h1 className="text-2xl font-semibold text-gray-800">Panel de Control</h1>
         </header>
 
-        <div className="contenido">{renderModulo()}</div>
+        <div className="p-6">
+          {renderModulo()}
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default App

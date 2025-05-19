@@ -1,557 +1,246 @@
 import { useState, useEffect } from "react";
-import { traerID, traerPropositos, traerAuditadosPlan, traerTodoTrabajador,
-    traerReunionPlan, traerItinerarioPlan, guardarReuniones, guardarAuditadosPlan,
-    guardarItinerarios, borrarReunion, borrarItinerario, borrarAuditado, borrarProposito
- } from "./metodos";
+import {
+  traerID,
+  traerPropositos,
+  traerAuditadosPlan,
+  traerTodoTrabajador,
+  traerReunionPlan,
+  traerItinerarioPlan,
+  guardarReuniones,
+  guardarAuditadosPlan,
+  guardarItinerarios,
+  borrarReunion,
+  borrarItinerario,
+  borrarAuditado,
+  borrarProposito,
+  guardarPropositos
+} from "./metodos";
 
-const PlanEdit = (prop) => {
-    
-    
+const PlanEdit = ({ plan: planId, onGuardar, onCancelar }) => {
+  // Estados
+  const [plan, setPlan] = useState({});
+  const [propositos, setPropositos] = useState([]);
+  const [auditados, setAuditados] = useState([]);
+  const [reuniones, setReuniones] = useState([]);
+  const [itinerarios, setItinerarios] = useState([]);
+  const [trabajadores, setTrabajadores] = useState([]);
 
-    const [propositos, setPropositos] = useState([])
-    const [plan, setPlan] = useState({})
-    const [auditados, setAuditados] = useState([])
-    const [reuniones, setReuniones] = useState([])
-    const [itinerarios, setItinerarios] = useState([])
-    const [trabajadores, setTrabajadores] = useState([])
-
-
-    const agregarProposito = () => {
-        const nuevo = {
-          
-          id_plan: prop.id, // o usa un UUID si prefieres
-          descripcion: ""
-        };
-        setPropositos([...propositos, nuevo]);
-      };
-
-    
-    const agregarAuditado = () => {
-        const nuevo = {
-          
-          id_plan: prop.id, // o usa un UUID si prefieres
-          auditado: ""
-        };
-        setAuditados([...auditados, nuevo]);
-    };
-
-
-    const agregarItinerario = () => {
-        const nuevo = {
-          
-          id_plan: prop.id, // o usa un UUID si prefieres
-          actividad: "",
-          auditado: "",
-          auditor: "",
-          lugar: "",
-          inicio: "00:00:00",
-          fin: "00:00:00"
-        };
-        setItinerarios([...itinerarios, nuevo]);
-    };
-
-
-    const agregarReunion = () => {
-        const nuevo = {
-          
-          id_plan: prop.id, // o usa un UUID si prefieres
-          fecha: "0000-00-00",
-          hora: "00:00:00",
-          lugar: "lugar",
-          apertura: false
-        };
-        setAuditados([...reuniones, nuevo]);
-    };
-
-
-    const guardarPlanActividad = () => {
-        guardarItinerarios(itinerarios);
-        guardarReuniones(reuniones);
-        guardarAuditadosPlan(auditados);
-        guardarPropositos(propositos);
+  // Cargar datos al montar el componente o cuando cambie planId
+  useEffect(() => {
+    if (!planId) {
+      // Si no hay planId (nuevo plan), inicializamos vacíos
+      setPlan({});
+      setPropositos([]);
+      setAuditados([]);
+      setReuniones([]);
+      setItinerarios([]);
+      setTrabajadores([]);
+      return;
     }
 
+    // Traer datos del plan y listas relacionadas
+    traerID(planId).then(setPlan);
+    traerPropositos(planId).then(setPropositos);
+    traerAuditadosPlan(planId).then(setAuditados);
+    traerReunionPlan(planId).then(setReuniones);
+    traerItinerarioPlan(planId).then(setItinerarios);
+    traerTodoTrabajador().then(setTrabajadores);
+  }, [planId]);
 
-    useEffect(() => {
-        traerTodoTrabajador().then((e)=>setTrabajadores(e));
-        traerPropositos(prop.id).then((e) => setPropositos(e));
-        traerID(prop.id).then((e) => setPlan(e));
-        traerAuditadosPlan(prop.id).then((e)=>setAuditados(e));
-        traerItinerarioPlan(prop.id).then((e)=>setItinerarios(e));
-        traerReunionPlan(prop.id).then((e)=>setReuniones(e));
-        
-      }, []); 
+  // Agregar elemento a una lista (propositos, auditados, etc)
+  const agregarElemento = (lista, setLista, nuevoElemento) => {
+    setLista([...lista, nuevoElemento]);
+  };
 
+  // Eliminar elemento de lista y borrar en backend si tiene id
+  const eliminarElemento = (lista, setLista, index, id, borrarFn) => {
+    setLista(lista.filter((_, i) => i !== index));
+    if (id != null && borrarFn) {
+      borrarFn(id);
+    }
+  };
 
-    return (
-        <>
-        <div className=" w-full h-full flex flex-col items-center justify-center">
-            <div className="mt-10 bg-white w-[90%] rounded-xl">
-                <div className="flex flex-row">
-                    <p className="p-2 bg-[#1E3766] text-white"> fecha</p>
+  // Guardar todos los datos relacionados
+  const guardarPlanActividad = async () => {
+  try {
+    // Primero guarda o actualiza el plan
+    const nuevoPlan = await onGuardar(plan); // espera que retorne el objeto creado/actualizado con su ID
 
-                    <input
-                    type="datetime-local"
-                    id="datetime"
-                    value={plan.fecha?.slice(0, 16) || ""}
-                    onChange={(e) => {
-                        setPlan({ ...plan, fecha: e.target.value });
-                    }}
-                    className="border border-gray-300 rounded px-3 py-2"
-                    />
+    const id_plan = nuevoPlan?.id || plan.id;
 
-                </div>
+    // Luego guarda los elementos relacionados con ese plan
+    const propositosConId = propositos.map(p => ({ ...p, id_plan }));
+    const auditadosConId = auditados.map(a => ({ ...a, id_plan }));
+    const reunionesConId = reuniones.map(r => ({ ...r, id_plan }));
+    const itinerariosConId = itinerarios.map(i => ({ ...i, id_plan }));
 
-                <div className="flex flex-row">
-                    <p className="p-2 bg-[#1E3766] text-white"> alcance</p>
-
-                    <input
-                  type="text"
-                  id="alcance-planauditoria"
-                  placeholder="alcance"
-                  value={plan.alcance}
-                  className="w-full text-center"
-                  onChange={(e) => {
-                    const newPlan = plan
-                    newPlan.alcance = e.target.value;
-                    setPlan(newPlan);
-                  }}
-                   />
-                </div>
-
-                <div className="flex flex-row">
-                    <p className="p-2 bg-[#1E3766] text-white"> proposito</p>
-
-                    <table
-                        className="w-full"
-                        >
-                        <tbody>
-                        {propositos.map((proposito, index) => (
-                            <tr key={index}>
-                            <td>
-                            <input
-                            type="text"
-                            id={proposito.id}
-                            placeholder="proposito"
-                            value={proposito.descripcion}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newPropositos = [...propositos];
-                                newPropositos[index].descripcion = e.target.value;
-                                setPropositos(newPropositos);
-                            }}
-                            />
-                   </td>
-                            <td> <button
-                            className="bg-[#1E3766] rounded-full text-white text-xl ml-3 p-1"
-                            onClick={() => {
-                                setPropositos(prev => prev.filter((_, i) => i !== index));
-                                if(proposito.id != null){borrarProposito(proposito.id)};
-                              }}
-                            >borrar</button></td>
-                            </tr>
-                        ))
-                        }
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-                <button
-                    className="bg-[#1E3766] rounded-full text-white text-xl ml-3 p-1"
-                    onClick={agregarProposito}
-                    > agregar </button>
-
-            </div>
-
-            <div 
-            className="bg-white w-[90%] rounded-xl
-            flex flex-row mt-10 ">
-                <div className="flex flex-col w-[25%]">
-                    <h3 className="bg-[#1E3766] text-white text-center">Procesos</h3>
-                    <input
-                  type="text"
-                  id="proceso-planauditoria"
-                  placeholder="proceso a auditar"
-                  value={plan.proceso}
-                  className="w-full text-center"
-                  onChange={(e) => {
-                    const newPlan = plan
-                    newPlan.proceso = e.target.value;
-                    setPlan(newPlan);
-                  }}
-                   />
-
-                </div>
-                <div className="flex flex-col w-[25%]">
-                    <h3 className="bg-[#1E3766] text-white text-center">Lider</h3>
-                    <input
-                  type="text"
-                  id="liderProceso-planauditoria"
-                  placeholder="lider del proceso auditado"
-                  value={plan.lider_proceso}
-                  className="w-full text-center"
-                  onChange={(e) => {
-                    const newPlan = plan
-                    newPlan.lider_proceso = e.target.value;
-                    setPlan(newPlan);
-                  }}
-                   />
-                </div>
-
-                <div className="flex flex-col w-[25%]">
-                    <h3 className="bg-[#1E3766] text-white text-center">Auditados</h3>
-                    <table
-                        className="w-full"
-                        >
-                        <tbody >
-                        { auditados.map( (auditado, index) => (
-                       
-                            <tr key={index}>
-                            <td>
-                            <input
-                            type="text"
-                            id={auditado.id}
-                            placeholder="auditado"
-                            value={auditado.auditado}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newAuditados = [...auditados];
-                                newAuditados[index].auditado = e.target.value;
-                                setAuditados(newAuditados);
-                            }}
-                            />
-                            </td>
-                            <td> <button
-                            className="bg-[#1E3766] rounded-full text-white text-xl ml-3 p-1"
-                            onClick={() => {
-                                setAuditados(prev => prev.filter((_, i) => i !== index));
-                                if(auditado.id != null){borrarAuditado(auditado.id)};
-                              }}
-                            >borrar</button></td>
-                            </tr>
-                            
-                        )
-                        )}
-                        </tbody>
-                    </table>
-                    <button
-                    className="bg-[#1E3766] rounded-full text-white text-xl ml-3 p-1"
-                    onClick={agregarAuditado}> Agregar</button>
-                </div>
-                <div className="flex flex-col w-[25%]">
-                    <h3 className="bg-[#1E3766] text-white text-center">Firma</h3>
-                    <p> </p>
-                </div>
-
-            </div>
-
-            {/*                                                  REUNIONES                  */}
+    await guardarPropositos(propositosConId);
+    await guardarAuditadosPlan(auditadosConId);
+    await guardarReuniones(reunionesConId);
+    await guardarItinerarios(itinerariosConId);
+  } catch (error) {
+    console.error("Error guardando plan y datos relacionados:", error);
+  }
+};
 
 
-            <div className=" w-[90%] mt-10 flex flex-row">
-                <div className="bg-white w-[70%] mr-10">
-                    <table
-                        className="w-full"
-                        >
-                        <thead className=" bg-[#1E3766] text-white text-center">
-                        <tr>
-                            <th>Tipo de reunion </th>
-                            <th> Fecha </th>
-                            <th> Hora </th>
-                            <th> Lugar </th>
-                            <th> Acciones </th>
-                        </tr>
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center">
+      {/* Datos Generales */}
+      <div className="mt-10 bg-white w-[90%] rounded-xl p-4">
+        <h2 className="text-xl font-bold mb-4 text-[#1E3766]">Datos del Plan</h2>
+        <div className="flex flex-col gap-4">
+          <label className="flex items-center gap-4">
+            <span className="w-32 text-white bg-[#1E3766] p-2 rounded">Fecha</span>
+            <input
+              type="datetime-local"
+              value={plan.fecha?.slice(0, 16) || ""}
+              onChange={(e) => setPlan({ ...plan, fecha: e.target.value })}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+            />
+          </label>
 
-                        </thead>
-                        <tbody>
-                            {reuniones && (
-                                reuniones.map((reunion,index)=>(
-                                    <tr key={ reunion.id}>
-                                    <td>
-                                    <select
-                                    id={"tipoReunion" + reunion.id}
-                                    value={reunion.apertura ? "apertura" : "cierre"}
-                                    onChange={(e) => {
-                                        const value = e.target.value === "apertura";
-                                        const nuevasReuniones = [...reuniones];
-                                        nuevasReuniones[index].apertura = value;
-                                        setReuniones(nuevasReuniones);
-                                    }}
-                                    className="w-full text-center"
-                                    >
-                                    <option value="apertura">apertura</option>
-                                    <option value="cierre">cierre</option>
-                                    </select>
-                                    </td>
-                                    <td>
-                                    <input
-                            type="text"
-                            id={"fechaReunion"+reunion.id}
-                            placeholder="reunion"
-                            value={reunion.fecha}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newReuniones = [...reuniones];
-                                newReuniones[index].fecha = e.target.value;
-                                setReuniones(newReuniones);
-                            }}
-                            />
-                            </td>
-                                    <td>
-                                    <input
-                            type="text"
-                            id={"horaReunion"+reunion.id}
-                            placeholder="hora"
-                            value={reunion.hora}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newReuniones = [...reuniones];
-                                newReuniones[index].hora = e.target.value;
-                                setReuniones(newReuniones);
-                            }}
-                            />
-                            </td>
-                                    <td>
-                                    <input
-                            type="text"
-                            id={"lugarReunion"+reunion.id}
-                            placeholder="auditado"
-                            value={reunion.lugar}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newReuniones = [...reuniones];
-                                newReuniones[index].lugar = e.target.value;
-                                setReuniones(newReuniones);
-                            }}
-                            />
-                            </td>
-                            <td> <button
-                                className="bg-[#1E3766] rounded-full text-white text-xl ml-3 p-1"
-                                onClick={() => {
-                                    setReuniones(prev => prev.filter((_, i) => i !== index));
-                                    if(reunion.id != null){borrarReunion(reunion.id)};
-                                  }}
-                                >borrar</button></td>
-                                    </tr>
-                                ))
+          <label className="flex items-center gap-4">
+            <span className="w-32 text-white bg-[#1E3766] p-2 rounded">Alcance</span>
+            <input
+              type="text"
+              placeholder="Alcance"
+              value={plan.alcance || ""}
+              onChange={(e) => setPlan({ ...plan, alcance: e.target.value })}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+            />
+          </label>
 
-                            )}
-
-                        </tbody>
-
-                    </table>
-                    <button
-                    className="bg-[#1E3766] rounded-full text-white text-xl ml-3 p-1"
-                    onClick={agregarReunion}>
-                        Agregar
-                    </button>
-                </div>
-                <div className="bg-white w-[30%] ml-10">
-                    <h2
-                    className=" bg-[#1E3766] text-white text-center"
-                    > Auditores</h2>
-                    {plan && trabajadores.length > 0 && (
-                        <table className="w-full text-center">
-                            <tbody>
-                                <tr>
-                                    <td className=" bg-[#1E3766] text-white text-center">lider auditoria</td>
-                                    <td>
-                                    <select
-                                    id={plan.auditor_lider || ""}
-                                    value={plan.auditor_lider || ""}
-                                    onChange={(e) => {
-                                        setPlan({ ...plan, auditor_lider: e.target.value });
-                                    }}
-                                    className="w-full text-center"
-                                    >
-                                    {trabajadores.map((trabajador, index) => (
-                                        <option key={index} value={trabajador.id}>
-                                        {trabajador.nombre}
-                                        </option>
-                                    ))}
-                                    </select>
-                            </td>
-                                </tr>
-                                <tr>
-                                    <td className=" bg-[#1E3766] text-white text-center">auditor auxiliar</td>
-                                    <td>
-                                    <select
-                                    id={plan.auditor || ""}
-                                    value={plan.auditor || ""}
-                                    onChange={(e) => {
-                                        setPlan({ ...plan, auditor: e.target.value });
-                                    }}
-                                    className="w-full text-center"
-                                    >
-                                    {trabajadores.map((trabajador, index) => (
-                                        <option key={index} value={trabajador.id}>
-                                        {trabajador.nombre}
-                                        </option>
-                                    ))}
-                                    </select>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    )}
-
-                </div>
-
-            </div>
-
-            <div className="mt-10 flex flex-col bg-white w-[90%]">
-                <h2 className="w-full bg-[#1E3766] text-white text-center"> itinerario</h2>
-                <div className="">
-            
-                <table
-                        className="w-full"
-                        >
-                        <thead className=" bg-[#1E3766] text-white text-center">
-                        <tr>
-                            <th>Actividades</th>
-                            <th> Auditado</th>
-                            <th>Auditor</th>
-                            <th>Fecha inicio</th>
-                            <th> Fecha fin </th>
-                            <th>Lugar</th>
-                            <th> Acciones</th>
-                        </tr>
-
-                        </thead>
-                        { itinerarios && (
-                        <tbody>
-                            {itinerarios.map((itinerario,index)=>(
-                                <tr key={index}>
-                                <td>
-                                <input
-                            type="text"
-                            id={"actividad"+itinerario.id}
-                            placeholder="actividad"
-                            value={itinerario.actividad}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newItinerarios = [...itinerarios];
-                                newItinerarios[index].actividad = e.target.value;
-                                setItinerarios(newItinerarios);
-                            }}
-                            /></td>
-                                <td>
-                                <input
-                            type="text"
-                            id={"auditado"+itinerario.id}
-                            placeholder="auditado"
-                            value={itinerario.auditado}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newItinerarios = [...itinerarios];
-                                newItinerarios[index].auditado = e.target.value;
-                                setItinerarios(newItinerarios);
-                            }}
-                            /></td>
-                                <td>
-                                <input
-                            type="text"
-                            id={"auditor"+itinerario.id}
-                            placeholder="auditor"
-                            value={itinerario.auditor}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newItinerarios = [...itinerarios];
-                                newItinerarios[index].auditor = e.target.value;
-                                setItinerarios(newItinerarios);
-                            }}
-                            /></td>
-                                <td>
-                                <input
-                            type="text"
-                            id={"horaInicio"+itinerario.id}
-                            placeholder="hora inicio"
-                            value={itinerario.inicio}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newItinerarios = [...itinerarios];
-                                newItinerarios[index].inicio = e.target.value;
-                                setItinerarios(newItinerarios);
-                            }}
-                            /> </td>
-                                <td>
-                                <input
-                            type="text"
-                            id={"horaFin"+itinerario.id}
-                            placeholder="hora fin"
-                            value={itinerario.fin}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newItinerarios = [...itinerarios];
-                                newItinerarios[index].fin = e.target.value;
-                                setItinerarios(newItinerarios);
-                            }}
-                            /> 
-                            </td>
-                                <td>
-                                <input
-                            type="text"
-                            id={"lugar"+itinerario.id}
-                            placeholder="lugar"
-                            value={itinerario.lugar}
-                            className="w-full text-center"
-                            onChange={(e) => {
-                                const newItinerarios = [...itinerarios];
-                                newItinerarios[index].lugar = e.target.value;
-                                setItinerarios(newItinerarios);
-                            }}
-                            /> 
-                            </td>
-                                <td> <button
-                                className="bg-[#1E3766] rounded-full text-white text-xl ml-3 p-1"
-                                onClick={() => {
-                                    setItinerarios(prev => prev.filter((_, i) => i !== index));
-                                    if(itinerario.id != null){borrarItinerario(itinerario.id)};
-                                  }}
-                                >borrar</button></td>
-                                </tr>
-                            ))}
-                    </tbody>                        
-                    )}
-
-
-                    </table>
-                    <button
-                    className="bg-[#1E3766] rounded-full text-white text-xl ml-3 p-1"
-                    onClick={agregarItinerario}
-                    >
-                        Agregar
-                    </button>
-                </div>
-
-            </div>
-
-            <div className="mt-10"
-            
+          {/* Propósitos */}
+          <div>
+            <span className="text-white bg-[#1E3766] p-2 rounded inline-block mb-2">Propósitos</span>
+            <table className="w-full">
+              <tbody>
+                {propositos.map((p, i) => (
+                  <tr key={i} className="mb-2">
+                    <td className="w-full">
+                      <input
+                        type="text"
+                        placeholder="Propósito"
+                        value={p.descripcion || ""}
+                        onChange={(e) => {
+                          const nuevos = [...propositos];
+                          nuevos[i].descripcion = e.target.value;
+                          setPropositos(nuevos);
+                        }}
+                        className="w-full border rounded px-2 py-1"
+                      />
+                    </td>
+                    <td>
+                      <button
+                        className="bg-red-600 text-white px-2 py-1 rounded ml-2"
+                        onClick={() => eliminarElemento(propositos, setPropositos, i, p.id, borrarProposito)}
+                      >
+                        Borrar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+              className="mt-2 bg-[#1E3766] text-white px-3 py-1 rounded"
+              onClick={() => agregarElemento(propositos, setPropositos, { id_plan: planId, descripcion: "" })}
             >
-                <button id="btn-guardar-edicion" 
-                className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
-                onClick={() => {
-                    guardarPlanActividad;
-                    window.location.reload();}}>
-                Guardar
-                </button>
-                <button
-                id="btn-cancelar-edicion"
-                className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
-                onClick={() => {
-                    window.location.reload();}}
-                >
-                Cancelar
-                </button>
-            </div>
-
+              Agregar propósito
+            </button>
+          </div>
         </div>
-        </>
-    )
-}
+      </div>
+
+      {/* Información de Auditoría */}
+      <div className="bg-white w-[90%] mt-10 rounded-xl p-4">
+        <h2 className="text-xl font-bold mb-4 text-[#1E3766]">Información de Auditoría</h2>
+        <div className="grid grid-cols-4 gap-4">
+          <div>
+            <h3 className="bg-[#1E3766] text-white text-center p-1">Proceso</h3>
+            <input
+              type="text"
+              placeholder="Proceso"
+              value={plan.proceso || ""}
+              onChange={(e) => setPlan({ ...plan, proceso: e.target.value })}
+              className="w-full border rounded px-2 py-1"
+            />
+          </div>
+          <div>
+            <h3 className="bg-[#1E3766] text-white text-center p-1">Líder</h3>
+            <input
+              type="text"
+              placeholder="Líder del proceso"
+              value={plan.lider_proceso || ""}
+              onChange={(e) => setPlan({ ...plan, lider_proceso: e.target.value })}
+              className="w-full border rounded px-2 py-1"
+            />
+          </div>
+          <div>
+            <h3 className="bg-[#1E3766] text-white text-center p-1">Auditados</h3>
+            <table className="w-full">
+              <tbody>
+                {auditados.map((a, i) => (
+                  <tr key={i}>
+                    <td>
+                      <input
+                        type="text"
+                        placeholder="Auditado"
+                        value={a.auditado || ""}
+                        onChange={(e) => {
+                          const nuevos = [...auditados];
+                          nuevos[i].auditado = e.target.value;
+                          setAuditados(nuevos);
+                        }}
+                        className="w-full border rounded px-2 py-1"
+                      />
+                    </td>
+                    <td>
+                      <button
+                        className="bg-red-600 text-white px-2 py-1 rounded ml-2"
+                        onClick={() => eliminarElemento(auditados, setAuditados, i, a.id, borrarAuditado)}
+                      >
+                        Borrar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+              className="mt-2 bg-[#1E3766] text-white px-3 py-1 rounded"
+              onClick={() => agregarElemento(auditados, setAuditados, { id_plan: planId, auditado: "" })}
+            >
+              Agregar auditado
+            </button>
+          </div>
+          <div>
+            <h3 className="bg-[#1E3766] text-white text-center p-1">Firma</h3>
+            <p className="text-center">(espacio reservado)</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Botones Guardar y Cancelar */}
+      <div className="flex gap-4 mt-6">
+        <button
+          className="bg-green-600 text-white px-6 py-2 rounded-full text-lg"
+          onClick={guardarPlanActividad}
+        >
+          Guardar Cambios del Plan
+        </button>
+        {onCancelar && (
+          <button
+            className="bg-gray-500 text-white px-6 py-2 rounded-full text-lg"
+            onClick={onCancelar}
+          >
+            Cancelar
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default PlanEdit;

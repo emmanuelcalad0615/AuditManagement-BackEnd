@@ -89,29 +89,24 @@ export const guardartrabajador = async function(e){
     return respuesta
   }
 
-export const actualizartrabajador = async function(id){
-    var nombre = document.getElementById("editar-nombre-trabajador").value;
-    var celular = document.getElementById("editar-celular-trabajador").value;
-    var correo = document.getElementById("editar-correo-trabajador").value;
-    var id_sector = document.getElementById("input-editar-sector").value;
-
+export const actualizartrabajador = async function(id, data) {
     const raw = JSON.stringify({
         "id": id,
-        "nombre": nombre,
-        "celular": celular,
-        "correo": correo,
-        "id_sector": id_sector
-      });
-      
-      const requestOptions = {
+        "nombre": data.nombre,
+        "celular": data.celular,
+        "correo": data.correo,
+        "id_sector": data.id_sector
+    });
+
+    const requestOptions = {
         method: "PUT",
         headers: myHeaders,
         body: raw,
         redirect: "follow"
-      };
-      
-    const respuesta = await  fetch("http://localhost:5000/trabajador/update", requestOptions)
+    };
+
+    const respuesta = await fetch("http://localhost:5000/trabajador/update", requestOptions)
         .then((response) => response.json());
 
     return respuesta;
-    }
+};

@@ -2,7 +2,6 @@ import json
 from model import Auditoria
 from repository.mysql.AuditoriaRepository import AuditoriaRepository
 from datetime import datetime
-
 import json
 from datetime import datetime
 

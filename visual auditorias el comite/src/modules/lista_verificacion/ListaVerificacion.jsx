@@ -1,187 +1,172 @@
 import React, { useState, useEffect } from 'react';
-import './ListaVerificacion.css'
-import {traerID, traerTodo, borrarID, guardarlista_verificacion, actualizarlista_verificacion} from './metodos.js'
+import './ListaVerificacion.css';
+import {
+  traerID,
+  traerTodo,
+  borrarID,
+  guardarlista_verificacion,
+  actualizarlista_verificacion
+} from './metodos.js';
 
 const ListaVerificacion = () => {
-
   const [listas, setListas] = useState([]);
   const [vista, setVista] = useState('principal');
-  const [lista, setLista] = useState(1);
-  const [objeto, setObjeto] = useState({})
+  const [listaId, setListaId] = useState(null);
+  const [descripcionEdit, setDescripcionEdit] = useState('');
+  const [cumplimientoEdit, setCumplimientoEdit] = useState('');
+  const [incumplimientoEdit, setIncumplimientoEdit] = useState('');
+  const [reload, setReload] = useState(false);
 
-  const handleReset = () => {
-    setFormData({
-      descripcion: '',
-      cumplimiento: '',
-      incumplimiento: '',
+  useEffect(() => {
+    if (vista === 'principal') {
+      traerTodo()
+        .then(data => {
+          if (Array.isArray(data)) setListas(data);
+        })
+        .catch(console.error);
+    }
+  }, [vista, reload]);
 
+  const handleEditar = (id) => {
+    setListaId(id);
+    traerID(id).then(data => {
+      setDescripcionEdit(data.descripcion);
+      setCumplimientoEdit(data.cumplimiento);
+      setIncumplimientoEdit(data.incumplimiento);
+    });
+    setVista('editar');
+  };
+
+  const handleBorrar = (id) => {
+    borrarID(id).then(() => {
+      setReload(prev => !prev);
     });
   };
 
-  
+  const handleGuardarEdicion = () => {
+    const datosActualizados = {
+      descripcion: descripcionEdit,
+      cumplimiento: cumplimientoEdit,
+      incumplimiento: incumplimientoEdit
+    };
 
-  useEffect(() => {
-    // Trae todos los elementos cuando la vista sea 'principal'
-    if (vista === 'principal') {
-      traerTodo().then(data => {
-        setListas([...data]);
-      });
-    }
-  }, [vista]); 
+    actualizarlista_verificacion(listaId, datosActualizados).then(() => {
+      setVista('principal');
+      setReload(prev => !prev);
+    });
+  };
 
+  const handleReset = (form) => {
+    form.reset(); // limpia campos del form
+  };
 
   return (
     <>
-    {vista == 'principal'  && (
-      <section id="trabajadores" className="seccion activa ">
-        <div id="contenedor-tabla-trabajadores" 
-        className="flex text-center
-        justify-center flex-col bg-white rounded-2xl m-5">
-          <h3 className="titulo-tabla text-[#1E3766]
-          text-xl">Lista de Verificacion</h3>
-          <table className="tabla-trabajadores">
-            <thead className='bg-[#1E3766] text-white'>
-              <tr>
-                <th>descripcion</th>
-                <th>cumplimiento</th>
-                <th>incumplimiento</th>
-                <th>acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tbody-trabajadores">
-              {listas
-                .map((lista, index) => (
+      {vista === 'principal' && (
+        <section className="seccion activa p-5">
+          <div className="bg-white rounded-2xl p-5">
+            <h3 className="text-[#1E3766] text-xl font-bold mb-4 text-center">Lista de Verificación</h3>
+            <table className="tabla-trabajadores w-full text-center mb-4">
+              <thead className="bg-[#1E3766] text-white">
+                <tr>
+                  <th>Descripción</th>
+                  <th>Cumplimiento</th>
+                  <th>Incumplimiento</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {listas.map((item, index) => (
                   <tr key={index}>
-                    <td>{lista.descripcion}</td>
-                    <td>{lista.cumplimiento}</td>
-                    <td>{lista.incumplimiento}</td>
-                    <td>
-                      <button className="bg-[#1E3766] m-2 p-1 rounded-full text-white text-xl" 
-                      onClick={() => {setLista(lista.id); traerID(lista.id).then((e)=>{setObjeto(e)});setVista('editar')}}
-                      >Editar</button>
-
-                      <button className="bg-[#1E3766] m-2 p-1 rounded-full text-white text-xl" onClick={() => { 
-                        setVista('formulario'); borrarID(lista.id); setVista('principal'); setReload(!reload)}}>Borrar</button>
-
+                    <td>{item.descripcion}</td>
+                    <td>{item.cumplimiento}</td>
+                    <td>{item.incumplimiento}</td>
+                    <td className="table-actions">
+                      <button className="btn btn-green" onClick={() => handleEditar(item.id)}>
+                        🖉 Editar
+                      </button>
+                      <button className="btn btn-red" onClick={() => handleBorrar(item.id)}>
+                        🗑️ Borrar
+                      </button>
                     </td>
                   </tr>
                 ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="botones">
-        <button
-        id="btn-agregar"
-        className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
-        onClick={() => setVista('formulario')}
-      >
-        Agregar
-      </button>
-        </div>
+              </tbody>
+            </table>
+            <div className="flex justify-end">
+              <button className="btn " onClick={() => setVista('formulario')}>➕ Agregar Lista</button>
+            </div>
+          </div>
         </section>
-
-            )}
-
-      { vista === 'formulario' && ( 
-        
-      <>
-      <h2 className='bg-[#1E3766] text-white w-full
-      text-xl text-center rounded-xl m-5'>Agregar</h2>
-      <form 
-      className="bg-white rounded-xl m-5 flex 
-      flex-col justify-center text-center" 
-      onSubmit={(e) => {guardarlista_verificacion(e); setVista('principal'); setReload(!reload)}} 
-      onReset={handleReset}>
-        <label className='m-2 text-xl'>descripcion
-          <textarea
-            type="text"
-            name="descripcion"
-            className='text-xl ml-3 bg-gray-100 rounded'
-          />
-        </label>
-        <label className='m-2 text-xl'>cumplimiento
-          <textarea
-            type="text"
-            name="cumplimiento"
-className='text-xl ml-3 bg-gray-100 rounded'
-          />
-        </label>
-        <label className='m-2 text-xl'>incumplimiento
-          <textarea
-            type="text"
-            name="incumplimiento"
-            className='text-xl ml-3 bg-gray-100 rounded'
-
-          />
-        </label>
-        <div className="botones">
-          <button type="submit" 
-          className="bg-[#1E3766] m-2 p-1 rounded-full text-white text-xl"  >Guardar</button>
-          <button type="reset" 
-          className="bg-[#1E3766] m-2 p-1 rounded-full text-white text-xl"  onClick={() => {setVista('principal'); setReload(!reload)}}>Cancelar</button>
-        </div>
-      </form>
-      </>
       )}
 
-        {vista === 'editar' && (
-          <section id="vista-editar-lista" 
-          className="flex flex-col text-center justify-center items-center w-full" style={{ padding: '20px' }} >
-            <h2 className='bg-[#1E3766] w-full rounded-xl text-white text-xl'>Editar sector</h2>
-  
-            <div 
-            className='m-3 flex flex-col text-center justify-center items-center w-full bg-white
-            rounded-xl'
-            >
-              <div
-
-                className='flex flex-col text-center justify-center items-center'
-              >
-                <input
-                  type="text"
-                  id="editar-descripcion-lista"
-                  placeholder={objeto.descripcion}
-                  style={{ padding: '10px', width: '300px' }}
-                />
-                <input
-                  type="text"
-                  id="editar-cumplimiento-lista"
-                  placeholder={objeto.cumplimiento}
-                  style={{ padding: '10px', width: '300px' }}
-                />
-                <input
-                  type="text"
-                  id="editar-incunmplimiento-lista"
-                  placeholder={objeto.incumplimiento}
-                  style={{ padding: '10px', width: '300px' }}
-                />
-
-              </div>
+      {vista === 'formulario' && (
+        <section className="bg-white rounded-xl m-5 p-5">
+          <h2 className="bg-[#1E3766] text-white text-xl text-center rounded-xl mb-4">Agregar</h2>
+          <form
+            onSubmit={async (e) => {
+              await guardarlista_verificacion(e);
+              setVista('principal');
+              setReload(prev => !prev);
+            }}
+            onReset={(e) => {
+              handleReset(e.target);
+              setVista('principal');
+            }}
+            className="flex flex-col items-center gap-4"
+          >
+            <label className="w-full max-w-md">
+              Descripción
+              <textarea name="descripcion" className="textarea" required />
+            </label>
+            <label className="w-full max-w-md">
+              Cumplimiento
+              <textarea name="cumplimiento" className="textarea" required />
+            </label>
+            <label className="w-full max-w-md">
+              Incumplimiento
+              <textarea name="incumplimiento" className="textarea" required />
+            </label>
+            <div className="flex gap-4 mt-4">
+              <button type="submit" className="btn">Guardar</button>
+              <button type="reset" className="btn">Cancelar</button>
             </div>
-  
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: '40px',
-              }}
-            >
-              <button id="btn-guardar-edicion" 
-              className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
-              onClick={() => {actualizarlista_verificacion(lista); setVista('principal'); setReload(!reload)}}>
-                Guardar
-              </button>
-              <button
-                id="btn-cancelar-edicion"
-                className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
-                onClick={() => {setVista('principal'); setReload(!reload)}}
-              >
-                Cancelar
-              </button>
-            </div>
-          </section>
-        )}
-  </>
+          </form>
+        </section>
+      )}
+
+      {vista === 'editar' && (
+        <section className="flex flex-col items-center w-full p-5">
+          <h2 className="bg-[#1E3766] text-white text-xl w-full text-center rounded-xl mb-4">
+            Editar ítem
+          </h2>
+          <div className="bg-white rounded-xl p-4 w-full max-w-md flex flex-col gap-4">
+            <input
+              type="text"
+              value={descripcionEdit}
+              onChange={(e) => setDescripcionEdit(e.target.value)}
+              className="input"
+            />
+            <input
+              type="text"
+              value={cumplimientoEdit}
+              onChange={(e) => setCumplimientoEdit(e.target.value)}
+              className="input"
+            />
+            <input
+              type="text"
+              value={incumplimientoEdit}
+              onChange={(e) => setIncumplimientoEdit(e.target.value)}
+              className="input"
+            />
+          </div>
+          <div className="flex gap-4 mt-4">
+            <button className="btn" onClick={handleGuardarEdicion}>Guardar</button>
+            <button className="btn" onClick={() => setVista('principal')}>Cancelar</button>
+          </div>
+        </section>
+      )}
+    </>
   );
 };
 

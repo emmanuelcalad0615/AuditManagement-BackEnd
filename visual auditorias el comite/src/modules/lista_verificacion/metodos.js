@@ -75,27 +75,27 @@ export const guardarlista_verificacion = async function(e){
     return respuesta
   }
 
-export const actualizarlista_verificacion = async function(id){
-    var descripcion = document.getElementById("editar-descripcion-lista").value;
-    var cumplimiento = document.getElementById("editar-cumplimiento-lista").value;
-    var incumplimiento = document.getElementById("editar-incunmplimiento-lista").value;
+export const actualizarlista_verificacion = async function(id, datos) {
+  const raw = JSON.stringify({
+    id: id,
+    descripcion: datos.descripcion,
+    cumplimiento: datos.cumplimiento,
+    incumplimiento: datos.incumplimiento
+  });
 
-    const raw = JSON.stringify({
-        "id": id,
-        "descripcion": descripcion,
-        "cumplimiento": cumplimiento,
-        "incumplimiento": incumplimiento
-      });
-      
-      const requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow"
-      };
-      
-    const respuesta = await  fetch("http://localhost:5000/lista_verificacion/update", requestOptions)
-        .then((response) => response.json());
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",  // Asegúrate de tener esto
+    },
+    body: raw,
+    redirect: "follow"
+  };
 
-    return respuesta;
-    }
+  const respuesta = await fetch("http://localhost:5000/lista_verificacion/update", requestOptions)
+    .then((response) => response.json());
+
+  return respuesta;
+};
+
+

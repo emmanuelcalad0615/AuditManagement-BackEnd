@@ -1,78 +1,133 @@
 import React, { useState, useEffect } from 'react';
-import './PlanAuditoria.css'; // Si tienes estilos aparte, opcional
-import {traerTodo, traerID, traerTodoTrabajador} from './metodos'
+import './PlanAuditoria.css';
+import {
+  traerTodo,
+  traerID,
+  traerTodoTrabajador,
+  crearPlan,
+  actualizarplan
+} from './metodos';
 import PlanEdit from './PlanEdit';
 
 const PlanAuditoria = () => {
-
   const [planes, setPlanes] = useState([]);
-  const [vista, setVista] = useState('principal')
-  const [plan, setPlan] = useState(0)
-  const [objeto, setObjeto] = useState({})
-  const [trabajadores, setTrabajadores] = useState([])
+  const [vista, setVista] = useState('principal');
+  const [plan, setPlan] = useState(null);
+  const [objeto, setObjeto] = useState(null);
+  const [trabajadores, setTrabajadores] = useState([]);
 
-  useEffect( ()=> {
-   traerTodo().then( (e)=>setPlanes([...e]));
-   traerTodoTrabajador().then((e)=>setTrabajadores(e))
+  useEffect(() => {
+    traerTodo().then(setPlanes);
+    traerTodoTrabajador().then(setTrabajadores);
+  }, [vista]);
 
-  }, [vista])
+  const obtenerNombreTrabajador = (id) => {
+    if (!id) return '—';
+    const persona = trabajadores.find(t => t.id === id);
+    return persona ? persona.nombre : '—';
+  };
+
+  const agregarNuevoPlan = () => {
+    const nuevo = {
+      id: null,
+      nombre: '',
+      tipo: '',
+      subtipo: '',
+      proceso: '',
+      lider_proceso: '',
+      auditor_lider: null,
+      auditor: null,
+      estado: 'Nuevo',
+      fecha: new Date().toISOString().slice(0, 16)
+    };
+    setObjeto(nuevo);
+    setPlan(null);
+    setVista('edit');
+  };
+
+  const guardarPlan = async (planData) => {
+  let creado;
+  if (planData.id) {
+    await actualizarplan(planData);
+    creado = planData;
+  } else {
+    creado = await crearPlan(planData); // <- Este devuelve el nuevo plan con id
+  }
+  setVista('principal');
+  return creado; // <--- NECESARIO para que PlanEdit sepa el ID
+};
+
+
+
+  // --- Vista principal ---
+  const renderPrincipal = () => (
+    <section id="auditoria" className="seccion px-4 py-6">
+      <div className="bg-white rounded-2xl shadow-md p-6 m-5">
+        <h2 className="text-[#1E3766] text-xl font-bold mb-4 text-center">
+          Planes de Auditoría
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-center table-auto border-collapse">
+            <thead className="bg-[#1E3766] text-white text-sm">
+              <tr>
+                <th className="p-2">Tipo</th>
+                <th className="p-2">Subtipo</th>
+                <th className="p-2">Auditoría</th>
+                <th className="p-2">Proceso</th>
+                <th className="p-2">Líder Proceso</th>
+                <th className="p-2">Líder Auditor</th>
+                <th className="p-2">Auditor</th>
+                <th className="p-2">Estado</th>
+                <th className="p-2">Fecha</th>
+              </tr>
+            </thead>
+            <tbody className="text-sm">
+              {planes.map(p => (
+                <tr
+                  key={p.id}
+                  className="hover:bg-gray-100 transition-colors cursor-pointer border-b"
+                  onClick={() => {
+                    traerID(p.id).then(d => {
+                      setObjeto(d);
+                      setPlan(p.id);
+                      setVista('edit');
+                    });
+                  }}
+                >
+                  <td className="p-2">{p.tipo}</td>
+                  <td className="p-2">{p.subtipo}</td>
+                  <td className="p-2">{p.nombre}</td>
+                  <td className="p-2">{p.proceso}</td>
+                  <td className="p-2">{p.lider_proceso}</td>
+                  <td className="p-2">{obtenerNombreTrabajador(p.auditor_lider)}</td>
+                  <td className="p-2">{obtenerNombreTrabajador(p.auditor)}</td>
+                  <td className="p-2">{p.estado}</td>
+                  <td className="p-2">{p.fecha}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex justify-end mt-4">
+          <button className="btn" onClick={agregarNuevoPlan}>➕ Agregar Plan</button>
+        </div>
+      </div>
+    </section>
+  );
+
+  // --- Vista edición/agregado ---
+  const renderEdicion = () => (
+    <PlanEdit
+      plan={objeto}
+      onGuardar={guardarPlan}
+      onCancelar={() => setVista('principal')}
+    />
+  );
 
   return (
     <>
-    { vista === 'principal' &&
-    <section id="auditoria" className="seccion">
-              <div id="contenedor-tabla-trabajadores" 
-        className="flex  text-center
-        justify-center flex-col bg-white rounded-2xl m-5">
-      <h2 className="titulo-tabla text-[#1E3766]
-          text-xl">Planes de Auditoría</h2>
-        <table>
-          <thead className='bg-[#1E3766] text-white'>
-            <tr>
-              <th>Tipo</th>
-              <th>Subtipo</th>
-              <th>Auditoría</th>
-              <th>Proceso</th>
-              <th>Líder Proceso</th>
-              <th>Líder Auditor</th>
-              <th>Auditor</th>
-              <th>Estado</th>
-              <th>Fecha</th>
-            </tr>
-          </thead>
-          <tbody>
-            {planes.map( (plan, index) => (
-            <tr key={plan.id}
-            className="hover:bg-gray-200 transition-colors duration-200 text-xl" 
-            onClick={() => {setPlan(plan.id);setVista('edit'); traerID(plan.id).then((e)=>{setObjeto(e)})}} style={{ cursor: "pointer" }}>
-              <td>{plan.tipo}</td>
-              <td>{plan.subtipo}</td>
-              <td>{plan.nombre}</td>
-              <td>{plan.proceso}</td>
-              <td>{plan.lider_proceso}</td>
-              <td>{trabajadores.find(trabajador => trabajador.id == plan.auditor_lider).nombre}</td>
-              <td>{trabajadores.find(trabajador => trabajador.id == plan.auditor).nombre}</td>
-              <td>{plan.estado}</td>
-              <td>{plan.fecha}</td>
-            </tr>              
-            ))}
-
-          </tbody>
-        </table>
-        </div>
-        <div className="botones">
-        <button 
-        className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2" >
-          Agregar
-        </button>
-        </div>
-    </section>
-    }
-
-
-    {vista === 'edit' &&
-      <PlanEdit id={plan}/>
-    }
+      {vista === 'principal' && renderPrincipal()}
+      {vista === 'edit' && renderEdicion()}
     </>
   );
 };

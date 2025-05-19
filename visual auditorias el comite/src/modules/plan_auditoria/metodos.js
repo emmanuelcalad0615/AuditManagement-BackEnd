@@ -1,4 +1,3 @@
-
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
@@ -7,281 +6,197 @@ const requestOptionsGet = {
     redirect: "follow"
 };
 
+/* Trabajadores */
 
-const plan = {
-    id: Int16Array,
-    tipo: String,
-    nombre: String,
-    alcance: String,
-    proveso: String,
-    lider_proceso: String,
-    auditor: Int16Array,
-    auditor_lider: Int16Array,
-    
-}
-
-export const traerTodoTrabajador = async function(){
-    const respuesta = await fetch("http://localhost:5000/trabajador/getAll", requestOptionsGet)
-        .then((response) => response.json());
-
-    return respuesta;
-
-}
+export const traerTodoTrabajador = async function () {
+    const respuesta = await fetch("http://localhost:5000/trabajador/getAll", requestOptionsGet);
+    return await respuesta.json();
+};
 
 /* Reuniones */
 
-export const traerReunionPlan = async function(id){
-    const respuesta = await fetch("http://localhost:5000/reunion/getByPlan/"+id, requestOptionsGet)
-        .then((response) => response.json());
+export const traerReunionPlan = async function (id) {
+    const respuesta = await fetch(`http://localhost:5000/reunion/getByPlan/${id}`, requestOptionsGet);
+    return await respuesta.json();
+};
 
-    return respuesta;
+export const guardarReuniones = async function (lista) {
+    for (const reunion of lista) {
+        const metodo = reunion.id ? "PUT" : "POST";
+        const url = reunion.id
+            ? "http://localhost:5000/reunion/update"
+            : "http://localhost:5000/reunion/save";
 
-}
+        const requestOptions = {
+            method: metodo,
+            headers: myHeaders,
+            body: JSON.stringify(reunion),
+            redirect: "follow"
+        };
 
-export const guardarReuniones = async function(lista){
-    for(const reunion of lista){
-        if(reunion.id){             
-              const requestOptions = {
-                method: "PUT",
-                headers: myHeaders,
-                body: JSON.stringify(reunion),
-                redirect: "follow"
-              };
-
-            await fetch("http://localhost:5000/reunion/update", requestOptions)
-        }else{
-            const requestOptions = {
-                method: "POST",
-                headers: myHeaders,
-                body: JSON.stringify(reunion),
-                redirect: "follow"
-              };
-
-            await fetch("http://localhost:5000/reunion/save", requestOptions)
-        }
+        await fetch(url, requestOptions);
     }
-}
+};
 
-export const borrarReunion = async function(id){
+export const borrarReunion = async function (id) {
     const requestOptions = {
         method: "DELETE",
         redirect: "follow"
     };
-    const respuesta = await fetch("http://localhost:5000/reunion/delete/"+id, requestOptions)
-        .then((response) => response.json());
-
-    return respuesta;
-}
+    const respuesta = await fetch(`http://localhost:5000/reunion/delete/${id}`, requestOptions);
+    return await respuesta.json();
+};
 
 /* Itinerarios */
 
-export const traerItinerarioPlan = async function(id){
-    const respuesta = await fetch("http://localhost:5000/itinerario/getByPlan/"+id, requestOptionsGet)
-        .then((response) => response.json());
+export const traerItinerarioPlan = async function (id) {
+    const respuesta = await fetch(`http://localhost:5000/itinerario/getByPlan/${id}`, requestOptionsGet);
+    return await respuesta.json();
+};
 
-    return respuesta;
+export const guardarItinerarios = async function (lista) {
+    for (const itinerario of lista) {
+        const metodo = itinerario.id !== null ? "PUT" : "POST";
+        const url = itinerario.id !== null
+            ? "http://localhost:5000/itinerario/update"
+            : "http://localhost:5000/itinerario/save";
 
-}
+        const requestOptions = {
+            method: metodo,
+            headers: myHeaders,
+            body: JSON.stringify(itinerario),
+            redirect: "follow"
+        };
 
-export const guardarItinerarios = async function(lista){
-    for(const itinerario of lista){
-        console.log(itinerario)
-        if(itinerario.id != null){             
-              const requestOptions = {
-                method: "PUT",
-                headers: myHeaders,
-                body: JSON.stringify(itinerario),
-                redirect: "follow"
-              };
-
-            await fetch("http://localhost:5000/itinerario/update", requestOptions)
-        }else{
-            const requestOptions = {
-                method: "POST",
-                headers: myHeaders,
-                body: JSON.stringify(itinerario),
-                redirect: "follow"
-              };
-
-            await fetch("http://localhost:5000/itinerario/save", requestOptions)
-        }
+        await fetch(url, requestOptions);
     }
-}
+};
 
-export const borrarItinerario = async function(id){
+export const borrarItinerario = async function (id) {
     const requestOptions = {
         method: "DELETE",
         redirect: "follow"
     };
-    const respuesta = await fetch("http://localhost:5000/itinerario/delete/"+id, requestOptions)
-        .then((response) => response.json());
-
-    return respuesta;
-}
+    const respuesta = await fetch(`http://localhost:5000/itinerario/delete/${id}`, requestOptions);
+    return await respuesta.json();
+};
 
 /* Auditados en el plan */
 
-export const traerAuditadosPlan = async function(id){
-    const respuesta = await fetch("http://localhost:5000/auditado_plan/getidplan/"+id, requestOptionsGet)
-        .then((response) => response.json());
+export const traerAuditadosPlan = async function (id) {
+    const respuesta = await fetch(`http://localhost:5000/auditado_plan/getidplan/${id}`, requestOptionsGet);
+    return await respuesta.json();
+};
 
-    return respuesta;
+export const guardarAuditadosPlan = async function (lista) {
+    for (const auditado of lista) {
+        const metodo = auditado.id !== null ? "PUT" : "POST";
+        const url = auditado.id !== null
+            ? "http://localhost:5000/auditado_plan/update"
+            : "http://localhost:5000/auditado_plan/save";
 
-}
+        const requestOptions = {
+            method: metodo,
+            headers: myHeaders,
+            body: JSON.stringify(auditado),
+            redirect: "follow"
+        };
 
-export const guardarAuditadosPlan = async function(lista){
-    for(const auditados of lista){
-       
-        if(auditados.id != null){             
-              const requestOptions = {
-                method: "PUT",
-                headers: myHeaders,
-                body: JSON.stringify(auditados),
-                redirect: "follow"
-              };
-
-            await fetch("http://localhost:5000/auditado_plan/update", requestOptions)
-        }else{
-            const requestOptions = {
-                method: "POST",
-                headers: myHeaders,
-                body: JSON.stringify(auditados),
-                redirect: "follow"
-              };
-
-            await fetch("http://localhost:5000/auditado_plan/save", requestOptions)
-        }
+        await fetch(url, requestOptions);
     }
-}
+};
 
-export const borrarAuditado = async function(id){
+export const borrarAuditado = async function (id) {
     const requestOptions = {
         method: "DELETE",
         redirect: "follow"
     };
-    const respuesta = await fetch("http://localhost:5000/auditado_plan/delete/"+id, requestOptions)
-        .then((response) => response.json());
+    const respuesta = await fetch(`http://localhost:5000/auditado_plan/delete/${id}`, requestOptions);
+    return await respuesta.json();
+};
 
-    return respuesta;
-}
+/* Propósitos */
 
-/* Propositos */
+export const traerPropositos = async function (id) {
+    const respuesta = await fetch(`http://localhost:5000/proposito/getByPlan/${id}`, requestOptionsGet);
+    return await respuesta.json();
+};
 
-export const traerPropositos = async function(id){
-    const respuesta = await fetch("http://localhost:5000/proposito/getByPlan/"+id, requestOptionsGet)
-        .then((response) => response.json());
+export const guardarPropositos = async function (lista) {
+    for (const proposito of lista) {
+        const metodo = proposito.id !== null ? "PUT" : "POST";
+        const url = proposito.id !== null
+            ? "http://localhost:5000/proposito/update"
+            : "http://localhost:5000/proposito/save";
 
-    return respuesta;
+        const requestOptions = {
+            method: metodo,
+            headers: myHeaders,
+            body: JSON.stringify(proposito),
+            redirect: "follow"
+        };
 
-}
-
-
-export const guardarPropositos = async function(lista){
-    for(const proposito of lista){
-       
-        if(proposito.id != null){             
-              const requestOptions = {
-                method: "PUT",
-                headers: myHeaders,
-                body: JSON.stringify(proposito),
-                redirect: "follow"
-              };
-
-            await fetch("http://localhost:5000/proposito/update", requestOptions)
-        }else{
-            const requestOptions = {
-                method: "POST",
-                headers: myHeaders,
-                body: JSON.stringify(proposito),
-                redirect: "follow"
-              };
-
-            await fetch("http://localhost:5000/proposito/save", requestOptions)
-        }
+        await fetch(url, requestOptions);
     }
-}
+};
 
-export const borrarProposito = async function(id){
+export const borrarProposito = async function (id) {
     const requestOptions = {
         method: "DELETE",
         redirect: "follow"
     };
+    const respuesta = await fetch(`http://localhost:5000/proposito/delete/${id}`, requestOptions);
+    return await respuesta.json();
+};
 
-    
-    const respuesta = await fetch("http://localhost:5000/proposito/delete/"+id, requestOptions)
-        .then((response) => response.json());
+/* Planes */
 
-    return respuesta;
+export const traerID = async function (id) {
+    const respuesta = await fetch(`http://localhost:5000/plan/getid/${id}`, requestOptionsGet);
+    return await respuesta.json();
+};
 
-}
-/* plan info */
-
-export const traerID = async function(id){
-    const respuesta = await fetch("http://localhost:5000/plan/getid/"+id, requestOptionsGet)
-        .then((response) => response.json());
-
-    return respuesta;
-
-}
-
-export const borrarID = async function(id){
+export const borrarID = async function (id) {
     const requestOptions = {
         method: "DELETE",
         redirect: "follow"
     };
+    const respuesta = await fetch(`http://localhost:5000/plan/delete/${id}`, requestOptions);
+    return await respuesta.json();
+};
 
-    
-    const respuesta = await fetch("http://localhost:5000/plan/delete/"+id, requestOptions)
-        .then((response) => response.json());
+export const traerTodo = async function () {
+    const respuesta = await fetch("http://localhost:5000/plan/getAll", requestOptionsGet);
+    return await respuesta.json();
+};
 
-    return respuesta;
-
-}
-
-export const traerTodo = async function(){
-    const respuesta = await fetch("http://localhost:5000/plan/getAll", requestOptionsGet)
-        .then((response) => response.json());
-
-    return respuesta;
-
-}
-
-export const guardarplan = async function(){
-    var nombre = document.getElementById("input-nuevo-plan").value;
-    console.log(nombre)
-
-    const raw = JSON.stringify({
-        "nombre": nombre
-      });
+export const crearPlan = async function (datos) {
+    const raw = JSON.stringify(datos);
 
     const requestOptionsPost = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow"
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
     };
 
-    const respuesta = await fetch("http://localhost:5000/plan/save", requestOptionsPost)
-        .then((response) => response.json());
-    return respuesta
-  }
+    const respuesta = await fetch("http://localhost:5000/plan/save", requestOptionsPost);
+    return await respuesta.json();
+};
 
-export const actualizarplan = async function(id){
-    var nombre = document.getElementById("input-editar-plan").value;
-    const raw = JSON.stringify({
-        "id": id,
-        "nombre": nombre
-      });
-      
-      const requestOptions = {
+
+
+export const actualizarplan = async function (datos) {
+    const raw = JSON.stringify(datos);
+
+    const requestOptions = {
         method: "PUT",
         headers: myHeaders,
         body: raw,
         redirect: "follow"
-      };
-      
-    const respuesta = await  fetch("http://localhost:5000/plan/update", requestOptions)
-        .then((response) => response.json());
+    };
 
-    return respuesta;
-    }
+    const respuesta = await fetch("http://localhost:5000/plan/update", requestOptions);
+    return await respuesta.json();
+};
+
