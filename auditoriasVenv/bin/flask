@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/home/lenin/Documents/Universidad/2025-1/fundamentos de disenio/auditorias el comite/auditoriasVenv/bin/python3" "$0" "$@"
-' '''
+#!/home/windows/Documents/AuditManagement-BackEnd/auditoriasVenv/bin/python3.13
 # -*- coding: utf-8 -*-
 import re
 import sys
