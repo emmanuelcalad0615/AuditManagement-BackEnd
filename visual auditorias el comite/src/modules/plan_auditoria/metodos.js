@@ -404,6 +404,7 @@ export const actualizarplan = async function(id){
     var lider_proceso = document.getElementById("liderProceso-planauditoria").value;
     
     const raw = JSON.stringify({
+        "id": id,
         "nombre": nombre,
         "tipo": "interna",
         "fecha": fecha,

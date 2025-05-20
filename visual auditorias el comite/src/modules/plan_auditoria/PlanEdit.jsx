@@ -3,11 +3,12 @@ import { traerID, traerPropositos, traerAuditadosPlan, traerTodoTrabajador,
     traerReunionPlan, traerItinerarioPlan, guardarReuniones, guardarAuditadosPlan,
     guardarItinerarios, borrarReunion, borrarItinerario, borrarAuditado, borrarProposito,
     traerListasV, traerAspectos,traerAuditoria, guardarPropositos, guardarAspectos, traerListaxAuditoria,
-    borrarAspecto, guardarListaxAuditoria,
+    borrarAspecto, guardarListaxAuditoria, actualizarplan,
     traerOportunidades, guardarOportunidades, borrarOportunidades,
     traerDebilidades, guardarDebilidades, borrarDebilidades,
     traerFortalezas, guardarFortalezas, borrarFortalezas,
     traerCompromisos, guardarCompromisos, borrarCompromisos,
+    guardarplan,
  } from "./metodos";
 
 const PlanEdit = (prop) => {
@@ -27,6 +28,7 @@ const PlanEdit = (prop) => {
     const [itinerarios, setItinerarios] = useState([])
     const [trabajadores, setTrabajadores] = useState([])
     const [visual, setVisual] = useState('a')
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const agregarFortalezas = () => {
         const nuevo = {
@@ -132,7 +134,7 @@ const PlanEdit = (prop) => {
           lugar: "lugar",
           apertura: false
         };
-        setAuditados([...reuniones, nuevo]);
+        setReuniones([...reuniones, nuevo]);
     };
 
 
@@ -141,6 +143,7 @@ const PlanEdit = (prop) => {
         guardarReuniones(reuniones);
         guardarAuditadosPlan(auditados);
         guardarPropositos(propositos);
+        actualizarplan(prop.id);
     }
 
     const guardarAuditoria = () => {
@@ -657,7 +660,7 @@ const PlanEdit = (prop) => {
                 className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
                 onClick={() => {
                     guardarPlanActividad();
-                    window.location.reload();}}>
+                    sleep(1000).then(() => window.location.reload());}}>
                 Guardar
                 </button>
                 <button id="btn-guardar-edicion" 
@@ -692,7 +695,7 @@ const PlanEdit = (prop) => {
 
                     <p
                     type="datetime-local"
-                    id="datetime"
+                    id="datetime2"
                     className="border border-gray-300 rounded px-3 py-2"
                     > {plan.fecha?.slice(0, 16) || ""}</p>
 
@@ -1243,7 +1246,7 @@ const PlanEdit = (prop) => {
                                 <td>
                                 <input
                                 type="datetime-local"
-                                id="datetime"
+                                id="datetime3"
                                 value={compromiso.fecha_limite?.slice(0, 16) || ""}
                                 onChange={(e) => {
                                     const newLista = [...compromisos];
@@ -1275,7 +1278,7 @@ const PlanEdit = (prop) => {
                 className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
                 onClick={() => {
                     guardarAuditoria();
-                    setVisual('a')}}>
+                    sleep(1000).then(() => window.location.reload());}}>
                 Guardar
                 </button>
                 <button

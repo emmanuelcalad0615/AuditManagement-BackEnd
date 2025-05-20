@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { guardarplan, guardarReuniones, guardarAuditadosPlan,
-    guardarItinerarios, borrarReunion, borrarItinerario, borrarAuditado, borrarProposito,
+    guardarItinerarios, borrarReunion, borrarItinerario, borrarAuditado, borrarProposito, traerTodoTrabajador,
     guardarPropositos
  } from "./metodos";
 
@@ -15,7 +15,8 @@ const PlanCreate = () => {
     const [trabajadores, setTrabajadores] = useState([])
     const [liderAuditor, setLiderAuditor] = useState({})
     const [auditorAuxiliar, setAuditorAuxiliar] = useState({})
-
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    
     const actualizarIdPlan = () => {
         guardarplan().then((e)=>{
             setPlan(e);
@@ -74,17 +75,29 @@ const PlanCreate = () => {
 
 
     const agregarReunion = () => {
-    const nuevo = {
-      id_plan: 0,
-      fecha: "0000-00-00",
-      hora: "00:00:00",
-      lugar: "lugar",
-      apertura: false
+        const nuevo = {
+          
+          id_plan: 0, // o usa un UUID si prefieres
+          fecha: "0000-00-00",
+          hora: "00:00:00",
+          lugar: "lugar",
+          apertura: false
+        };
+        setReuniones([...reuniones, nuevo]);
     };
-    setReuniones([...reuniones, nuevo]); // <--- esta es la línea corregida
-};
 
+    useEffect(() => {
+    const obtenerTrabajadores = async () => {
+        try {
+        const resultado = await traerTodoTrabajador();
+        setTrabajadores(resultado);
+        } catch (error) {
+        console.error("Error al traer los trabajadores:", error);
+        }
+    };
 
+    obtenerTrabajadores();
+    }, []);
 
     return (
         <>
@@ -372,7 +385,7 @@ const PlanCreate = () => {
                     </table>
                     <button
                     className="bg-[#1E3766] rounded-full text-white text-xl ml-3 p-1"
-                    onClick={agregarReunion}>
+                    onClick={() => agregarReunion()}>
                         Agregar
                     </button>
                 </div>
@@ -386,17 +399,17 @@ const PlanCreate = () => {
                                 <tr>
                                     <td className=" bg-[#1E3766] text-white text-center">lider auditoria</td>
                                     <td>
-                                    <select
-                                    id={"liderAuditoria"}
-                                    value={trabajadores[0].nombre}
-                                    className="w-full text-center"
-                                    >
-                                    {trabajadores.map((trabajador, index) => (
-                                        <option key={index} value={trabajador.id}>
-                                        {trabajador.nombre}
-                                        </option>
-                                    ))}
-                                    </select>
+                                <select
+                                id={"liderAuditoria"}
+                                value={trabajadores.length > 0 ? trabajadores[0].id : ""}
+                                className="w-full text-center"
+                                >
+                                {trabajadores.map((trabajador, index) => (
+                                    <option key={index} value={trabajador.id}>
+                                    {trabajador.nombre}
+                                    </option>
+                                ))}
+                                </select>
                             </td>
                                 </tr>
                                 <tr>
@@ -404,7 +417,7 @@ const PlanCreate = () => {
                                     <td>
                                     <select
                                     id={plan.auditor || ""}
-                                    value={trabajadores[0].nombre}
+                                    value={trabajadores.length > 0 ? trabajadores[0].id : ""}
                                     onChange={(e) => {
                                         setAuditorAuxiliar(e.target.value);
                                     }}

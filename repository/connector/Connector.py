@@ -7,8 +7,7 @@ Conector del ORM con la DB.
 """
 
 Base = declarative_base()
-#engine = create_engine('mysql+pymysql://root:MiContrasena123@localhost:3306/auditorias')
-engine = create_engine('mysql+pymysql://root:Joaco06151970@localhost:6666/gestor_auditorias')
+engine = create_engine('mysql+pymysql://guttentag:mysqldatabasepass@database-2.cls28w4sc51e.us-east-2.rds.amazonaws.com:3306/auditorias')
 
 SessionLocal = sessionmaker(autocommit=False, bind=engine)
 
