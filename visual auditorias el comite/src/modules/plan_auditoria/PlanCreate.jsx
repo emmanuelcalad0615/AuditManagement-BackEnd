@@ -13,8 +13,8 @@ const PlanCreate = () => {
     const [reuniones, setReuniones] = useState([])
     const [itinerarios, setItinerarios] = useState([])
     const [trabajadores, setTrabajadores] = useState([])
-    const [liderAuditor, setLiderAuditor] = useState({})
-    const [auditorAuxiliar, setAuditorAuxiliar] = useState({})
+    const [liderAuditor, setLiderAuditor] = useState(1)
+    const [auditorAuxiliar, setAuditorAuxiliar] = useState(1)
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     
     const actualizarIdPlan = () => {
@@ -400,8 +400,11 @@ const PlanCreate = () => {
                                     <td className=" bg-[#1E3766] text-white text-center">lider auditoria</td>
                                     <td>
                                 <select
-                                id={"liderAuditoria"}
-                                value={trabajadores.length > 0 ? trabajadores[0].id : ""}
+                                id="liderAuditoria"
+                                value={String(liderAuditor)||""}
+                                onChange={(e) => {
+                                    setLiderAuditor(e.target.value);
+                                }}
                                 className="w-full text-center"
                                 >
                                 {trabajadores.map((trabajador, index) => (
@@ -416,8 +419,8 @@ const PlanCreate = () => {
                                     <td className=" bg-[#1E3766] text-white text-center">auditor auxiliar</td>
                                     <td>
                                     <select
-                                    id={plan.auditor || ""}
-                                    value={trabajadores.length > 0 ? trabajadores[0].id : ""}
+                                    id="auditor"
+                                    value={String(auditorAuxiliar)||""}
                                     onChange={(e) => {
                                         setAuditorAuxiliar(e.target.value);
                                     }}
@@ -574,7 +577,7 @@ const PlanCreate = () => {
                 className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
                 onClick={() => {
                     actualizarIdPlan();
-                    sleep(1000).then(() => window.location.reload());
+                    sleep(2000).then(() => window.location.reload());
                  }}>
                 Guardar
                 </button>

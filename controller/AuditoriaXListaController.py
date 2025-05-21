@@ -17,6 +17,10 @@ def getid(id_auditoria, id_listaverificacion):
 def save():
     return auditoriaxlistaService.save(request.get_json())
 
+@auditoriaxlista.route('/getByPlan/<int:id>', methods=['GET'])
+def getByPlan(id):
+    return auditoriaxlistaService.getByPlan(id)
+
 @auditoriaxlista.route('/update', methods=['PUT'])
 def update():
     return auditoriaxlistaService.update(request.get_json())

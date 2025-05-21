@@ -12,6 +12,10 @@ def getAll():
 def getid(id):
     return debilidadService.getId(id)
 
+@debilidad.route('/getByPlan/<int:id>', methods=['GET'])
+def getByPlan(id):
+    return debilidadService.getByPlan(id)
+
 @debilidad.route('/save', methods=['POST'])
 def save():
     return debilidadService.save(request.get_json())
