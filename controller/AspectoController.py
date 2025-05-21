@@ -12,6 +12,10 @@ def getAll():
 def getid(id):
     return aspectoService.getId(id)
 
+@aspecto.route('/getByPlan/<int:id>', methods=['GET'])
+def getByPlan(id):
+    return aspectoService.getByPlan(id)
+
 @aspecto.route('/save', methods=['POST'])
 def save():
     return aspectoService.save(request.get_json())

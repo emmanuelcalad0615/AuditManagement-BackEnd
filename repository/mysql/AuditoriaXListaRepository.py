@@ -48,3 +48,10 @@ class AuditoriaXListaRepository:
             for obj in lista:
                 obj.__delattr__('_sa_instance_state')
             return lista
+
+    def getByPlan(self, id):
+        with SessionLocal() as session:
+            lista = session.query(AuditoriaXLista).filter(AuditoriaXLista.id_auditoria == id).all()
+            for objeto in lista:
+                objeto.__delattr__('_sa_instance_state')
+            return lista

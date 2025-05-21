@@ -12,6 +12,10 @@ def getAll():
 def getid(id):
     return fortalezaService.getId(id)
 
+@fortaleza.route('/getByPlan/<int:id>', methods=['GET'])
+def getByPlan(id):
+    return fortalezaService.getByPlan(id)
+
 @fortaleza.route('/save', methods=['POST'])
 def save():
     return fortalezaService.save(request.get_json())

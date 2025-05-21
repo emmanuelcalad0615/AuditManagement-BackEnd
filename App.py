@@ -1,6 +1,12 @@
 import Ejecutar
 
 from flask import Flask, request, jsonify, render_template
+from flask import Flask
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
 from repository.connector.Connector import Base, engine
 from controller.AspectoController import aspecto
 from controller.AuditadoPlanController import auditado_plan
@@ -18,14 +24,8 @@ from controller.PlanController import plan
 from controller.PropositoController import proposito
 from controller.ReunionController import reunion
 from controller.TrabajadorController import trabajador
-from flask import Flask
-from flask_cors import CORS
-
-app = Flask(__name__)
-
-# Esto permite CORS desde cualquier origen
-CORS(app)
 from controller import sector
+
 Base.metadata.create_all(bind=engine)
 
 app.register_blueprint(sector, url_prefix='/sector')

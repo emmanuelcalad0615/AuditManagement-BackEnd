@@ -40,3 +40,10 @@ class AspectoRepository:
             for i in lista:
                 i.__delattr__('_sa_instance_state')
             return lista
+
+    def getByPlan(self, id):
+        with SessionLocal() as session:
+            lista = session.query(Aspecto).filter(Aspecto.id_auditoria == id).all()
+            for objeto in lista:
+                objeto.__delattr__('_sa_instance_state')
+            return lista
