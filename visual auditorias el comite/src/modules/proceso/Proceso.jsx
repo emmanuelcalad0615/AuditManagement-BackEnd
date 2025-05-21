@@ -128,7 +128,7 @@ const Proceso = () => {
               </button>
               <button
                 type="button"
-                className="btn"
+                className="btn-gray"
                 onClick={() => setVista("principal")}
               >
                 Cancelar
@@ -159,7 +159,7 @@ const Proceso = () => {
                 Guardar
               </button>
               <button
-                className="btn"
+                className="btn-gray"
                 onClick={() => setVista("principal")}
               >
                 Cancelar

@@ -129,7 +129,7 @@ const ListaVerificacion = () => {
             </label>
             <div className="flex gap-4 mt-4">
               <button type="submit" className="btn">Guardar</button>
-              <button type="reset" className="btn">Cancelar</button>
+              <button type="reset" className="btn-gray">Cancelar</button>
             </div>
           </form>
         </section>
@@ -162,7 +162,7 @@ const ListaVerificacion = () => {
           </div>
           <div className="flex gap-4 mt-4">
             <button className="btn" onClick={handleGuardarEdicion}>Guardar</button>
-            <button className="btn" onClick={() => setVista('principal')}>Cancelar</button>
+            <button className="btn-gray" onClick={() => setVista('principal')}>Cancelar</button>
           </div>
         </section>
       )}
