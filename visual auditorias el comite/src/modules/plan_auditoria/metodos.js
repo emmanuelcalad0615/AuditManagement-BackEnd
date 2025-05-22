@@ -169,7 +169,8 @@ export const borrarAuditado = async function(id){
 export const traerAuditoria = async function(id){
 
     const auditoria = {
-        id_plan: id
+        id_plan: id,
+        fecha: "0000-00-00"
     }
 
     const requestOptions = {
@@ -181,7 +182,7 @@ export const traerAuditoria = async function(id){
 
     var respuesta = await fetch("http://localhost:5000/auditoria/getByPlan/"+id, requestOptionsGet)
         .then((response) => response.json());
-
+    console.log(respuesta)
     let existente = respuesta.find((e) => e.id_plan === id);
 
     if (!existente) {
@@ -189,7 +190,7 @@ export const traerAuditoria = async function(id){
         existente = await fetch("http://localhost:5000/auditoria/save", requestOptions)
         .then((response) => response.json());
     } 
-
+    console.log(existente)
     return existente;
 
 }
@@ -368,12 +369,15 @@ export const traerTodo = async function(){
 
 }
 
-export const guardarplan = async function(){
+export const guardarplan = async function(plan){
     var nombre = document.getElementById("input-editar-plan").value;
     var fecha = document.getElementById("datetime").value;
     var alcance = document.getElementById("alcance-planauditoria").value;
     var proceso = document.getElementById("proceso-planauditoria").value;
     var lider_proceso = document.getElementById("liderProceso-planauditoria").value;
+    var estado = document.getElementById("input-estado").value;
+    var auditor = document.getElementById("auditor").value;
+    var auditor_lider = document.getElementById("liderAuditoria").value;
     
     const raw = JSON.stringify({
         "nombre": nombre,
@@ -381,7 +385,10 @@ export const guardarplan = async function(){
         "fecha": fecha,
         "alcance": alcance,
         "proceso": proceso,
-        "lider_proceso": lider_proceso
+        "lider_proceso": lider_proceso,
+        "estado": estado,
+        "auditor": auditor,
+        "auditor_lider": auditor_lider
       });
 
     const requestOptionsPost = {
@@ -396,21 +403,20 @@ export const guardarplan = async function(){
     return respuesta
   }
 
-export const actualizarplan = async function(id){
-    var nombre = document.getElementById("input-editar-plan").value;
-    var fecha = document.getElementById("datetime").value;
-    var alcance = document.getElementById("alcance-planauditoria").value;
-    var proceso = document.getElementById("proceso-planauditoria").value;
-    var lider_proceso = document.getElementById("liderProceso-planauditoria").value;
+export const actualizarplan = async function(plan){
+
     
     const raw = JSON.stringify({
-        "id": id,
-        "nombre": nombre,
+        "id": plan.id,
+        "nombre": plan.nombre,
         "tipo": "interna",
-        "fecha": fecha,
-        "alcance": alcance,
-        "proceso": proceso,
-        "lider_proceso": lider_proceso
+        "fecha": plan.fecha,
+        "alcance": plan.alcance,
+        "estado": plan.estado,
+        "proceso": plan.proceso,
+        "lider_proceso": plan.lider_proceso,
+        "auditor": plan.auditor,
+        "auditor_lider": plan.auditor_lider
       });
       
       const requestOptions = {

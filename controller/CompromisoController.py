@@ -13,6 +13,10 @@ def getAll():
 def getid(id):
     return compromisoService.getId(id)
 
+@compromiso.route('/getByPlan/<int:id>', methods=['GET'])
+def getByPlan(id):
+    return compromisoService.getByPlan(id)
+
 @compromiso.route('/save', methods=['POST'])
 def save():
     return compromisoService.save(request.get_json())

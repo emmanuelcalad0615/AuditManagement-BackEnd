@@ -143,7 +143,7 @@ const PlanEdit = (prop) => {
         guardarReuniones(reuniones);
         guardarAuditadosPlan(auditados);
         guardarPropositos(propositos);
-        actualizarplan(prop.id);
+        actualizarplan(plan);
     }
 
     const guardarAuditoria = () => {
@@ -160,13 +160,16 @@ const PlanEdit = (prop) => {
         
         traerTodoTrabajador().then((e)=>setTrabajadores(e));
         traerPropositos(prop.id).then((e) => setPropositos(e));
-        traerID(prop.id).then((e) => setPlan(e));
+        traerID(prop.id).then((e) => {
+   
+            setPlan(e);});
         traerAuditadosPlan(prop.id).then((e)=>setAuditados(e));
         traerItinerarioPlan(prop.id).then((e)=>setItinerarios(e));
         traerReunionPlan(prop.id).then((e)=>setReuniones(e));
         traerListasV().then((e) => setListas(e));
 
         traerAuditoria(prop.id).then((e)=>{
+            console.log(e)
             setAuditoria(e);
             traerAspectos(e.id).then((e)=>setAspectos(e));
             traerListaxAuditoria(e.id).then((e)=>setListaAuditada(e));
@@ -177,7 +180,7 @@ const PlanEdit = (prop) => {
         
         });
 
-
+        ;
         
       }, [visual]); 
 
@@ -482,20 +485,23 @@ const PlanEdit = (prop) => {
                                 <tr>
                                     <td className=" bg-[#1E3766] text-white text-center">lider auditoria</td>
                                     <td>
+                                    {trabajadores.length > 0 && (
                                     <select
-                                    id={plan.auditor_lider || ""}
-                                    value={plan.auditor_lider || ""}
-                                    onChange={(e) => {
+                                        value={String(plan.auditor_lider || "")}
+                                        onChange={(e) => {
+                                        
                                         setPlan({ ...plan, auditor_lider: e.target.value });
-                                    }}
-                                    className="w-full text-center"
+                                        console.log(e.target.value);
+                                        }}
+                                        className="w-full text-center"
                                     >
-                                    {trabajadores.map((trabajador, index) => (
-                                        <option key={index} value={trabajador.id}>
-                                        {trabajador.nombre}
+                                        {trabajadores.map((trabajador, index) => (
+                                        <option key={index} value={String(trabajador.id)}>
+                                            {trabajador.nombre}
                                         </option>
-                                    ))}
+                                        ))}
                                     </select>
+                                    )}
                             </td>
                                 </tr>
                                 <tr>
@@ -505,6 +511,7 @@ const PlanEdit = (prop) => {
                                     id={plan.auditor || ""}
                                     value={plan.auditor || ""}
                                     onChange={(e) => {
+                                        console.log(e.target.value);
                                         setPlan({ ...plan, auditor: e.target.value });
                                     }}
                                     className="w-full text-center"

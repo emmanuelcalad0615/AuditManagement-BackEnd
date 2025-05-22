@@ -43,3 +43,10 @@ class AuditoriaRepository:
             for i in lista:
                 i.__delattr__('_sa_instance_state')
             return lista
+
+    def getByPlan(self, id):
+        with SessionLocal() as session:
+            lista = session.query(Auditoria).filter(Auditoria.id_plan == id).all()
+            for objeto in lista:
+                objeto.__delattr__('_sa_instance_state')
+            return lista

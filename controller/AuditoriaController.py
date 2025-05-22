@@ -13,6 +13,10 @@ def getAll():
 def getid(id):
     return auditoriaService.getId(id)
 
+@auditoria.route('/getByPlan/<int:id>', methods=['GET'])
+def getByPlan(id):
+    return auditoriaService.getByPlan(id)
+
 @auditoria.route('/save', methods=['POST'])
 def save():
     return auditoriaService.save(request.get_json())

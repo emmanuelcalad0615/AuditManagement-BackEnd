@@ -13,6 +13,10 @@ def getAll():
 def getid(id):
     return oportunidadService.getId(id)
 
+@oportunidad.route('/getByPlan/<int:id>', methods=['GET'])
+def getByPlan(id):
+    return oportunidadService.getByPlan(id)
+
 @oportunidad.route('/save', methods=['POST'])
 def save():
     return oportunidadService.save(request.get_json())
@@ -24,3 +28,5 @@ def update():
 @oportunidad.route('/delete/<int:id>', methods=['DELETE'])
 def delete(id):
     return oportunidadService.delete(id)
+
+
