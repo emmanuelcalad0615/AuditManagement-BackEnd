@@ -387,7 +387,7 @@ const PlanCreate = () => {
                     </button>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-md overflow-hidden w-full md:w-[30%]">
+                <div className="bg-white rounded-xl shadow-md overflow-hidden w-full md:w-[30%] flex-shrink-0 h-[180px] flex flex-col justify-start">
                     <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium">Auditores</h3>
                     <table className="w-full">
                         <tbody>
