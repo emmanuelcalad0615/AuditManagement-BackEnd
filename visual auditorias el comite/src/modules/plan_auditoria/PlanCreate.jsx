@@ -179,6 +179,7 @@ const PlanCreate = () => {
                                             <td className="text-right pr-4">
                                                 <button
                                                     className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                    style={{ marginLeft: "0.5rem", marginTop: "0" }}
                                                     onClick={() => {
                                                         setPropositos(prev => prev.filter((_, i) => i !== index));
                                                         if (proposito.id != null) { borrarProposito(proposito.id) };
@@ -260,6 +261,7 @@ const PlanCreate = () => {
                                         <td className="text-right pr-4">
                                             <button
                                                 className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                style={{ marginLeft: "0.5rem", marginTop: "0" }}
                                                 onClick={() => {
                                                     setAuditados(prev => prev.filter((_, i) => i !== index));
                                                     if (auditado.id != null) { borrarAuditado(auditado.id) };
@@ -323,7 +325,7 @@ const PlanCreate = () => {
                                         </td>
                                         <td className="p-3">
                                             <input
-                                                type="text"
+                                                type="date"
                                                 id={"fechaReunion" + reunion.id}
                                                 placeholder="Fecha"
                                                 value={reunion.fecha}
@@ -387,7 +389,7 @@ const PlanCreate = () => {
                     </button>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-md overflow-hidden w-full md:w-[30%]">
+                <div className="bg-white rounded-xl shadow-md overflow-hidden w-full md:w-[30%] flex-shrink-0 h-[180px] flex flex-col justify-start">
                     <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium">Auditores</h3>
                     <table className="w-full">
                         <tbody>
@@ -440,8 +442,8 @@ const PlanCreate = () => {
                                 <th className="p-3">Actividades</th>
                                 <th className="p-3">Auditado</th>
                                 <th className="p-3">Auditor</th>
-                                <th className="p-3">Fecha inicio</th>
-                                <th className="p-3">Fecha fin</th>
+                                <th className="p-3">Hora inicio</th>
+                                <th className="p-3">Hora fin</th>
                                 <th className="p-3">Lugar</th>
                                 <th className="p-3">Acciones</th>
                             </tr>
