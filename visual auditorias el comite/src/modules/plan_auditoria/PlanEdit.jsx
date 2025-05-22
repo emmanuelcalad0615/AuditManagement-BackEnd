@@ -266,6 +266,7 @@ const PlanEdit = (prop) => {
                                                 <td className="text-right pr-4">
                                                     <button
                                                         className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                        style={{ marginLeft: "0.5rem", marginTop: "0" }}
                                                         onClick={() => {
                                                             setPropositos(prev => prev.filter((_, i) => i !== index));
                                                             if (proposito.id != null) { borrarProposito(proposito.id) };
@@ -347,6 +348,7 @@ const PlanEdit = (prop) => {
                                         <td className="text-right pr-4">
                                             <button
                                                 className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                style={{ marginLeft: "0.5rem", marginTop: "0" }}
                                                 onClick={() => {
                                                     setAuditados(prev => prev.filter((_, i) => i !== index));
                                                     if (auditado.id != null) { borrarAuditado(auditado.id) };
@@ -682,620 +684,567 @@ const PlanEdit = (prop) => {
         </div>
         }
 
+
         {/*     VISUAL PARA HACER LA AUDITORIA              */}
 
         {visual=='b' &&
-        <div className=" w-full h-full flex flex-col items-center justify-center">
-            <div className="mt-10 bg-white w-[90%] rounded-xl">
-                <div className="flex flex-row">
-                    <p className="p-2 bg-[#1E3766] text-white"> fecha</p>                <button id="btn-guardar-edicion" 
-                className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
-                onClick={() => {setVisual('b')}}>
-                Auditoria
-                </button>
+            <div className="w-full min-h-screen bg-gray-100 flex flex-col items-center py-8">
+                <div className="mt-10 bg-white w-[90%] rounded-xl shadow-md overflow-hidden">
+                    {/* Fecha y Auditoría */}
+                    <div className="flex flex-col md:flex-row border-b border-gray-200">
+                        <div className="flex-1 flex flex-col md:flex-row">
+                            <label className="p-3 bg-[#1E3766] text-white font-medium min-w-[120px]">Fecha</label>
+                            <p className="flex-1 border border-gray-300 rounded px-4 py-2 m-2 bg-gray-50">
+                                {plan.fecha?.slice(0, 16) || ""}
+                            </p>
+                        </div>
+                    </div>
 
-                    <p
-                    type="datetime-local"
-                    id="datetime2"
-                    className="border border-gray-300 rounded px-3 py-2"
-                    > {plan.fecha?.slice(0, 16) || ""}</p>
+                    {/* Alcance */}
+                    <div className="flex flex-col md:flex-row border-b border-gray-200">
+                        <div className="flex-1 flex flex-row">
+                            <label className="p-3 bg-[#1E3766] text-white font-medium min-w-[120px]">Alcance</label>
+                            <p className="flex-1 border border-gray-300 rounded px-4 py-2 m-2 bg-gray-50 text-start">
+                                {plan.alcance}
+                            </p>
+                        </div>
+                    </div>
 
-                </div>
+                    {/* Propósito */}
+                    <div className="flex flex-col border-b border-gray-200">
+                        <div className="flex flex-col md:flex-row">
+                            <label className="p-3 bg-[#1E3766] text-white font-medium min-w-[120px]">Propósito</label>
+                            <div className="flex-1">
+                                <table className="w-full">
+                                    <tbody>
+                                        {propositos.map((proposito, index) => (
+                                            <tr key={index} className="border-t border-gray-200">
+                                                <td className="w-full">
+                                                    <p className="w-full border border-gray-300 rounded px-4 py-2 m-2 bg-gray-50 text-start">
+                                                        {proposito.descripcion}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-                <div className="flex flex-row">
-                    <p className="p-2 bg-[#1E3766] text-white"> alcance</p>
+                    {/* Agrupamos las tablas en un solo contenedor y reducimos el margen superior */}
+                    <div className="bg-white w-[100%] rounded-xl flex flex-row mt-4">
+                        <div className="flex flex-col w-[25%]">
+                            <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Procesos</h3>
+                            <p id="proceso-planauditoria" className="w-full text-center px-4 py-2 m-2 border border-gray-300 rounded bg-gray-50">{plan.proceso}</p>
+                        </div>
+                        <div className="flex flex-col w-[25%]">
+                            <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Líder</h3>
+                            <p id="liderProceso-planauditoria" className="w-full text-center px-4 py-2 m-2 border border-gray-300 rounded bg-gray-50">{plan.lider_proceso}</p>
+                        </div>
+                        <div className="flex flex-col w-[25%]">
+                            <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Auditados</h3>
+                            <table className="w-full">
+                                <tbody>
+                                    {auditados.map((auditado, index) => (
+                                        <tr key={index}>
+                                            <td>
+                                                <p id={auditado.id} className="w-full text-center px-4 py-2 m-2 border border-gray-300 rounded bg-gray-50">{auditado.auditado}</p>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="flex flex-col w-[25%]">
+                            <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Firma</h3>
+                            <p className= "text-center py-4 text-gray-500">Espacio para firma</p>
+                        </div>
+                    </div>
 
-                    <p
-                  type="text"
-                  id="alcance-planauditoria"
-                  placeholder="alcance"
-                  className="w-full text-center"
-                
-                   >{plan.alcance}</p>
-                </div>
-
-                <div className="flex flex-row">
-                    <p className="p-2 bg-[#1E3766] text-white"> proposito</p>
-
-                    <table
-                        className="w-full"
-                        >
-                        <tbody>
-                        {propositos.map((proposito, index) => (
-                            <tr key={index}>
-                            <td>
-                            <p
-                            type="text"
-                            className="w-full text-center"
-                            >{proposito.descripcion}</p>
-                   </td>
-                            </tr>
-                        ))
-                        }
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-
-            </div>
-
-            <div 
-            className="bg-white w-[90%] rounded-xl
-            flex flex-row mt-10 ">
-                <div className="flex flex-col w-[25%]">
-                    <h3 className="bg-[#1E3766] text-white text-center">Procesos</h3>
-                    <p
-                  type="text"
-                  id="proceso-planauditoria"
-                  className="w-full text-center"
-
-                   >{plan.proceso}</p>
-
-                </div>
-                <div className="flex flex-col w-[25%]">
-                    <h3 className="bg-[#1E3766] text-white text-center">Lider</h3>
-                    <p
-                  type="text"
-                  id="liderProceso-planauditoria" 
-                  className="w-full text-center"
-
-                   > {plan.lider_proceso}</p>
-                </div>
-
-                <div className="flex flex-col w-[25%]">
-                    <h3 className="bg-[#1E3766] text-white text-center">Auditados</h3>
-                    <table
-                        className="w-full"
-                        >
-                        <tbody >
-                        { auditados.map( (auditado, index) => (
-                       
-                            <tr key={index}>
-                            <td>
-                            <p
-                            type="text"
-                            id={auditado.id}
-                            className="w-full text-center"
-
-                            > {auditado.auditado}</p>
-                            </td>
-                            </tr>
-                            
-                        )
-                        )}
-                        </tbody>
-                    </table>
-                </div>
-                <div className="flex flex-col w-[25%]">
-                    <h3 className="bg-[#1E3766] text-white text-center">Firma</h3>
-                    <p> </p>
-                </div>
-
-            </div>
-
-            {/*                                                  REUNIONES                  */}
-
-
-            <div className=" w-[90%] mt-10 flex flex-row">
-                <div className="bg-white w-[70%] mr-10">
-                    <table
-                        className="w-full"
-                        >
-                        <thead className=" bg-[#1E3766] text-white text-center">
-                        <tr>
-                            <th>Tipo de reunion </th>
-                            <th> Fecha </th>
-                            <th> Hora </th>
-                            <th> Lugar </th>
-       
-                        </tr>
-
-                        </thead>
-                        <tbody>
-                            {reuniones && (
-                                reuniones.map((reunion,index)=>(
-                                    <tr key={ reunion.id}>
-                                    <td>
-                                    <p
-                                    id={"tipoReunion" + reunion.id}
-                                    value={reunion.apertura ? "apertura" : "cierre"}
-                                    className="w-full text-center"
-                                    >
-                                    {reunion.apertura ? "apertura" : "cierre"}
-                                    </p>
-                                    </td>
-                                    <td>
-                                    <p
-                            type="text"
-                            id={"fechaReunion"+reunion.id}
-                            placeholder="reunion"
-                            className="w-full text-center"
-  
-                            >{reunion.fecha}</p>
-                            </td>
-                                    <td>
-                                    <p
-                            type="text"
-                            id={"horaReunion"+reunion.id}
-                            placeholder="hora"
-                            value={reunion.hora}
-                            className="w-full text-center"
-
-                            >{reunion.hora} </p>
-                            </td>
-                                    <td>
-                                    <p
-                            type="text"
-                            id={"lugarReunion"+reunion.id}
-                            placeholder="auditado"
-                            className="w-full text-center"
-                            > {reunion.lugar}</p>
-                            </td>
+                    {/* Tabla de reuniones y auditores */}
+                    <div className="w-[100%] mt-6 flex flex-col md:flex-row gap-6">
+                        {/* Reuniones */}
+                        <div className="bg-white rounded-xl shadow-md overflow-hidden flex-1">
+                            <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium">Reuniones</h3>
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead className="bg-[#1E3766] text-white">
+                                        <tr>
+                                            <th className="p-3">Tipo de reunión</th>
+                                            <th className="p-3">Fecha</th>
+                                            <th className="p-3">Hora</th>
+                                            <th className="p-3">Lugar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {reuniones && reuniones.map((reunion, index) => (
+                                            <tr key={reunion.id} className="border-t border-gray-200 hover:bg-gray-50">
+                                                <td className="p-3 text-center">
+                                                    <span className="border border-gray-300 rounded px-3 py-2 bg-gray-50 block">
+                                                        {reunion.apertura ? "apertura" : "cierre"}
+                                                    </span>
+                                                </td>
+                                                <td className="p-3 text-center">
+                                                    <span className="border border-gray-300 rounded px-3 py-2 bg-gray-50 block">
+                                                        {reunion.fecha}
+                                                    </span>
+                                                </td>
+                                                <td className="p-3 text-center">
+                                                    <span className="border border-gray-300 rounded px-3 py-2 bg-gray-50 block">
+                                                        {reunion.hora}
+                                                    </span>
+                                                </td>
+                                                <td className="p-3 text-center">
+                                                    <span className="border border-gray-300 rounded px-3 py-2 bg-gray-50 block">
+                                                        {reunion.lugar}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {/* Auditores */}
+                                                <div className="bg-white rounded-xl shadow-md overflow-hidden w-full md:w-[30%] flex-shrink-0 flex flex-col justify-start">
+                                                    <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium">Auditores</h3>
+                                                    {plan && trabajadores.length > 0 && (
+                                                        <table className="w-full text-center">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td className="bg-[#1E3766] text-white font-medium p-3">Líder auditoría</td>
+                                                                    <td className="p-3">
+                                                                        <span className="border border-gray-300 rounded px-3 py-2 bg-gray-50 block">
+                                                                            {trabajadores.find(trabajador => trabajador.id == plan.auditor_lider)?.nombre || ""}
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td className="bg-[#1E3766] text-white font-medium p-3">Auditor auxiliar</td>
+                                                                    <td className="p-3">
+                                                                        <span className="border border-gray-300 rounded px-3 py-2 bg-gray-50 block">
+                                                                            {trabajadores.find(trabajador => trabajador.id == plan.auditor)?.nombre || ""}
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    )}
+                                                </div>
+                                                </div>
+                                                </div>
+                                                
+                                                <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 rounded-xl p-4">
+                                                    <table className="w-full text-center">
+                                                        <thead className="bg-[#1E3766] text-white">
+                                                            <tr>
+                                                                <th className="py-3 px-4 text-lg">Aspecto</th>
+                                                                <th className="py-3 px-4 text-lg">Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {aspectos.map((aspecto, index) => (
+                                                                <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                                                                    <td className="py-2 px-4">
+                                                                        <input
+                                                                            type="text"
+                                                                            className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                            value={aspecto.aspecto}
+                                                                            onChange={(e) => {
+                                                                                const nuevosAspectos = [...aspectos];
+                                                                                nuevosAspectos[index].aspecto = e.target.value;
+                                                                                setAspectos(nuevosAspectos);
+                                                                            }}
+                                                                        />
+                                                                    </td>
+                                                                    <td className="py-2 px-4">
+                                                                        <button
+                                                                            className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                                            onClick={() => {
+                                                                                setAspectos(prev => prev.filter((_, i) => i !== index));
+                                                                                if (aspecto.id != null) { borrarAspecto(aspecto.id) }
+                                                                            }}
+                                                                        >
+                                                                            Eliminar
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <button
+                                                    className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
+                                                    onClick={agregarAspectoAuditado}
+                                                >
+                                                    Agregar
+                                                </button>
+                        {/* Tabla para seleccionar de la lista de verificación */}
+                        <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl ">Lista de Verificación</h3>
+                        <div className="w-[90%] bg-white  shadow-md overflow-hidden mb-6">
+                            <table className="w-full text-center">
+                                <thead className="bg-[#1E3766] text-white">
+                                    <tr>
+                                        <th className="py-3 px-4 text-lg">Descripción</th>
+                                        <th className="py-3 px-4 text-lg">Cumple</th>
+                                        <th className="py-3 px-4 text-lg">Incumple</th>
+                                        <th className="py-3 px-4 text-lg">No aplica</th>
                                     </tr>
-                                ))
+                                </thead>
+                                <tbody>
+                                    {listas.map((lista, index) => (
+                                        <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                                            <td className="py-2 px-4">{lista.descripcion}</td>
+                                            <td className="py-2 px-4">
+                                                <label className="flex items-center justify-center space-x-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={
+                                                            listaAuditada.some(audit => audit.id_listaverificacion === lista.id)
+                                                                ? listaAuditada.find(a => lista.id === a.id_listaverificacion).cumple === true &&
+                                                                  listaAuditada.find(a => lista.id === a.id_listaverificacion).aplica === true
+                                                                : false
+                                                        }
+                                                        onChange={(e) => {
+                                                            const isChecked = e.target.checked;
+                                                            if (listaAuditada.some(audit => audit.id_listaverificacion == lista.id)) {
+                                                                const nuevasListas = listaAuditada.map(item =>
+                                                                    item.id_listaverificacion == lista.id
+                                                                        ? isChecked
+                                                                            ? { ...item, cumple: true, aplica: true }
+                                                                            : { ...item, cumple: false }
+                                                                        : item
+                                                                );
+                                                                setListaAuditada(nuevasListas);
+                                                            } else {
+                                                                agregarListaAuditada(lista.id, isChecked, true);
+                                                            }
+                                                            if (isChecked) {
+                                                                const nuevo = {
+                                                                    id_auditoria: auditoria.id,
+                                                                    virtud: lista.cumplimiento
+                                                                };
+                                                                setFortalezas([...fortalezas, nuevo]);
+                                                            }
+                                                        }}
+                                                        className="w-5 h-5 accent-green-600"
+                                                    />
+                                                </label>
+                                            </td>
+                                            <td className="py-2 px-4">
+                                                <label className="flex items-center justify-center space-x-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={
+                                                            listaAuditada.some(audit => audit.id_listaverificacion === lista.id)
+                                                                ? listaAuditada.find(a => lista.id === a.id_listaverificacion)?.cumple === false &&
+                                                                  listaAuditada.find(a => lista.id === a.id_listaverificacion)?.aplica === true
+                                                                : false
+                                                        }
+                                                        onChange={(e) => {
+                                                            const isChecked = e.target.checked;
+                                                            if (listaAuditada.some(audit => audit.id_listaverificacion == lista.id)) {
+                                                                const nuevasListas = listaAuditada.map(item =>
+                                                                    item.id_listaverificacion == lista.id
+                                                                        ? isChecked
+                                                                            ? { ...item, cumple: false, aplica: true }
+                                                                            : { ...item, cumple: true }
+                                                                        : item
+                                                                );
+                                                                setListaAuditada(nuevasListas);
+                                                            } else {
+                                                                agregarListaAuditada(lista.id, false, true);
+                                                            }
+                                                            if (isChecked) {
+                                                                const nuevo = {
+                                                                    id_auditoria: auditoria.id,
+                                                                    falta: lista.incumplimiento
+                                                                };
+                                                                setDebilidades([...debilidades, nuevo]);
+                                                            }
+                                                        }}
+                                                        className="w-5 h-5 accent-red-600"
+                                                    />
+                                                </label>
+                                            </td>
+                                            <td className="py-2 px-4">
+                                                <label className="flex items-center justify-center space-x-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={
+                                                            listaAuditada.some(audit => audit.id_listaverificacion === lista.id)
+                                                                ? listaAuditada.find(a => lista.id === a.id_listaverificacion)?.aplica === false
+                                                                : false
+                                                        }
+                                                        onChange={(e) => {
+                                                            const isChecked = e.target.checked;
+                                                            if (listaAuditada.some(audit => audit.id_listaverificacion == lista.id)) {
+                                                                const nuevasListas = listaAuditada.map(item =>
+                                                                    item.id_listaverificacion == lista.id
+                                                                        ? isChecked
+                                                                            ? { ...item, cumple: false, aplica: false }
+                                                                            : { ...item, aplica: true }
+                                                                        : item
+                                                                );
+                                                                setListaAuditada(nuevasListas);
+                                                            } else {
+                                                                agregarListaAuditada(lista.id, false, isChecked ? false : true);
+                                                            }
+                                                        }}
+                                                        className="w-5 h-5 accent-gray-600"
+                                                    />
+                                                </label>
+                                            </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
 
-                            )}
-
-                        </tbody>
-
-                    </table>
-                </div>
-                <div className="bg-white w-[30%] ml-10">
-                    <h2
-                    className=" bg-[#1E3766] text-white text-center"
-                    > Auditores</h2>
-                    {plan && trabajadores.length > 0 && (
-                        <table className="w-full text-center">
-                            <tbody>
-                                <tr>
-                                    <td className=" bg-[#1E3766] text-white text-center">lider auditoria</td>
-                                    <td>
-                                    <p
-                                    className="w-full text-center"
-                                    >
-                                    {trabajadores.find(trabajador => trabajador.id == plan.auditor_lider).nombre}
-                                    </p>
-                            </td>
-                                </tr>
-                                <tr>
-                                    <td className=" bg-[#1E3766] text-white text-center">auditor auxiliar</td>
-                                    <td>
-                                    <p
-                                    id={plan.auditor || ""}
-                 
-                                    className="w-full text-center"
-                                    >
-                                    {trabajadores.find(trabajador => trabajador.id == plan.auditor).nombre}
-                                    </p>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    )}
-
-                </div>
-
-            </div>
-            {/* tabla para ingresar los aspectos que fueron auditados*/}
-            <table className="tabla-trabajadores mt-3 w-[90%] bg-white rounded-xl text-center">
-                        <thead className='bg-[#1E3766] text-white'>
-                          <tr>
-                            <th>aspecto</th>
-                            <th>accion</th>
-                          </tr>
-                        </thead>
-
-                        <tbody id="tbody-aspectos">
-                        
-                        {aspectos.map((aspecto,index) => (
-                        <tr key={index}>
-                        <td>
-    
-                        <input
-                        type="text"
-                        value={aspecto.aspecto}
-                        className="w-full h-5 bg-gray-200 text-center"
-                        onChange={(e) => {
-                            const nuevosAspectos = [...aspectos];
-                            nuevosAspectos[index].aspecto = e.target.value;
-                            setAspectos(nuevosAspectos);
-                        }}
-                        />
-                        
-                        </td>
-                        <td>
-                            <button className="bg-[#1E3766] rounded-full text-white text-xl p-1" 
-                            onClick={() => {
-                                    setAspectos(prev => prev.filter((_, i) => i !== index));
-                                    if(aspecto.id != null){borrarAspecto(aspecto.id)};
-                                  }}
-                                  > Borrar </button>
-                        </td>
-                        </tr>
-                        ) )}
-                        
-                        </tbody>
-                      </table>
-                    <button className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2" 
-                        onClick={agregarAspectoAuditado}>Agregar</button>
-
-            {/* tabla para seleccionar de la lista de verificacion*/}
-            <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl rounded-xl"> Lista de Verificacion</h3>
-            <table className="tabla-trabajadores w-[90%] bg-white rounded-xl text-center">
-                        <thead className='bg-[#1E3766] text-white'>
-                          <tr>
-                            <th>Descripcion</th>
-                            <th>Cumple</th>
-                            <th>Incumple</th>
-                            <th>No aplica</th>
-                          </tr>
-                        </thead>
-                        <tbody id="tbody-trabajadores">
-                          {listas
-                            .map((lista, index) => (
-                              <tr key={index}>
-                                <td>{lista.descripcion}</td>
-                                
-                                <td>
-                                <label className="flex items-center space-x-2">
-                                
-                                <input
-                                type="checkbox"
-                                checked={
-                                    listaAuditada.some(audit => audit.id_listaverificacion === lista.id)
-                                    ? listaAuditada.find(a => lista.id === a.id_listaverificacion).cumple === true
-                                    : false
-                                }
+    {/* Tabla de Fortalezas */}
+    <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl "> Fortalezas </h3>
+    <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 ">
+        <table className="w-full text-center">
+            <thead className="bg-[#1E3766] text-white">
+                <tr>
+                    <th className="py-3 px-4 text-lg">Descripción</th>
+                    <th className="py-3 px-4 text-lg">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {fortalezas.map((fortaleza, index) => (
+                    <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                        <td className="py-2 px-4">
+                            <input
+                                type="text"
+                                className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={fortaleza.virtud}
                                 onChange={(e) => {
-                                    const isChecked = e.target.checked;
-
-                                    // Ya existe: actualizamos
-                                    if (listaAuditada.some(audit => audit.id_listaverificacion == lista.id)) {
-                                    const nuevasListas = listaAuditada.map(item =>
-                                        item.id_listaverificacion == lista.id
-                                        ? isChecked == true? { ...item, cumple: true, aplica: true} : 
-                                                             { ...item, cumple: false, aplica: true } 
-                                        : item
-                                    );
-                                    setListaAuditada(nuevasListas); // ✅ corregido aquí
-                                    } else {
-                                    // No existe: agregamos
-                                    agregarListaAuditada(lista.id, isChecked, false);
-                                    }
-                                    console.log(listaAuditada)
-                                    
-                                    if(isChecked == true){
-                                        const nuevo = {
-                                        id_auditoria: auditoria.id, 
-                                        virtud: lista.cumplimiento
-                                        };
-                                        setFortalezas([...fortalezas, nuevo]);
-                                    } 
+                                    const newFortalezas = [...fortalezas];
+                                    newFortalezas[index].virtud = e.target.value;
+                                    setFortalezas(newFortalezas);
                                 }}
-                                className="w-5 h-5"
-                                />
-                              
-                                </label>
-                                </td>
-                                <td>
-                                <label className="flex items-center space-x-2">
-                                    <input
-                                    type="checkbox"
-                                    checked={
-                                        listaAuditada.some(audit => audit.id_listaverificacion === lista.id)
-                                        ? listaAuditada.find(a => lista.id === a.id_listaverificacion)?.cumple === false
-                                        : true
-                                    }
-                                    onChange={(e) => {
-                                        const isChecked = e.target.checked;
-
-                                        // Ya existe: actualizamos
-                                        if (listaAuditada.some(audit => audit.id_listaverificacion == lista.id)) {
-                                        const nuevasListas = listaAuditada.map(item =>
-                                            item.id_listaverificacion == lista.id
-                                            ? isChecked == true? { ...item, cumple: false, aplica: true} : 
-                                                                { ...item, cumple: true, aplica: true } 
-                                            : item
-                                        );
-                                        setListaAuditada(nuevasListas); // ✅ corregido aquí
-                                        } else {
-                                        // No existe: agregamos
-                                        agregarListaAuditada(lista.id, isChecked, false);
-                                        }
-                                        console.log(listaAuditada)
-                                        if(isChecked == true){
-                                        const nuevo = {
-                                        id_auditoria: auditoria.id, 
-                                        falta: lista.incumplimiento
-                                        };
-                                        setDebilidades([...debilidades, nuevo]);
-                                        } 
-                                    }}
-                                    className="w-5 h-5"
-                                    />
-                
-                                </label>
-                                </td>
-                                <td>
-                                    <label className="flex items-center space-x-2">
-                                    <input
-                                    type="checkbox"
-                                    checked={
-                                        listaAuditada.some(audit => audit.id_listaverificacion === lista.id)
-                                        ? listaAuditada.find(a => lista.id === a.id_listaverificacion)?.aplica === false
-                                        : true
-                                    }
-                                    onChange={(e) => {
-                                        const isChecked = e.target.checked;
-
-                                        // Ya existe: actualizamos
-                                        if (listaAuditada.some(audit => audit.id_listaverificacion == lista.id)) {
-                                        const nuevasListas = listaAuditada.map(item =>
-                                            item.id_listaverificacion == lista.id
-                                            ? isChecked == true? { ...item, cumple: false, aplica: false} : 
-                                                                { ...item,  aplica: true } 
-                                            : item
-                                        );
-                                        setListaAuditada(nuevasListas); // ✅ corregido aquí
-                                        } else {
-                                        // No existe: agregamos
-                                        agregarListaAuditada(lista.id, false, isChecked);
-                                        }
-                                        console.log(listaAuditada)
-
-                                    }}
-                                    className="w-5 h-5"
-                                    />
-     
-                                </label>
-                                </td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-
-                            {/* Tabla de Fortalezas */}
-<h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl rounded-xl"> Fortalezas </h3>
-            <table className="tabla-trabajadores w-[90%] bg-white rounded-xl text-center">
-                        <thead className='bg-[#1E3766] text-white'>
-                          <tr>
-                            <th>Descripcion</th>
-                            <th>Acciones</th>
-                          </tr>
-                        </thead>
-                        <tbody id="tbody-trabajadores">
-                          {fortalezas
-                            .map((fortaleza, index) => (
-                              <tr key={index}>
-                                <td>
-                                    <input 
-                                    type="text"
-                                    className="bg-gray-200 w-[90%] m-2"
-                                    value={fortaleza.virtud}
-                                    onChange={(e) => {
-                                        const newFortalezas = [...fortalezas];
-                                        newFortalezas[index].virtud = e.target.value;
-                                        setFortalezas(newFortalezas);
-                                    }}
-                                    />
-
-                                </td>
-                                                        <td>
-                                <button className="bg-[#1E3766] rounded-full text-white text-xl p-1" 
+                            />
+                        </td>
+                        <td className="py-2 px-4">
+                            <button
+                                className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
                                 onClick={() => {
-                                        setFortalezas(prev => prev.filter((_, i) => i !== index));
-                                        if(fortaleza.id != null){borrarFortalezas(fortaleza.id)};
-                                    }}
-                                    > Borrar </button>
-                            </td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                        <button className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2" 
-                        onClick={agregarFortalezas}>Agregar</button>
+                                    setFortalezas(prev => prev.filter((_, i) => i !== index));
+                                    ;
+                                                                    }}
+                                                                >
+                                                                    Eliminar
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <button
+                                            className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
+                                            onClick={agregarFortalezas}
+                                        >
+                                            Agregar
+                                        </button>
+                                        {/* Tabla de Debilidades */}
+                                        <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl"> Debilidades </h3>
+                                        <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 ">
+                                            <table className="w-full text-center">
+                                                <thead className="bg-[#1E3766] text-white">
+                                                    <tr>
+                                                        <th className="py-3 px-4 text-lg">Descripción</th>
+                                                        <th className="py-3 px-4 text-lg">Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {debilidades.map((debilidad, index) => (
+                                                        <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                                                            <td className="py-2 px-4">
+                                                                <input
+                                                                    type="text"
+                                                                    className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                    value={debilidad.falta}
+                                                                    onChange={(e) => {
+                                                                        const newDebilidades = [...debilidades];
+                                                                        newDebilidades[index].falta = e.target.value;
+                                                                        setDebilidades(newDebilidades);
+                                                                    }}
+                                                                />
+                                                            </td>
+                                                            <td className="py-2 px-4">
+                                                                <button
+                                                                    className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                                    onClick={() => {
+                                                                        setDebilidades(prev => prev.filter((_, i) => i !== index));
+                                                                        }}
+                                                                    >
+                                                                        Eliminar
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <button
+                                                className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
+                                                onClick={agregarDebilidades}
+                                            >
+                                                Agregar
+                                            </button>
 
-
-
-{/* Tabla de debilidades */}
-<h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl rounded-xl"> Debilidades </h3>
-            <table className="tabla-trabajadores w-[90%] bg-white rounded-xl text-center">
-                        <thead className='bg-[#1E3766] text-white'>
-                          <tr>
-                            <th>Descripcion</th>
-                            <th>Acciones</th>
-                          </tr>
-                        </thead>
-                        <tbody id="tbody-trabajadores">
-                          {debilidades
-                            .map((debilidad, index) => (
-                              <tr key={index}>
-                                <td>
-                                    <input 
-                                    type="text"
-                                    className="bg-gray-200 w-[90%] m-2"
-                                    value={debilidad.falta}
-                                    onChange={(e) => {
-                                        const newLista = [...debilidades];
-                                        newLista[index].falta = e.target.value;
-                                        setDebilidades(newLista);
-                                    }}
-                                    />
-
-                                </td>
-                                <td>
-                                <button className="bg-[#1E3766] rounded-full text-white text-xl p-1" 
+    {/* Tabla de oportunidades */}
+    <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl "> Oportunidades de Mejora </h3>
+    <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 ">
+        <table className="w-full text-center">
+            <thead className='bg-[#1E3766] text-white'>
+                <tr>
+                    <th className="py-3 px-4 text-lg">Descripción</th>
+                    <th className="py-3 px-4 text-lg">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {oportunidades.map((oportunidad, index) => (
+                    <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                        <td className="py-2 px-4">
+                            <input
+                                type="text"
+                                className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={oportunidad.oportunidad}
+                                onChange={(e) => {
+                                    const newLista = [...oportunidades];
+                                    newLista[index].oportunidad = e.target.value;
+                                    setOportunidades(newLista);
+                                }}
+                            />
+                        </td>
+                        <td className="py-2 px-4">
+                            <button
+                                className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
                                 onClick={() => {
-                                        setDebilidades(prev => prev.filter((_, i) => i !== index));
-                                        if(debilidad.id != null){borrarDebilidades(debilidad.id)};
-                                    }}
-                                    > Borrar </button>
-                            </td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                        <button className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2" 
-                        onClick={agregarDebilidades}>Agregar</button>
+                                    setOportunidades(prev => prev.filter((_, i) => i !== index));
+                                    if (oportunidad.id != null) { borrarOportunidades(oportunidad.id) };
+                                }}
+                            >
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </div>
+    <button
+        className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
+        onClick={agregarOportunidades}
+    >
+        Agregar
+    </button>
 
-{/* Tabla de oportunidades */}
-<h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl rounded-xl"> Oportunidades de Mejora </h3>
-            <table className="tabla-trabajadores w-[90%] bg-white rounded-xl text-center">
-                        <thead className='bg-[#1E3766] text-white'>
-                          <tr>
-                            <th>Descripcion</th>
-                            <th>Acciones</th>
-                          </tr>
-                        </thead>
-                        <tbody id="tbody-trabajadores">
-                          {oportunidades
-                            .map((oportunidad, index) => (
-                              <tr key={index}>
-                                <td>
-                                    <input 
-                                    type="text"
-                                    className="bg-gray-200 w-[90%] m-2"
-                                    value={oportunidad.oportunidad}
-                                    onChange={(e) => {
-                                        const newLista = [...oportunidades];
-                                        newLista[index].oportunidad = e.target.value;
-                                        setOportunidades(newLista);
-                                    }}
-                                    />
-
-                                </td>
-                                                                <td>
-                                <button className="bg-[#1E3766] rounded-full text-white text-xl p-1" 
-                                onClick={() => {
-                                        setOportunidades(prev => prev.filter((_, i) => i !== index));
-                                        if(oportunidad.id != null){borrarOportunidades(oportunidad.id)};
-                                    }}
-                                    > Borrar </button>
-                            </td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                        <button className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2" 
-                        onClick={agregarOportunidades}>Agregar</button>
-
-
-{/* Tabla de Compromisos */}
-<h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl rounded-xl"> Compromisos </h3>
-            <table className="tabla-trabajadores w-[90%] bg-white rounded-xl text-center">
-                        <thead className='bg-[#1E3766] text-white'>
-                          <tr>
-                            <th>Compromiso</th>
-                            <th>Responsable</th>
-                            <th>Fecha Limite</th>
-                            <th>Acciones</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          {compromisos
-                            .map((compromiso, index) => (
-                              <tr key={index}>
-                                <td>
-                                    <input 
-                                    type="text"
-                                    className="bg-gray-200 w-[90%] m-2"
-                                    value={compromiso.compromiso}
-                                    onChange={(e) => {
-                                        const newLista = [...compromisos];
-                                        newLista[index].compromiso = e.target.value;
-                                        setCompromisos(newLista);
-                                    }}
-                                    />
-
-                                </td>
-                                <td>
-                                    <input 
-                                    type="text"
-                                    className="bg-gray-200 w-[90%] m-2"
-                                    value={compromiso.responsable}
-                                    onChange={(e) => {
-                                        const newLista = [...compromisos];
-                                        newLista[index].responsable = e.target.value;
-                                        setCompromisos(newLista);
-                                    }}
-                                    />
-                                </td>
-                                <td>
-                                <input
+    {/* Tabla de Compromisos */}
+    <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl "> Compromisos </h3>
+    <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 ">
+        <table className="w-full text-center">
+            <thead className='bg-[#1E3766] text-white'>
+                <tr>
+                    <th className="py-3 px-4 text-lg">Compromiso</th>
+                    <th className="py-3 px-4 text-lg">Responsable</th>
+                    <th className="py-3 px-4 text-lg">Fecha Limite</th>
+                    <th className="py-3 px-4 text-lg">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {compromisos.map((compromiso, index) => (
+                    <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                        <td className="py-2 px-4">
+                            <input
+                                type="text"
+                                className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={compromiso.compromiso}
+                                onChange={(e) => {
+                                    const newLista = [...compromisos];
+                                    newLista[index].compromiso = e.target.value;
+                                    setCompromisos(newLista);
+                                }}
+                            />
+                        </td>
+                        <td className="py-2 px-4">
+                            <input
+                                type="text"
+                                className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                value={compromiso.responsable}
+                                onChange={(e) => {
+                                    const newLista = [...compromisos];
+                                    newLista[index].responsable = e.target.value;
+                                    setCompromisos(newLista);
+                                }}
+                            />
+                        </td>
+                        <td className="py-2 px-4">
+                            <input
                                 type="datetime-local"
-                                id="datetime3"
                                 value={compromiso.fecha_limite?.slice(0, 16) || ""}
                                 onChange={(e) => {
                                     const newLista = [...compromisos];
                                     newLista[index].fecha_limite = e.target.value;
                                     setCompromisos(newLista);
                                 }}
-                                className="border border-gray-300 rounded px-3 py-2"
-                                />
-                                </td>
-                                <td>
-                                <button className="bg-[#1E3766] rounded-full text-white text-xl p-1" 
+                                className="border border-gray-300 rounded px-3 py-2 w-full"
+                            />
+                        </td>
+                        <td className="py-2 px-4">
+                            <button
+                                className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
                                 onClick={() => {
-                                        setCompromisos(prev => prev.filter((_, i) => i !== index));
-                                        if(compromiso.id != null){borrarCompromisos(compromiso.id)};
-                                    }}
-                                    > Borrar </button>
-                            </td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                        <button className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2" 
-                        onClick={agregarCompromisos}>Agregar</button>
+                                    setCompromisos(prev => prev.filter((_, i) => i !== index));
+                                    if (compromiso.id != null) { borrarCompromisos(compromiso.id) };
+                                }}
+                            >
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </div>
+    <button
+        className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
+        onClick={agregarCompromisos}
+    >
+        Agregar
+    </button>
 
-            <div className="mt-10"
-            
-            >
-                <button id="btn-guardar-edicion" 
-                className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
-                onClick={() => {
+                <div className="mt-10"
+                
+                >
+                    <button id="btn-guardar-edicion" 
+                    className="btn text-xl ml-5 p-2"
+                    onClick={() => {
                     guardarAuditoria();
                     sleep(1000).then(() => window.location.reload());}}>
                 Guardar
                 </button>
                 <button
                 id="btn-cancelar-edicion"
-                className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
+                className="btn-gray text-xl ml-5 p-2"
                 onClick={() => {
                     window.location.reload();}}
                 >
                 Cancelar
                 </button>
             </div>
-            </div>
+            
 
 
-        }
-        </>
+        </div>
+        
+                }
+                </>
+
     )
 }
 

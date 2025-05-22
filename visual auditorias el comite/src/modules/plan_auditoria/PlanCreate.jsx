@@ -179,6 +179,7 @@ const PlanCreate = () => {
                                             <td className="text-right pr-4">
                                                 <button
                                                     className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                    style={{ marginLeft: "0.5rem", marginTop: "0" }}
                                                     onClick={() => {
                                                         setPropositos(prev => prev.filter((_, i) => i !== index));
                                                         if (proposito.id != null) { borrarProposito(proposito.id) };
@@ -260,6 +261,7 @@ const PlanCreate = () => {
                                         <td className="text-right pr-4">
                                             <button
                                                 className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                style={{ marginLeft: "0.5rem", marginTop: "0" }}
                                                 onClick={() => {
                                                     setAuditados(prev => prev.filter((_, i) => i !== index));
                                                     if (auditado.id != null) { borrarAuditado(auditado.id) };
