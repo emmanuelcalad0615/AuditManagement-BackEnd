@@ -69,10 +69,10 @@ const PlanEdit = (prop) => {
         setCompromisos([...compromisos, nuevo]);
     };
 
-    const agregarAspectoAuditado = () => {
+    const agregarAspectoAuditado = (id) => {
         const nuevo = {
           
-          id_auditoria: auditoria.id, // o usa un UUID si prefieres
+          id_auditoria: auditoria.id, 
           aspecto: ""
         };
         setAspectos([...aspectos, nuevo]);
@@ -147,13 +147,16 @@ const PlanEdit = (prop) => {
     }
 
     const guardarAuditoria = () => {
+
+        console.log(auditoria);
+
+        console.log(aspectos);
         guardarAspectos(aspectos);
         guardarCompromisos(compromisos);
         guardarFortalezas(fortalezas);
         guardarDebilidades(debilidades);
         guardarOportunidades(oportunidades);
         guardarListaxAuditoria(listaAuditada);
-        
     };
 
     useEffect(() => {
@@ -161,15 +164,14 @@ const PlanEdit = (prop) => {
         traerTodoTrabajador().then((e)=>setTrabajadores(e));
         traerPropositos(prop.id).then((e) => setPropositos(e));
         traerID(prop.id).then((e) => {
-   
-            setPlan(e);});
+        setPlan(e);});
         traerAuditadosPlan(prop.id).then((e)=>setAuditados(e));
         traerItinerarioPlan(prop.id).then((e)=>setItinerarios(e));
         traerReunionPlan(prop.id).then((e)=>setReuniones(e));
         traerListasV().then((e) => setListas(e));
 
         traerAuditoria(prop.id).then((e)=>{
-            console.log(e)
+ 
             setAuditoria(e);
             traerAspectos(e.id).then((e)=>setAspectos(e));
             traerListaxAuditoria(e.id).then((e)=>setListaAuditada(e));
@@ -180,7 +182,7 @@ const PlanEdit = (prop) => {
         
         });
 
-        ;
+        
         
       }, [visual]); 
 
@@ -873,35 +875,34 @@ const PlanEdit = (prop) => {
                     <h2
                     className=" bg-[#1E3766] text-white text-center"
                     > Auditores</h2>
-                    {plan && trabajadores.length > 0 && (
-                        <table className="w-full text-center">
-                            <tbody>
-                                <tr>
-                                    <td className=" bg-[#1E3766] text-white text-center">lider auditoria</td>
-                                    <td>
-                                    <p
-                                    className="w-full text-center"
-                                    >
-                                    {trabajadores.find(trabajador => trabajador.id == plan.auditor_lider).nombre}
-                                    </p>
-                            </td>
-                                </tr>
-                                <tr>
-                                    <td className=" bg-[#1E3766] text-white text-center">auditor auxiliar</td>
-                                    <td>
-                                    <p
-                                    id={plan.auditor || ""}
-                 
-                                    className="w-full text-center"
-                                    >
-                                    {trabajadores.find(trabajador => trabajador.id == plan.auditor).nombre}
-                                    </p>
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    )}
+                    {plan && trabajadores.length > 0 && (() => {
+                        const lider = trabajadores.find(t => t.id == plan.auditor_lider);
+                        const auxiliar = trabajadores.find(t => t.id == plan.auditor);
+
+                        return (
+                            <table className="w-full text-center">
+                                <tbody>
+                                    <tr>
+                                        <td className="bg-[#1E3766] text-white text-center">líder auditoría</td>
+                                        <td>
+                                            <p className="w-full text-center">
+                                                {lider?.nombre || `ID no encontrado: ${plan.auditor_lider}`}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="bg-[#1E3766] text-white text-center">auditor auxiliar</td>
+                                        <td>
+                                            <p className="w-full text-center">
+                                                {auxiliar?.nombre || `ID no encontrado: ${plan.auditor}`}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        );
+                    })()}
 
                 </div>
 
@@ -947,7 +948,7 @@ const PlanEdit = (prop) => {
                         </tbody>
                       </table>
                     <button className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2" 
-                        onClick={agregarAspectoAuditado}>Agregar</button>
+                        onClick={() => agregarAspectoAuditado()}>Agregar</button>
 
             {/* tabla para seleccionar de la lista de verificacion*/}
             <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl rounded-xl"> Lista de Verificacion</h3>
@@ -1285,7 +1286,7 @@ const PlanEdit = (prop) => {
                 className="bg-[#1E3766] rounded-full text-white text-xl ml-5 p-2"
                 onClick={() => {
                     guardarAuditoria();
-                    sleep(1000).then(() => window.location.reload());}}>
+                    sleep(1000000).then(() => window.location.reload());}}>
                 Guardar
                 </button>
                 <button
