@@ -42,7 +42,6 @@ const PlanEdit = (prop) => {
 
     const agregarDebilidades = () => {
         const nuevo = {
-          
           id_auditoria: auditoria.id, 
           falta: ""
         };
@@ -1224,7 +1223,7 @@ const PlanEdit = (prop) => {
                     <button id="btn-guardar-edicion" 
                     className="btn text-xl ml-5 p-2"
                     onClick={() => {
-                    guardarAuditoria();
+                    guardarplan();
                     sleep(1000).then(() => window.location.reload());}}>
                 Guardar
                 </button>

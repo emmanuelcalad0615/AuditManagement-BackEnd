@@ -325,7 +325,7 @@ const PlanCreate = () => {
                                         </td>
                                         <td className="p-3">
                                             <input
-                                                type="text"
+                                                type="date"
                                                 id={"fechaReunion" + reunion.id}
                                                 placeholder="Fecha"
                                                 value={reunion.fecha}
@@ -442,8 +442,8 @@ const PlanCreate = () => {
                                 <th className="p-3">Actividades</th>
                                 <th className="p-3">Auditado</th>
                                 <th className="p-3">Auditor</th>
-                                <th className="p-3">Fecha inicio</th>
-                                <th className="p-3">Fecha fin</th>
+                                <th className="p-3">Hora inicio</th>
+                                <th className="p-3">Hora fin</th>
                                 <th className="p-3">Lugar</th>
                                 <th className="p-3">Acciones</th>
                             </tr>

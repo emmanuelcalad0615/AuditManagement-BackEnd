@@ -45,8 +45,10 @@ class AuditoriaRepository:
             return lista
 
     def getByPlan(self, id):
+        print(" en el metodo get by plan")
         with SessionLocal() as session:
-            lista = session.query(Auditoria).filter(Auditoria.id_plan == id).all()
-            for objeto in lista:
-                objeto.__delattr__('_sa_instance_state')
-            return lista
+            auditoria = session.query(Auditoria).filter(Auditoria.id_plan == id).first()
+            if auditoria == None:
+                return {}
+            auditoria.__delattr__('_sa_instance_state')
+            return auditoria

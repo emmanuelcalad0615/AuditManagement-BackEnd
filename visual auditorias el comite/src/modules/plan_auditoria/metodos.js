@@ -166,12 +166,11 @@ export const borrarAuditado = async function(id){
 }
 /*auditoria */
 
-export const traerAuditoria = async function(id){
-
+export const traerAuditoria = async function(id) {
     const auditoria = {
         id_plan: id,
         fecha: "0000-00-00"
-    }
+    };
 
     const requestOptions = {
         method: "POST",
@@ -180,19 +179,26 @@ export const traerAuditoria = async function(id){
         redirect: "follow"
     };
 
-    var respuesta = await fetch("http://localhost:5000/auditoria/getByPlan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://localhost:5000/auditoria/getByPlan/" + id, requestOptionsGet)
         .then((response) => response.json());
-    console.log(respuesta)
-    let existente = respuesta.find((e) => e.id_plan === id);
+
+    console.log("Respuesta de auditoría:", respuesta);
+
+    let existente;
+
+    if (Array.isArray(respuesta)) {
+        existente = respuesta.find((e) => e.id_plan === id);
+    } else if (respuesta && typeof respuesta === "object") {
+        existente = respuesta; // si ya es el objeto directamente
+    }
 
     if (!existente) {
-
         existente = await fetch("http://localhost:5000/auditoria/save", requestOptions)
-        .then((response) => response.json());
-    } 
-    console.log(existente)
-    return existente;
+            .then((response) => response.json());
+    }
 
+    console.log("Auditoría existente o creada:", existente);
+    return existente;
 }
 
 /* auditoria x lista de verificacion */
@@ -271,7 +277,6 @@ export const borrarAspecto = async function(id){
         redirect: "follow"
     };
 
-    
     const respuesta = await fetch("http://localhost:5000/aspecto/delete/"+id, requestOptions)
         .then((response) => response.json());
 
