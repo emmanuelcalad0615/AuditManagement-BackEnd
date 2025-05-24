@@ -18,3 +18,19 @@ snap-confine has elevated permissions and is not confined but should be. Refusin
 Please make sure that the snapd.apparmor service is enabled and started.
 [10483:10483:0523/220410.632497:ERROR:mojo/public/cpp/bindings/lib/interface_endpoint_client.cc:725] Message 0 rejected by interface blink.mojom.WidgetHost
 [10483:10483:0523/230900.205067:ERROR:CONSOLE:1] "Uncaught (in promise) SyntaxError: Unexpected token 'H', "HTTP/1.1 4"... is not valid JSON", source: devtools://devtools/bundled/devtools_app.html?remoteBase=https://devtools.brave.com/serve_file/@9161158db1676f5fb4a6e048cc98d776dcbf9ba/&targetType=tab&can_dock=true&panel=elements (1)
+node:events:502
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event on ReadStream instance at:
+    at emitErrorNT (node:internal/streams/destroy:169:8)
+    at errorOrDestroy (node:internal/streams/destroy:238:7)
+    at node:internal/fs/streams:272:9
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:685:5) {
+  errno: -9,
+  code: 'EBADF',
+  syscall: 'read'
+}
+
+Node.js v20.19.0
