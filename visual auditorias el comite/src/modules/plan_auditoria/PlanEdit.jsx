@@ -6,7 +6,7 @@ import { traerID, traerPropositos, traerAuditadosPlan, traerTodoTrabajador,
     borrarAspecto, guardarListaxAuditoria, actualizarplan,
     traerOportunidades, guardarOportunidades, borrarOportunidades,
     traerDebilidades, guardarDebilidades, borrarDebilidades,
-    traerFortalezas, guardarFortalezas, borrarFortalezas,
+    traerFortalezas, guardarFortalezas, borrarFortalezas, borrarPlan,
     traerCompromisos, guardarCompromisos, borrarCompromisos,
     guardarplan,
  } from "./metodos";
@@ -661,15 +661,28 @@ const PlanEdit = (prop) => {
                 className="btn"
                 onClick={() => {
                     guardarPlanActividad();
-                    sleep(1000).then(() => window.location.reload());}}>
+                    sleep(500).then(() => window.location.reload());}}>
                 Guardar
+                </button>
+
+                <button
+                id="eliminar-plan-cascada"
+                className="btn-gray"
+                onClick={() => {
+                    console.log(prop.id);
+                    borrarPlan(prop.id);
+                    sleep(500).then(() => window.location.reload());
+                }}
+                >
+                Eliminar
                 </button>
 
                 <button
                 id="btn-cancelar-edicion"
                 className="btn-gray"
                 onClick={() => {
-                    window.location.reload();}}
+                borrarPlan(prop.id);
+                sleep(500).then(() => window.location.reload());}}
                 >
                 Volver
                 </button>
@@ -683,8 +696,8 @@ const PlanEdit = (prop) => {
         </div>
         }
 
+       {/*     VISUAL PARA HACER LA AUDITORIA              */}
 
-        {/*     VISUAL PARA HACER LA AUDITORIA              */}
 
         {visual=='b' &&
             <div className="w-full min-h-screen bg-gray-100 flex flex-col items-center py-8">
@@ -1223,8 +1236,10 @@ const PlanEdit = (prop) => {
                     <button id="btn-guardar-edicion" 
                     className="btn text-xl ml-5 p-2"
                     onClick={() => {
-                    guardarplan();
-                    sleep(1000).then(() => window.location.reload());}}>
+
+                    guardarAuditoria();
+                    sleep(500).then(() => window.location.reload());}}>
+
                 Guardar
                 </button>
                 <button
@@ -1242,7 +1257,8 @@ const PlanEdit = (prop) => {
         </div>
         
                 }
-                </>
+
+        </>
 
     )
 }

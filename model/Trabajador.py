@@ -9,3 +9,5 @@ class Trabajador(Base):
     nombre = Column(String(50))
     celular = Column(String(10))
     correo = Column(String(50))
+    password = Column(String(50))
+  

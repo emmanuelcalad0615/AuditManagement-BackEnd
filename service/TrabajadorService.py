@@ -1,5 +1,6 @@
 import json
 from model import Trabajador
+from model import Login
 from repository.mysql.TrabajadorRepository import TrabajadorRepository
 
 class TrabajadorService:
@@ -26,6 +27,15 @@ class TrabajadorService:
 
     def getId(self, id):
         return json.dumps(vars(self.repository.getId(id)))
+
+    def login(self, login):
+    
+        obj = Login()
+        for key, value in login.items():
+            if hasattr(obj, key):
+                setattr(obj, key, value)
+
+        return json.dumps(vars(self.repository.login(obj.password,obj.correo)))
 
     def getAll(self):
         data = [json.dumps(vars(objeto)) for objeto in self.repository.getAll()]
