@@ -15,3 +15,4 @@ from .Proposito import Proposito
 from .Reunion import Reunion
 from .Sector import Sector
 from .Trabajador import Trabajador
+from .Login import Login

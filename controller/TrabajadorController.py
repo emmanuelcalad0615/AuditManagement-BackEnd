@@ -20,6 +20,10 @@ def update():
 def get_id(id):
     return service.getId(id)
 
+@trabajador.route('/login', methods=['POST'])
+def login():
+    return service.login(request.json)
+
 @trabajador.route('/getAll', methods=['GET'])
 def get_all():
     return service.getAll()

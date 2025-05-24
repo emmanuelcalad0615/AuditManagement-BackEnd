@@ -36,6 +36,15 @@ class TrabajadorRepository:
             trabajador.__delattr__('_sa_instance_state')
             return trabajador
 
+    def login(self, password, email):
+
+        with SessionLocal() as session:
+            trabajador = session.query(Trabajador).filter(Trabajador.correo == email, Trabajador.password == password).first()
+            if trabajador == None:
+                return {}
+            trabajador.__delattr__('_sa_instance_state')
+            return trabajador
+
     def getAll(self):
         with SessionLocal() as session:
             lista = session.query(Trabajador).all()

@@ -437,6 +437,16 @@ export const actualizarplan = async function(plan){
     return respuesta;
     }
 
+export const borrarPlan = (id) => {
+    
+    const requestOptions = {
+    method: "DELETE",
+    headers: myHeaders,
+    redirect: "follow"
+    };
+
+    fetch("http://localhost:5000/plan/delete/"+id, requestOptions)
+}
 /*compromisos */
 
 export const traerCompromisos = async function(id){
