@@ -197,7 +197,7 @@ const PlanEdit = (prop) => {
                                 type="text"
                                 id="input-editar-plan"
                                 value={plan.nombre}
-                                onChange={(e) => setPlan({ ...plan, nombre: e.target.value })}
+                                onChange={(e) => {console.log(e);setPlan({ ...plan, nombre: e.target.value })}}
                                 className="flex-1 border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
@@ -655,7 +655,7 @@ const PlanEdit = (prop) => {
                 className="btn"
                 onClick={() => {
                     guardarPlanActividad();
-                    sleep(500).then(() => window.location.reload());}}>
+                    sleep(1000).then(() => window.location.reload());}}>
                 Guardar
                 </button>
 
