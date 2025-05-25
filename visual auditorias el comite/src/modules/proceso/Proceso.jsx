@@ -16,6 +16,9 @@ const Proceso = () => {
   const [nombreNuevo, setNombreNuevo] = useState("");
   const [reload, setReload] = useState(false);
 
+  const [errorNuevo, setErrorNuevo] = useState("");
+  const [errorEdit, setErrorEdit] = useState("");
+
   useEffect(() => {
     if (vista === "principal") {
       traerTodo()
@@ -26,16 +29,29 @@ const Proceso = () => {
     }
   }, [vista, reload]);
 
+  // Validación del nombre
+  const validarNombre = (nombre) => {
+    const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]{3,50}$/; // letras, números y espacios, mínimo 3 caracteres, sin símbolos ni comillas
+    return regex.test(nombre.trim());
+  };
+
   // EDITAR
   const handleEditar = (id) => {
     traerID(id).then((data) => {
       setProcesoId(data.id);
       setNombreEdit(data.nombre);
+      setErrorEdit(""); // Limpiar error al abrir el formulario de edición
       setVista("editar");
     });
   };
 
-  const handleGuardarEdicion = () => {
+  const handleGuardarEdicion = (e) => {
+    e.preventDefault(); // Evita el comportamiento por defecto del formulario
+    if (!validarNombre(nombreEdit)) {
+      setErrorEdit("El nombre debe tener entre 3 y 50 caracteres y no debe contener caracteres especiales.");
+      return;
+    }
+    setErrorEdit(""); // Resetea el error si la validación es correcta
     actualizarSector(procesoId, nombreEdit).then(() => {
       setVista("principal");
       setReload((prev) => !prev);
@@ -52,7 +68,11 @@ const Proceso = () => {
   // GUARDAR NUEVO
   const handleGuardarNuevo = (e) => {
     e.preventDefault();
-    if (nombreNuevo.trim() === "") return;
+    if (!validarNombre(nombreNuevo)) {
+      setErrorNuevo("El nombre debe tener entre 3 y 50 caracteres y no debe contener caracteres especiales.");
+      return;
+    }
+    setErrorNuevo(""); // Resetea el error si la validación es correcta
     guardarSector(nombreNuevo).then(() => {
       setNombreNuevo("");
       setVista("principal");
@@ -98,7 +118,10 @@ const Proceso = () => {
               </tbody>
             </table>
             <div className="flex justify-end">
-              <button className="btn" onClick={() => setVista("formulario")}>
+              <button className="btn" onClick={() => {
+                setErrorNuevo(""); // Limpiar error al abrir el formulario de nuevo proceso
+                setVista("formulario");
+              }}>
                 ➕ Agregar Proceso
               </button>
             </div>
@@ -118,10 +141,11 @@ const Proceso = () => {
                 type="text"
                 value={nombreNuevo}
                 onChange={(e) => setNombreNuevo(e.target.value)}
-                className="input"
+                className={`input ${errorNuevo ? "input-error" : ""}`}
                 required
               />
             </label>
+            {errorNuevo && <p className="text-red-600 text-sm">{errorNuevo}</p>}
             <div className="flex gap-4 mt-4">
               <button type="submit" className="btn">
                 Guardar
@@ -143,30 +167,33 @@ const Proceso = () => {
           <h2 className="bg-[#1E3766] text-white text-xl text-center rounded-xl mb-4">
             Editar Proceso
           </h2>
-          <div className="flex flex-col gap-4">
+          <form onSubmit={handleGuardarEdicion} className="flex flex-col gap-4">
             <label>
               Nombre
               <input
                 type="text"
                 value={nombreEdit}
                 onChange={(e) => setNombreEdit(e.target.value)}
-                className="input"
+                className={`input ${errorEdit ? "input-error" : ""}`}
                 required
               />
             </label>
+            {errorEdit && <p className="text-red-600 text-sm">{errorEdit}</p>}
             <div className="flex gap-4 mt-4 justify-center">
-              <button className="btn" onClick={handleGuardarEdicion}>
+              <button type="submit" className="btn">
                 Guardar
               </button>
               <button
+                type="button"
                 className="btn-gray"
                 onClick={() => setVista("principal")}
               >
                 Cancelar
               </button>
             </div>
-          </div>
+          </form>
         </section>
+
       )}
     </>
   );
