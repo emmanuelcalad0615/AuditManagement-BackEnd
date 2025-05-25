@@ -139,25 +139,23 @@ const PlanEdit = (prop) => {
     };
 
 
-    const guardarPlanActividad = () => {
-        guardarItinerarios(itinerarios);
-        guardarReuniones(reuniones);
-        guardarAuditadosPlan(auditados);
-        guardarPropositos(propositos);
-        actualizarplan(plan);
+    const  guardarPlanActividad = async () => {
+        
+        await guardarItinerarios(itinerarios);
+        await guardarReuniones(reuniones);
+        await guardarAuditadosPlan(auditados);
+        await guardarPropositos(propositos);
+        await actualizarplan(plan);
     }
 
-    const guardarAuditoria = () => {
+    const guardarAuditoria = async () => {
 
-        console.log(auditoria);
-        console.log(auditados);
-        console.log(aspectos);
-        guardarAspectos(aspectos);
-        guardarCompromisos(compromisos);
-        guardarFortalezas(fortalezas);
-        guardarDebilidades(debilidades);
-        guardarOportunidades(oportunidades);
-        guardarListaxAuditoria(listaAuditada);
+        await guardarAspectos(aspectos);
+        await guardarCompromisos(compromisos);
+        await guardarFortalezas(fortalezas);
+        await guardarDebilidades(debilidades);
+        await guardarOportunidades(oportunidades);
+        await guardarListaxAuditoria(listaAuditada);
     };
 
     useEffect(() => {
@@ -645,7 +643,7 @@ const PlanEdit = (prop) => {
                 <div className="flex justify-start">
                 <button
                     className="bg-green-600 hover:bg-green-700 rounded-full text-white px-4 py-2 m-2 transition-colors duration-200"
-                    onClick={agregarItinerario}
+                    onClick={() => agregarItinerario()}
                 >
                     Agregar Actividad
                 </button>
@@ -657,9 +655,9 @@ const PlanEdit = (prop) => {
                 <button 
                 id="btn-guardar-edicion" 
                 className="btn"
-                onClick={() => {
-                    guardarPlanActividad();
-                    sleep(10000).then(() => window.location.reload());}}>
+                onClick={async () => {
+                    await guardarPlanActividad();
+                    sleep(1000).then(() => window.location.reload());}}>
                 Guardar
                 </button>
 
@@ -1232,8 +1230,8 @@ const PlanEdit = (prop) => {
                 >
                     <button id="btn-guardar-edicion" 
                     className="btn text-xl ml-5 p-2"
-                    onClick={() => {
-                    guardarAuditoria();
+                    onClick={async () => {
+                    await guardarAuditoria();
                     sleep(1000).then(() => window.location.reload());}}>
                 Guardar
                 </button>
