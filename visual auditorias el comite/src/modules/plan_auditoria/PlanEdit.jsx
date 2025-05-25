@@ -101,6 +101,7 @@ const PlanEdit = (prop) => {
 
     
     const agregarAuditado = () => {
+        console.log(auditados)
         const nuevo = {
           
           id_plan: prop.id, // o usa un UUID si prefieres
@@ -149,7 +150,7 @@ const PlanEdit = (prop) => {
     const guardarAuditoria = () => {
 
         console.log(auditoria);
-
+        console.log(auditados);
         console.log(aspectos);
         guardarAspectos(aspectos);
         guardarCompromisos(compromisos);
@@ -396,7 +397,7 @@ const PlanEdit = (prop) => {
                                     id={"tipoReunion" + reunion.id}
                                     value={reunion.apertura ? "apertura" : "cierre"}
                                     onChange={(e) => {
-                                        const value = e.target.value === "apertura";
+                                        const value = e.target.value;
                                         const nuevasReuniones = [...reuniones];
                                         nuevasReuniones[index].apertura = value;
                                         setReuniones(nuevasReuniones);
@@ -658,7 +659,7 @@ const PlanEdit = (prop) => {
                 className="btn"
                 onClick={() => {
                     guardarPlanActividad();
-                    sleep(1000).then(() => window.location.reload());}}>
+                    sleep(10000).then(() => window.location.reload());}}>
                 Guardar
                 </button>
 
@@ -678,7 +679,6 @@ const PlanEdit = (prop) => {
                 id="btn-cancelar-edicion"
                 className="btn-gray"
                 onClick={() => {
-                borrarPlan(prop.id);
                 sleep(1000).then(() => window.location.reload());}}
                 >
                 Volver
@@ -1054,7 +1054,7 @@ const PlanEdit = (prop) => {
                                         </div>
                                         <button
                                             className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
-                                            onClick={agregarFortalezas}
+                                            onClick={() => agregarFortalezas()}
                                         >
                                             Agregar
                                         </button>
@@ -1100,7 +1100,7 @@ const PlanEdit = (prop) => {
                                             </div>
                                             <button
                                                 className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
-                                                onClick={agregarDebilidades}
+                                                onClick={() => agregarDebilidades()}
                                             >
                                                 Agregar
                                             </button>
@@ -1148,7 +1148,7 @@ const PlanEdit = (prop) => {
     </div>
     <button
         className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
-        onClick={agregarOportunidades}
+        onClick={() => agregarOportunidades()}
     >
         Agregar
     </button>
