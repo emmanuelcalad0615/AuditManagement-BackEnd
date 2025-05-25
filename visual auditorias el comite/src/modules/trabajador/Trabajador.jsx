@@ -9,6 +9,31 @@ import {
   traerSectores
 } from './metodos';
 
+const validarNombre = (nombre) => {
+  if (!nombre.trim()) return 'El nombre es obligatorio';
+  const match = nombre.match(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/);
+  if (match) return `Caracter inválido: "${match[0]}"`;
+  return '';
+};
+
+const validarCelular = (celular) => {
+  if (!celular.trim()) return 'El celular es obligatorio';
+  if (!/^\d+$/.test(celular)) return 'Ingrese solo números';
+  if (celular.length !== 10) return 'El celular debe tener 10 números';
+  return '';
+};
+
+const validarCorreo = (correo) => {
+  if (!correo.trim()) return 'El correo es obligatorio';
+  if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(correo)) return 'Correo inválido';
+  return '';
+};
+
+const validarSector = (id_sector) => {
+  if (!id_sector) return 'Debe seleccionar un sector';
+  return '';
+};
+
 const Trabajador = () => {
   const [trabajadores, setTrabajadores] = useState([]);
   const [vista, setVista] = useState('principal');
@@ -20,6 +45,7 @@ const Trabajador = () => {
     correo: '',
     id_sector: ''
   });
+  const [errores, setErrores] = useState({});
   const [reload, setReload] = useState(false);
 
   useEffect(() => {
@@ -45,6 +71,7 @@ const Trabajador = () => {
         correo: data.correo,
         id_sector: data.id_sector
       });
+      setErrores({});
     });
     setVista('editar');
   };
@@ -53,20 +80,58 @@ const Trabajador = () => {
     borrarID(id).then(() => setReload(prev => !prev));
   };
 
+  const validarFormulario = (formData) => {
+    const nuevosErrores = {
+      nombre: validarNombre(formData.nombre),
+      celular: validarCelular(formData.celular),
+      correo: validarCorreo(formData.correo),
+      id_sector: validarSector(formData.id_sector)
+    };
+    setErrores(nuevosErrores);
+    return !Object.values(nuevosErrores).some(Boolean);
+  };
+
   const handleGuardarEdicion = () => {
-  actualizartrabajador(trabajadorId, form).then(() => {
-    setVista('principal');
-    setReload(prev => !prev);
-  });
-};
+    if (!validarFormulario(form)) return;
+    actualizartrabajador(trabajadorId, form).then(() => {
+      setVista('principal');
+      setReload(prev => !prev);
+    });
+  };
 
   const handleInputChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    setErrores({ ...errores, [name]: '' });
   };
 
   const handleReset = (formElement) => {
     formElement.reset();
+    setForm({
+      nombre: '',
+      celular: '',
+      correo: '',
+      id_sector: ''
+    });
+    setErrores({});
     setVista('principal');
+  };
+
+  const handleAgregarSubmit = async (e) => {
+    e.preventDefault();
+    const formData = {
+      nombre: e.target.nombre.value,
+      celular: e.target.celular.value,
+      correo: e.target.correo.value,
+      id_sector: e.target.sector.value
+    };
+    if (!validarFormulario(formData)) return;
+    await guardartrabajador({
+      ...formData,
+      id_sector: formData.id_sector
+    });
+    setVista('principal');
+    setReload(prev => !prev);
   };
 
   return (
@@ -101,7 +166,7 @@ const Trabajador = () => {
               </tbody>
             </table>
             <div className="flex justify-end">
-              <button className="btn" onClick={() => setVista('formulario')}>➕ Agregar Trabajador</button>
+              <button className="btn" onClick={() => { setVista('formulario'); setErrores({}); setForm({ nombre: '', celular: '', correo: '', id_sector: '' }); }}>➕ Agregar Trabajador</button>
             </div>
           </div>
         </section>
@@ -111,25 +176,25 @@ const Trabajador = () => {
         <section className="bg-white rounded-xl m-5 p-5">
           <h2 className="bg-[#1E3766] text-white text-xl text-center rounded-xl mb-4">Agregar</h2>
           <form
-            onSubmit={async (e) => {
-              await guardartrabajador(e);
-              setVista('principal');
-              setReload(prev => !prev);
-            }}
+            onSubmit={handleAgregarSubmit}
             onReset={(e) => handleReset(e.target)}
             className="flex flex-col items-center gap-4"
+            noValidate
           >
             <label className="w-full max-w-md">
               Nombre
               <input name="nombre" className="input" required />
+              {errores.nombre && <span className="text-red-500 text-sm">{errores.nombre}</span>}
             </label>
             <label className="w-full max-w-md">
               Celular
-              <input name="celular" type="tel" pattern="[0-9]{9,15}" className="input" required />
+              <input name="celular" type="tel" className="input" required />
+              {errores.celular && <span className="text-red-500 text-sm">{errores.celular}</span>}
             </label>
             <label className="w-full max-w-md">
               Correo
               <input name="correo" type="email" className="input" required />
+              {errores.correo && <span className="text-red-500 text-sm">{errores.correo}</span>}
             </label>
             <label className="w-full max-w-md">
               Sector
@@ -139,6 +204,7 @@ const Trabajador = () => {
                   <option key={index} value={sector.id}>{sector.nombre}</option>
                 ))}
               </select>
+              {errores.id_sector && <span className="text-red-500 text-sm">{errores.id_sector}</span>}
             </label>
             <div className="flex gap-4 mt-4">
               <button type="submit" className="btn">Guardar</button>
@@ -154,43 +220,54 @@ const Trabajador = () => {
             Editar Trabajador
           </h2>
           <div className="bg-white rounded-xl p-4 w-full max-w-md flex flex-col gap-4">
-            <input
-              id="editar-nombre-trabajador"
-              name="nombre"
-              type="text"
-              value={form.nombre}
-              onChange={handleInputChange}
-              className="input"
-            />
-            <input
-              id="editar-celular-trabajador"
-              name="celular"
-              type="tel"
-              pattern="[0-9]{9,15}"
-              value={form.celular}
-              onChange={handleInputChange}
-              className="input"
-            />
-            <input
-              id="editar-correo-trabajador"
-              name="correo"
-              type="email"
-              value={form.correo}
-              onChange={handleInputChange}
-              className="input"
-            />
-            <select
-              id="input-editar-sector"
-              name="id_sector"
-              value={form.id_sector}
-              onChange={handleInputChange}
-              className="input"
-            >
-              <option value="">Seleccione un sector</option>
-              {sectores.map((sector, index) => (
-                <option key={index} value={sector.id}>{sector.nombre}</option>
-              ))}
-            </select>
+            <label>
+              <input
+                id="editar-nombre-trabajador"
+                name="nombre"
+                type="text"
+                value={form.nombre}
+                onChange={handleInputChange}
+                className="input"
+              />
+              {errores.nombre && <span className="text-red-500 text-sm">{errores.nombre}</span>}
+            </label>
+            <label>
+              <input
+                id="editar-celular-trabajador"
+                name="celular"
+                type="tel"
+                value={form.celular}
+                onChange={handleInputChange}
+                className="input"
+              />
+              {errores.celular && <span className="text-red-500 text-sm">{errores.celular}</span>}
+            </label>
+            <label>
+              <input
+                id="editar-correo-trabajador"
+                name="correo"
+                type="email"
+                value={form.correo}
+                onChange={handleInputChange}
+                className="input"
+              />
+              {errores.correo && <span className="text-red-500 text-sm">{errores.correo}</span>}
+            </label>
+            <label>
+              <select
+                id="input-editar-sector"
+                name="id_sector"
+                value={form.id_sector}
+                onChange={handleInputChange}
+                className="input"
+              >
+                <option value="">Seleccione un sector</option>
+                {sectores.map((sector, index) => (
+                  <option key={index} value={sector.id}>{sector.nombre}</option>
+                ))}
+              </select>
+              {errores.id_sector && <span className="text-red-500 text-sm">{errores.id_sector}</span>}
+            </label>
           </div>
           <div className="flex gap-4 mt-4">
             <button className="btn" onClick={handleGuardarEdicion}>Guardar</button>

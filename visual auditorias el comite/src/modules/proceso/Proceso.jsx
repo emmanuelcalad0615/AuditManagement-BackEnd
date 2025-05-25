@@ -46,13 +46,33 @@ const Proceso = () => {
   };
 
   const handleGuardarEdicion = (e) => {
-    e.preventDefault(); // Evita el comportamiento por defecto del formulario
-    if (!validarNombre(nombreEdit)) {
-      setErrorEdit("El nombre debe tener entre 3 y 50 caracteres y no debe contener caracteres especiales.");
+    e.preventDefault();
+    const nombre = nombreEdit.trim();
+
+    // Caso 1: Menos de 3 caracteres
+    if (nombre.length < 3) {
+      setErrorEdit("El nombre debe tener al menos 3 caracteres.");
       return;
     }
+
+    // Caso 2: Más de 50 caracteres
+    if (nombre.length > 50) {
+      setErrorEdit("El nombre no debe exceder los 50 caracteres.");
+      return;
+    }
+
+    // Caso 3: Caracteres inválidos
+    const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+    if (!regex.test(nombre)) {
+      const invalidChar = nombre.split("").find(c => !regex.test(c));
+      setErrorEdit(
+        `El nombre contiene un caracter inválido: "${invalidChar}". Solo se permiten letras, números y espacios.`
+      );
+      return;
+    }
+
     setErrorEdit(""); // Resetea el error si la validación es correcta
-    actualizarSector(procesoId, nombreEdit).then(() => {
+    actualizarSector(procesoId, nombre).then(() => {
       setVista("principal");
       setReload((prev) => !prev);
     });
@@ -68,12 +88,33 @@ const Proceso = () => {
   // GUARDAR NUEVO
   const handleGuardarNuevo = (e) => {
     e.preventDefault();
-    if (!validarNombre(nombreNuevo)) {
-      setErrorNuevo("El nombre debe tener entre 3 y 50 caracteres y no debe contener caracteres especiales.");
+    const nombre = nombreNuevo.trim();
+
+    // Caso 1: Menos de 3 caracteres
+    if (nombre.length < 3) {
+      setErrorNuevo("El nombre debe tener al menos 3 caracteres.");
       return;
     }
+
+    // Caso 2: Más de 50 caracteres
+    if (nombre.length > 50) {
+      setErrorNuevo("El nombre no debe exceder los 50 caracteres.");
+      return;
+    }
+
+    // Caso 3: Caracteres inválidos
+    const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/;
+    if (!regex.test(nombre)) {
+      // Encontrar el primer caracter inválido
+      const invalidChar = nombre.split("").find(c => !regex.test(c));
+      setErrorNuevo(
+        `El nombre contiene un caracter inválido: "${invalidChar}". Solo se permiten letras, números y espacios.`
+      );
+      return;
+    }
+
     setErrorNuevo(""); // Resetea el error si la validación es correcta
-    guardarSector(nombreNuevo).then(() => {
+    guardarSector(nombre).then(() => {
       setNombreNuevo("");
       setVista("principal");
       setReload((prev) => !prev);
