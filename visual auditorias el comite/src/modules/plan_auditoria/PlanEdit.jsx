@@ -665,7 +665,7 @@ const PlanEdit = (prop) => {
                 onClick={() => {
                     console.log(prop.id);
                     borrarPlan(prop.id);
-                    sleep(500).then(() => window.location.reload());
+                    sleep(1000).then(() => window.location.reload());
                 }}
                 >
                 Eliminar
@@ -676,7 +676,7 @@ const PlanEdit = (prop) => {
                 className="btn-gray"
                 onClick={() => {
                 borrarPlan(prop.id);
-                sleep(500).then(() => window.location.reload());}}
+                sleep(1000).then(() => window.location.reload());}}
                 >
                 Volver
                 </button>
@@ -690,6 +690,7 @@ const PlanEdit = (prop) => {
         </div>
         }
 
+    
        {/*     VISUAL PARA HACER LA AUDITORIA              */}
 
 
@@ -742,8 +743,8 @@ const PlanEdit = (prop) => {
                     <div className="bg-white w-[100%] rounded-xl flex flex-row mt-4">
                         <div className="flex flex-col w-[25%]">
                             <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Procesos</h3>
-                            <input id="proceso-planauditoria" type="text" className="w-full text-center px-4 py-2 m-2 border border-gray-300 rounded bg-gray-50">
-                            {plan.proceso}</input>
+                            <p id="proceso-planauditoria" type="text" className="w-full text-center px-4 py-2 m-2 border border-gray-300 rounded bg-gray-50">
+                            {plan.proceso}</p>
                         </div>
                         <div className="flex flex-col w-[25%]">
                             <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Líder</h3>
@@ -1233,7 +1234,10 @@ const PlanEdit = (prop) => {
                     onClick={() => {
 
                     guardarAuditoria();
-                    sleep(500).then(() => window.location.reload());}}>
+
+
+
+                    sleep(1000).then(() => window.location.reload());}}>
 
                 Guardar
                 </button>
