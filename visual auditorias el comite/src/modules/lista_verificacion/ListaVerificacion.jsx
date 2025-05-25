@@ -9,7 +9,7 @@ import {
 } from './metodos.js';
 
 // Expresión regular: solo letras, números y espacios (puedes ajustar según tus necesidades)
-const VALID_REGEX = /^[a-zA-Z0-9\s]*$/;
+const VALID_REGEX = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]*$/;
 
 const getInvalidChar = (value) => {
   // Devuelve el primer caracter inválido encontrado, o null si todo es válido

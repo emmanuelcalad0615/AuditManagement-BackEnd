@@ -28,7 +28,140 @@ const PlanEdit = (prop) => {
     const [itinerarios, setItinerarios] = useState([])
     const [trabajadores, setTrabajadores] = useState([])
     const [visual, setVisual] = useState('a')
+    const [errores, setErrores] = useState({});
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    // Permite letras (con tildes), números, espacios, comas, puntos y signos de puntuación del español
+    const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:¡!¿?\-'"()]+$/;
+    function validarTexto(valor) {
+        if (!valor || valor.trim() === "") {
+            return { valido: false, invalidos: "", vacio: true };
+        }
+        let invalidos = valor.replace(textoRegex, "");
+        if (invalidos.length > 0) {
+            return { valido: false, invalidos, vacio: false };
+        }
+        return { valido: true, invalidos: "", vacio: false };
+    }
+
+    function validarFechaFutura(valor) {
+        if (!valor) return { valido: false, mensaje: "La fecha es obligatoria" };
+        const fechaIngresada = new Date(valor);
+        const ahora = new Date();
+        if (fechaIngresada <= ahora) {
+            return { valido: false, mensaje: "La fecha debe ser mayor o igual al dia actual" };
+        }
+        return { valido: true, mensaje: "" };
+    }
+
+    const handleNombreChange = (e) => {
+        const valor = e.target.value;
+        const validacion = validarTexto(valor);
+        setPlan({ ...plan, nombre: valor });
+        setErrores({
+            ...errores,
+            nombre: validacion.vacio
+                ? "El campo es obligatorio"
+                : validacion.valido
+                    ? ""
+                    : `Caracteres inválidos`,
+        });
+    };
+
+    const handleEstadoChange = (e) => {
+        const valor = e.target.value;
+        const validacion = validarTexto(valor);
+        setPlan({ ...plan, estado: valor });
+        setErrores({
+            ...errores,
+            estado: validacion.vacio
+                ? "El campo es obligatorio"
+                : validacion.valido
+                    ? ""
+                    : `Caracteres inválidos`,
+        });
+    };
+
+    const handleFechaChange = (e) => {
+        const valor = e.target.value;
+        const validacion = validarFechaFutura(valor);
+        setPlan({ ...plan, fecha: valor });
+        setErrores({
+            ...errores,
+            fecha: validacion.valido ? "" : validacion.mensaje,
+        });
+    };
+
+    const handleAlcanceChange = (e) => {
+        const valor = e.target.value;
+        const validacion = validarTexto(valor);
+        setPlan({ ...plan, alcance: valor });
+        setErrores({
+            ...errores,
+            alcance: validacion.vacio
+                ? "El campo es obligatorio"
+                : validacion.valido
+                    ? ""
+                    : `Caracteres inválidos`,
+        });
+    };
+
+    const handleProcesoChange = (e) => {
+        const valor = e.target.value;
+        const validacion = validarTexto(valor);
+        setPlan({ ...plan, proceso: valor });
+        setErrores({
+            ...errores,
+            proceso: validacion.vacio
+                ? "El campo es obligatorio"
+                : validacion.valido
+                    ? ""
+                    : `Caracteres inválidos`,
+        });
+    };
+
+    const handleLiderProcesoChange = (e) => {
+        const valor = e.target.value;
+        const validacion = validarTexto(valor);
+        setPlan({ ...plan, lider_proceso: valor });
+        setErrores({
+            ...errores,
+            lider_proceso: validacion.vacio
+                ? "El campo es obligatorio"
+                : validacion.valido
+                    ? ""
+                    : `Caracteres inválidos`,
+        });
+    };
+
+    const handlePropositosChange = (e) => {
+        const valor = e.target.value;
+        const validacion = validarTexto(valor);
+        setPlan({ ...plan, propositos: valor });
+        setErrores({
+            ...errores,
+            propositos: validacion.vacio
+                ? "El campo es obligatorio"
+                : validacion.valido
+                    ? ""
+                    : `Caracteres inválidos`,
+        });
+    };
+
+    const handleAuditadosChange = (e) => {
+        const valor = e.target.value;
+        const validacion = validarTexto(valor);
+        setPlan({ ...plan, auditados: valor });
+        setErrores({
+            ...errores,
+            auditados: validacion.vacio
+                ? "El campo es obligatorio"
+                : validacion.valido
+                    ? ""
+                    : `Caracteres inválidos:  ${[...new Set(validacion.invalidos)].join("")}`,
+        });
+    };
+
 
     const agregarFortalezas = () => {
         const nuevo = {
@@ -138,27 +271,25 @@ const PlanEdit = (prop) => {
     };
 
 
-    const guardarPlanActividad = () => {
-        guardarItinerarios(itinerarios);
-        guardarReuniones(reuniones);
-        guardarAuditadosPlan(auditados);
-        guardarPropositos(propositos);
-        actualizarplan(plan);
+    const  guardarPlanActividad = async () => {
+        
+        await guardarItinerarios(itinerarios);
+        await guardarReuniones(reuniones);
+        await guardarAuditadosPlan(auditados);
+        await guardarPropositos(propositos);
+        await actualizarplan(plan);
     }
 
-    const guardarAuditoria = () => {
+    const guardarAuditoria = async () => {
 
 
-        console.log(auditoria);
-        console.log(auditados);
-        console.log(aspectos);
-        guardarAspectos(aspectos);
-        guardarCompromisos(compromisos);
-        guardarFortalezas(fortalezas);
-        guardarDebilidades(debilidades);
-        guardarOportunidades(oportunidades);
-        guardarListaxAuditoria(listaAuditada);
-        
+        await guardarAspectos(aspectos);
+        await guardarCompromisos(compromisos);
+        await guardarFortalezas(fortalezas);
+        await guardarDebilidades(debilidades);
+        await guardarOportunidades(oportunidades);
+        await guardarListaxAuditoria(listaAuditada);
+
     };
 
     useEffect(() => {
@@ -203,9 +334,12 @@ const PlanEdit = (prop) => {
                                 type="text"
                                 id="input-editar-plan"
                                 value={plan.nombre}
-                                onChange={(e) => {console.log(e);setPlan({ ...plan, nombre: e.target.value })}}
+                                onChange={(e) => {console.log(e);setPlan({ ...plan, nombre: e.target.value });{handleNombreChange(e)}}}
                                 className="flex-1 border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
+                            {errores.nombre && (
+                                <div className="text-red-600 text-sm text-center">{errores.nombre}</div>
+                            )}
                         </div>
                         <div className="flex-1 flex flex-col md:flex-row">
                             <label className="p-3 bg-[#1E3766] text-white font-medium min-w-[120px]">Estado</label>
@@ -213,21 +347,27 @@ const PlanEdit = (prop) => {
                                 type="text"
                                 id="input-estado"
                                 value={plan.estado}
-                                onChange={(e) => setPlan({ ...plan, estado: e.target.value })}
+                                onChange={(e) => {setPlan({ ...plan, estado: e.target.value });{handleEstadoChange(e)}}}
                                 className="flex-1 border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
+                        {errores.estado && (
+                                    <div className="text-red-600 text-sm text-center">{errores.estado}</div>
+                                )}
                     </div>
-
+                    
                     <div className="flex flex-col md:flex-row border-b border-gray-200">
                         <label className="p-3 bg-[#1E3766] text-white font-medium min-w-[120px]">Fecha</label>
                         <input
                             type="datetime-local"
                             id="datetime"
                             value={plan.fecha?.slice(0, 16) || ""}
-                            onChange={(e) => setPlan({ ...plan, fecha: e.target.value })}
+                            onChange={(e) => {setPlan({ ...plan, fecha: e.target.value });{handleFechaChange(e)}}}
                             className="flex-1 border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
+                        {errores.fecha && (
+                            <div className="text-red-600 text-sm">{errores.fecha}</div>
+                        )}
                     </div>
 
                     <div className="flex flex-col md:flex-row border-b border-gray-200">
@@ -239,75 +379,101 @@ const PlanEdit = (prop) => {
                             value={plan.alcance}
                             onChange={(e) => {
                                 setPlan({ ...plan, alcance: e.target.value });
-                            }}
-                            className="flex-1 border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
+                            handleAlcanceChange(e)}}
+                                                        className="flex-1 border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    />
+                                                    {errores.alcance && (
+                                                        <div className="text-red-600 text-sm">{errores.alcance}</div>
+                                                    )}
+                                                </div>
 
-                    <div className="flex flex-col border-b border-gray-200">
-                        <div className="flex flex-col md:flex-row">
-                            <label className="p-3 bg-[#1E3766] text-white font-medium min-w-[120px]">Propósito</label>
-                            <div className="flex-1">
-                                <table className="w-full">
-                                    <tbody>
-                                        {propositos.map((proposito, index) => (
-                                            <tr key={index} className="border-t border-gray-200">
-                                                <td className="w-full">
+                                                <div className="flex flex-col border-b border-gray-200">
+                                                    <div className="flex flex-col md:flex-row">
+                                                        <label className="p-3 bg-[#1E3766] text-white font-medium min-w-[120px]">Propósito</label>
+                                                        <div className="flex-1">
+                                                            <table className="w-full">
+                                                                <tbody>
+                                                                    {propositos.map((proposito, index) => (
+                                                                        <tr key={index} className="border-t border-gray-200">
+                                                                            <td className="w-full">
+                                                                                <input
+                                                                                    type="text"
+                                                                                    id={proposito.id}
+                                                                                    placeholder="Propósito"
+                                                                                    value={proposito.descripcion}
+                                                                                    onChange={(e) => {
+                                                                                        const newPropositos = [...propositos];
+                                                                                        newPropositos[index].descripcion = e.target.value;
+                                                                                        setPropositos(newPropositos);
+                                                                                        // Solo muestra el error para este propósito
+                                                                                        const validacion = validarTexto(e.target.value);
+                                                                                        setErrores({
+                                                                                            ...errores,
+                                                                                            [`propositos_${index}`]: validacion.vacio
+                                                                                                ? "El campo es obligatorio"
+                                                                                                : validacion.valido
+                                                                                                    ? ""
+                                                                                                    : `Caracteres inválidos`,
+                                                                                        });
+                                                                                    }}
+                                                                                    className="w-full border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                                />
+                                                                                {errores[`propositos_${index}`] && (
+                                                                                    <div className="text-red-600 text-sm">{errores[`propositos_${index}`]}</div>
+                                                                                )}
+                                                                            </td>
+                                                                            <td className="text-right pr-4">
+                                                                                <button
+                                                                                    className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                                                    style={{ marginLeft: "0.5rem", marginTop: "0" }}
+                                                                                    onClick={() => {
+                                                                                        setPropositos(prev => prev.filter((_, i) => i !== index));
+                                                                                        if (proposito.id != null) { borrarProposito(proposito.id) };
+                                                                                        // Limpia el error al eliminar
+                                                                                        setErrores(prev => {
+                                                                                            const newErrores = { ...prev };
+                                                                                            delete newErrores[`propositos_${index}`];
+                                                                                            return newErrores;
+                                                                                        });
+                                                                                    }}
+                                                                                >
+                                                                                    Eliminar
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+                                                            <button
+                                                                className="bg-green-600 hover:bg-green-700 rounded-full text-white px-4 py-2 m-2 transition-colors duration-200"
+                                                                onClick={agregarProposito}
+                                                            >
+                                                                Agregar Propósito
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                            <div className="bg-white w-[90%] rounded-xl shadow-md mt-6 overflow-hidden">
+                                            <div className="flex flex-col md:flex-row">
+                                                <div className="flex-1 border-r border-gray-200 p-4">
+                                                    <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Procesos</h3>
                                                     <input
                                                         type="text"
-                                                        id={proposito.id}
-                                                        placeholder="Propósito"
-                                                        value={proposito.descripcion}
+                                                        id="proceso-planauditoria"
+                                                        placeholder="Proceso a auditar"
+                                                        value={plan.proceso}
                                                         onChange={(e) => {
-                                                            const newPropositos = [...propositos];
-                                                            newPropositos[index].descripcion = e.target.value;
-                                                            setPropositos(newPropositos);
-                                                        }}
-                                                        className="w-full border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    />
-                                                </td>
-                                                <td className="text-right pr-4">
-                                                    <button
-                                                        className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
-                                                        style={{ marginLeft: "0.5rem", marginTop: "0" }}
-                                                        onClick={() => {
-                                                            setPropositos(prev => prev.filter((_, i) => i !== index));
-                                                            if (proposito.id != null) { borrarProposito(proposito.id) };
-                                                        }}
-                                                    >
-                                                        Eliminar
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <button
-                                    className="bg-green-600 hover:bg-green-700 rounded-full text-white px-4 py-2 m-2 transition-colors duration-200"
-                                    onClick={agregarProposito}
-                                >
-                                    Agregar Propósito
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-<div className="bg-white w-[90%] rounded-xl shadow-md mt-6 overflow-hidden">
-                <div className="flex flex-col md:flex-row">
-                    <div className="flex-1 border-r border-gray-200 p-4">
-                        <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Procesos</h3>
-                        <input
-                            type="text"
-                            id="proceso-planauditoria"
-                            placeholder="Proceso a auditar"
-                            value={plan.proceso}
-                            onChange={(e) => {
                                 setPlan({ ...plan, proceso: e.target.value });
+                                {handleProcesoChange(e)}
                             }}
                             className="w-full border border-gray-300 rounded px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
+                        {errores.proceso && (
+                            <div className="text-red-600 text-sm">{errores.proceso}</div>
+                        )}
                     </div>
 
                     <div className="flex-1 border-r border-gray-200 p-4">
@@ -319,63 +485,86 @@ const PlanEdit = (prop) => {
                             value={plan.lider_proceso}
                             onChange={(e) => {
                                 setPlan({ ...plan, lider_proceso: e.target.value });
-                            }}
-                            className="w-full border border-gray-300 rounded px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
+                                handleLiderProcesoChange(e)}
+                                }
+                                                            className="w-full border border-gray-300 rounded px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        />
+                                                        {errores.lider_proceso && (
+                                                            <div className="text-red-600 text-sm">{errores.lider_proceso}</div>
+                                                        )}
+                                                    </div>
 
-                    <div className="flex-1 border-r border-gray-200 p-4">
-                        <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Auditados</h3>
-                        <table className="w-full">
-                            <tbody>
-                                {auditados.map((auditado, index) => (
-                                    <tr key={index} className="border-t border-gray-200">
-                                        <td className="w-full">
-                                            <input
-                                                type="text"
-                                                id={auditado.id}
-                                                placeholder="Auditado"
-                                                value={auditado.auditado}
-                                                onChange={(e) => {
-                                                    const newAuditados = [...auditados];
-                                                    newAuditados[index].auditado = e.target.value;
-                                                    setAuditados(newAuditados);
-                                                }}
-                                                className="w-full border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            />
-                                        </td>
-                                        <td className="text-right pr-4">
-                                            <button
-                                                className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
-                                                style={{ marginLeft: "0.5rem", marginTop: "0" }}
-                                                onClick={() => {
-                                                    setAuditados(prev => prev.filter((_, i) => i !== index));
-                                                    if (auditado.id != null) { borrarAuditado(auditado.id) };
-                                                }}
-                                            >
-                                                Eliminar
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <button
-                            className="bg-green-600 hover:bg-green-700 rounded-full text-white px-4 py-2 m-2 transition-colors duration-200"
-                            onClick={agregarAuditado}
-                        >
-                            Agregar Auditado
-                        </button>
-                    </div>
+                                                    <div className="flex-1 border-r border-gray-200 p-4">
+                                                        <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Auditados</h3>
+                                                        <table className="w-full">
+                                                            <tbody>
+                                                                {auditados.map((auditado, index) => (
+                                                                    <tr key={index} className="border-t border-gray-200">
+                                                                        <td className="w-full">
+                                                                            <input
+                                                                                type="text"
+                                                                                id={auditado.id}
+                                                                                placeholder="Auditado"
+                                                                                value={auditado.auditado}
+                                                                                onChange={(e) => {
+                                                                                    const newAuditados = [...auditados];
+                                                                                    newAuditados[index].auditado = e.target.value;
+                                                                                    setAuditados(newAuditados);
+                                                                                    // Solo muestra el error para este auditado
+                                                                                    const validacion = validarTexto(e.target.value);
+                                                                                    setErrores({
+                                                                                        ...errores,
+                                                                                        [`auditados_${index}`]: validacion.vacio
+                                                                                            ? "El campo es obligatorio"
+                                                                                            : validacion.valido
+                                                                                                ? ""
+                                                                                                : `Caracteres inválidos:  ${[...new Set(validacion.invalidos)].join("")}`,
+                                                                                    });
+                                                                                }}
+                                                                                className="w-full border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                            />
+                                                                            {errores[`auditados_${index}`] && (
+                                                                                <div className="text-red-600 text-sm">{errores[`auditados_${index}`]}</div>
+                                                                            )}
+                                                                        </td>
+                                                                        <td className="text-right pr-4">
+                                                                            <button
+                                                                                className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                                                style={{ marginLeft: "0.5rem", marginTop: "0" }}
+                                                                                onClick={() => {
+                                                                                    setAuditados(prev => prev.filter((_, i) => i !== index));
+                                                                                    if (auditado.id != null) { borrarAuditado(auditado.id) };
+                                                                                    // Limpia el error al eliminar
+                                                                                    setErrores(prev => {
+                                                                                        const newErrores = { ...prev };
+                                                                                        delete newErrores[`auditados_${index}`];
+                                                                                        return newErrores;
+                                                                                    });
+                                                                                }}
+                                                                            >
+                                                                                Eliminar
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                        <button
+                                                            className="bg-green-600 hover:bg-green-700 rounded-full text-white px-4 py-2 m-2 transition-colors duration-200"
+                                                            onClick={agregarAuditado}
+                                                        >
+                                                            Agregar Auditado
+                                                        </button>
+                                                    </div>
 
-                    <div className="flex-1 p-4">
-                        <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Firma</h3>
-                        <p className="text-center py-4 text-gray-500">Espacio para firma</p>
-                    </div>
-                </div>
-            </div>
+                                                    <div className="flex-1 p-4">
+                                                        <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Firma</h3>
+                                                        <p className="text-center py-4 text-gray-500">Espacio para firma</p>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-{/* Sección de Reuniones y Auditores */}
+                                {/* Sección de Reuniones y Auditores */}
 <div className="w-[90%] mt-6 flex flex-col md:flex-row gap-6">
     {/* Reuniones */}
     <div className="bg-white rounded-xl shadow-md overflow-hidden flex-1">
@@ -647,7 +836,7 @@ const PlanEdit = (prop) => {
                 <div className="flex justify-start">
                 <button
                     className="bg-green-600 hover:bg-green-700 rounded-full text-white px-4 py-2 m-2 transition-colors duration-200"
-                    onClick={agregarItinerario}
+                    onClick={() => agregarItinerario()}
                 >
                     Agregar Actividad
                 </button>
@@ -659,9 +848,11 @@ const PlanEdit = (prop) => {
                 <button 
                 id="btn-guardar-edicion" 
                 className="btn"
-                onClick={() => {
-                    guardarPlanActividad();
-                    sleep(3000).then(() => window.location.reload());}}>
+
+                onClick={async () => {
+                    await guardarPlanActividad();
+                    sleep(1000).then(() => window.location.reload());}}>
+
                 Guardar
                 </button>
 
@@ -1236,12 +1427,9 @@ const PlanEdit = (prop) => {
                 >
                     <button id="btn-guardar-edicion" 
                     className="btn text-xl ml-5 p-2"
-                    onClick={() => {
 
-                    guardarAuditoria();
-
-
-
+                    onClick={async () => {
+                    await guardarAuditoria();
                     sleep(1000).then(() => window.location.reload());}}>
 
                 Guardar
