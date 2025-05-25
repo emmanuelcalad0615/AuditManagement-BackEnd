@@ -49,7 +49,7 @@ const PlanEdit = (prop) => {
         const fechaIngresada = new Date(valor);
         const ahora = new Date();
         if (fechaIngresada <= ahora) {
-            return { valido: false, mensaje: "La fecha debe ser mayor o igual al dia actual" };
+            return { valido: false, mensaje: "La fecha debe ser futura a la fecha actual" };
         }
         return { valido: true, mensaje: "" };
     }
@@ -590,7 +590,7 @@ const PlanEdit = (prop) => {
                                     onChange={(e) => {
                                         const value = e.target.value;
                                         const nuevasReuniones = [...reuniones];
-                                        nuevasReuniones[index].apertura = value;
+                                        nuevasReuniones[index].apertura = value === "apertura";
                                         setReuniones(nuevasReuniones);
                                     }}
                                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -601,31 +601,51 @@ const PlanEdit = (prop) => {
                             </td>
                             <td className="p-3">
                                 <input
-                                    type="text"
+                                    type="date"
                                     id={"fechaReunion" + reunion.id}
                                     placeholder="Fecha"
                                     value={reunion.fecha}
                                     onChange={(e) => {
+                                        const valor = e.target.value;
+                                        const validacion = validarFechaFutura(valor);
                                         const newReuniones = [...reuniones];
-                                        newReuniones[index].fecha = e.target.value;
+                                        newReuniones[index].fecha = valor;
                                         setReuniones(newReuniones);
+                                        setErrores({
+                                            ...errores,
+                                            [`reunion_fecha_${index}`]: validacion.valido ? "" : validacion.mensaje,
+                                        });
                                     }}
                                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
+                                {errores[`reunion_fecha_${index}`] && (
+                                    <div className="text-red-600 text-sm">{errores[`reunion_fecha_${index}`]}</div>
+                                )}
                             </td>
                             <td className="p-3">
                                 <input
-                                    type="text"
+                                    type="time"
                                     id={"horaReunion" + reunion.id}
                                     placeholder="Hora"
                                     value={reunion.hora}
                                     onChange={(e) => {
+                                        const valor = e.target.value;
+                                        // Validar formato HH:MM y solo números
+                                        const horaRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+                                        const valido = horaRegex.test(valor);
                                         const newReuniones = [...reuniones];
-                                        newReuniones[index].hora = e.target.value;
+                                        newReuniones[index].hora = valor;
                                         setReuniones(newReuniones);
+                                        setErrores({
+                                            ...errores,
+                                            [`reunion_hora_${index}`]: valido ? "" : "Hora inválida (formato HH:MM, solo números)",
+                                        });
                                     }}
                                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
+                                {errores[`reunion_hora_${index}`] && (
+                                    <div className="text-red-600 text-sm">{errores[`reunion_hora_${index}`]}</div>
+                                )}
                             </td>
                             <td className="p-3">
                                 <input
@@ -634,12 +654,25 @@ const PlanEdit = (prop) => {
                                     placeholder="Lugar"
                                     value={reunion.lugar}
                                     onChange={(e) => {
+                                        const valor = e.target.value;
+                                        const validacion = validarTexto(valor);
                                         const newReuniones = [...reuniones];
-                                        newReuniones[index].lugar = e.target.value;
+                                        newReuniones[index].lugar = valor;
                                         setReuniones(newReuniones);
+                                        setErrores({
+                                            ...errores,
+                                            [`reunion_lugar_${index}`]: validacion.vacio
+                                                ? "El campo es obligatorio"
+                                                : validacion.valido
+                                                    ? ""
+                                                    : `Caracteres inválidos`,
+                                        });
                                     }}
                                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
+                                {errores[`reunion_lugar_${index}`] && (
+                                    <div className="text-red-600 text-sm">{errores[`reunion_lugar_${index}`]}</div>
+                                )}
                             </td>
                             <td className="p-3 text-center">
                                 <button
@@ -647,6 +680,13 @@ const PlanEdit = (prop) => {
                                     onClick={() => {
                                         setReuniones(prev => prev.filter((_, i) => i !== index));
                                         if (reunion.id != null) { borrarReunion(reunion.id) };
+                                        setErrores(prev => {
+                                            const newErrores = { ...prev };
+                                            delete newErrores[`reunion_fecha_${index}`];
+                                            delete newErrores[`reunion_hora_${index}`];
+                                            delete newErrores[`reunion_lugar_${index}`];
+                                            return newErrores;
+                                        });
                                     }}
                                 >
                                     Eliminar
@@ -713,153 +753,361 @@ const PlanEdit = (prop) => {
 
 
             {/* Sección de Itinerario */}
-            <div className="mt-10 flex flex-col bg-white w-[90%] rounded-xl shadow-md overflow-hidden">
-                <h2 className="w-full bg-[#1E3766] text-white text-center p-2 font-medium">Itinerario</h2>
-                <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <thead className="bg-[#1E3766] text-white">
-                            <tr>
-                                <th className="p-3">Actividades</th>
-                                <th className="p-3">Auditado</th>
-                                <th className="p-3">Auditor</th>
-                                <th className="p-3">Fecha inicio</th>
-                                <th className="p-3">Fecha fin</th>
-                                <th className="p-3">Lugar</th>
-                                <th className="p-3">Acciones</th>
-                            </tr>
-                        </thead>
-                        {itinerarios && (
-                            <tbody>
-                                {itinerarios.map((itinerario, index) => (
-                                    <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
-                                        <td className="p-3">
-                                            <input
-                                                type="text"
-                                                id={"actividad" + itinerario.id}
-                                                placeholder="Actividad"
-                                                value={itinerario.actividad}
-                                                onChange={(e) => {
-                                                    const newItinerarios = [...itinerarios];
-                                                    newItinerarios[index].actividad = e.target.value;
-                                                    setItinerarios(newItinerarios);
-                                                }}
-                                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            />
-                                        </td>
-                                        <td className="p-3">
-                                            <input
-                                                type="text"
-                                                id={"auditado" + itinerario.id}
-                                                placeholder="Auditado"
-                                                value={itinerario.auditado}
-                                                onChange={(e) => {
-                                                    const newItinerarios = [...itinerarios];
-                                                    newItinerarios[index].auditado = e.target.value;
-                                                    setItinerarios(newItinerarios);
-                                                }}
-                                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            />
-                                        </td>
-                                        <td className="p-3">
-                                            <input
-                                                type="text"
-                                                id={"auditor" + itinerario.id}
-                                                placeholder="Auditor"
-                                                value={itinerario.auditor}
-                                                onChange={(e) => {
-                                                    const newItinerarios = [...itinerarios];
-                                                    newItinerarios[index].auditor = e.target.value;
-                                                    setItinerarios(newItinerarios);
-                                                }}
-                                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            />
-                                        </td>
-                                        <td className="p-3">
-                                            <input
-                                                type="text"
-                                                id={"horaInicio" + itinerario.id}
-                                                placeholder="Hora inicio"
-                                                value={itinerario.inicio}
-                                                onChange={(e) => {
-                                                    const newItinerarios = [...itinerarios];
-                                                    newItinerarios[index].inicio = e.target.value;
-                                                    setItinerarios(newItinerarios);
-                                                }}
-                                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            />
-                                        </td>
-                                        <td className="p-3">
-                                            <input
-                                                type="text"
-                                                id={"horaFin" + itinerario.id}
-                                                placeholder="Hora fin"
-                                                value={itinerario.fin}
-                                                onChange={(e) => {
-                                                    const newItinerarios = [...itinerarios];
-                                                    newItinerarios[index].fin = e.target.value;
-                                                    setItinerarios(newItinerarios);
-                                                }}
-                                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            />
-                                        </td>
-                                        <td className="p-3">
-                                            <input
-                                                type="text"
-                                                id={"lugar" + itinerario.id}
-                                                placeholder="Lugar"
-                                                value={itinerario.lugar}
-                                                onChange={(e) => {
-                                                    const newItinerarios = [...itinerarios];
-                                                    newItinerarios[index].lugar = e.target.value;
-                                                    setItinerarios(newItinerarios);
-                                                }}
-                                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            />
-                                        </td>
-                                        <td className="p-3 text-center">
-                                            <button
-                                                className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
-                                                onClick={() => {
-                                                    setItinerarios(prev => prev.filter((_, i) => i !== index));
-                                                    if (itinerario.id != null) { borrarItinerario(itinerario.id) };
-                                                }}
-                                            >
-                                                Eliminar
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        )}
-                    </table>
-                </div>
-                <div className="flex justify-start">
-                <button
-                    className="bg-green-600 hover:bg-green-700 rounded-full text-white px-4 py-2 m-2 transition-colors duration-200"
-                    onClick={() => agregarItinerario()}
-                >
-                    Agregar Actividad
-                </button>
-                </div>
-            </div>
+                        <div className="mt-10 flex flex-col bg-white w-[90%] rounded-xl shadow-md overflow-hidden">
+                            <h2 className="w-full bg-[#1E3766] text-white text-center p-2 font-medium">Itinerario</h2>
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead className="bg-[#1E3766] text-white">
+                                        <tr>
+                                            <th className="p-3">Actividades</th>
+                                            <th className="p-3">Auditado</th>
+                                            <th className="p-3">Auditor</th>
+                                            <th className="p-3">Fecha inicio</th>
+                                            <th className="p-3">Fecha fin</th>
+                                            <th className="p-3">Lugar</th>
+                                            <th className="p-3">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    {itinerarios && (
+                                        <tbody>
+                                            {itinerarios.map((itinerario, index) => (
+                                                <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                                                    <td className="p-3">
+                                                        <input
+                                                            type="text"
+                                                            id={"actividad" + itinerario.id}
+                                                            placeholder="Actividad"
+                                                            value={itinerario.actividad}
+                                                            onChange={(e) => {
+                                                                const valor = e.target.value;
+                                                                const validacion = validarTexto(valor);
+                                                                const newItinerarios = [...itinerarios];
+                                                                newItinerarios[index].actividad = valor;
+                                                                setItinerarios(newItinerarios);
+                                                                setErrores({
+                                                                    ...errores,
+                                                                    [`itinerario_actividad_${index}`]: validacion.vacio
+                                                                        ? "El campo es obligatorio"
+                                                                        : validacion.valido
+                                                                            ? ""
+                                                                            : `Caracteres inválidos`,
+                                                                });
+                                                            }}
+                                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        />
+                                                        {errores[`itinerario_actividad_${index}`] && (
+                                                            <div className="text-red-600 text-sm">{errores[`itinerario_actividad_${index}`]}</div>
+                                                        )}
+                                                    </td>
+                                                    <td className="p-3">
+                                                        <input
+                                                            type="text"
+                                                            id={"auditado" + itinerario.id}
+                                                            placeholder="Auditado"
+                                                            value={itinerario.auditado}
+                                                            onChange={(e) => {
+                                                                const valor = e.target.value;
+                                                                const validacion = validarTexto(valor);
+                                                                const newItinerarios = [...itinerarios];
+                                                                newItinerarios[index].auditado = valor;
+                                                                setItinerarios(newItinerarios);
+                                                                setErrores({
+                                                                    ...errores,
+                                                                    [`itinerario_auditado_${index}`]: validacion.vacio
+                                                                        ? "El campo es obligatorio"
+                                                                        : validacion.valido
+                                                                            ? ""
+                                                                            : `Caracteres inválidos`,
+                                                                });
+                                                            }}
+                                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        />
+                                                        {errores[`itinerario_auditado_${index}`] && (
+                                                            <div className="text-red-600 text-sm">{errores[`itinerario_auditado_${index}`]}</div>
+                                                        )}
+                                                    </td>
+                                                    <td className="p-3">
+                                                        <input
+                                                            type="text"
+                                                            id={"auditor" + itinerario.id}
+                                                            placeholder="Auditor"
+                                                            value={itinerario.auditor}
+                                                            onChange={(e) => {
+                                                                const valor = e.target.value;
+                                                                const validacion = validarTexto(valor);
+                                                                const newItinerarios = [...itinerarios];
+                                                                newItinerarios[index].auditor = valor;
+                                                                setItinerarios(newItinerarios);
+                                                                setErrores({
+                                                                    ...errores,
+                                                                    [`itinerario_auditor_${index}`]: validacion.vacio
+                                                                        ? "El campo es obligatorio"
+                                                                        : validacion.valido
+                                                                            ? ""
+                                                                            : `Caracteres inválidos`,
+                                                                });
+                                                            }}
+                                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        />
+                                                        {errores[`itinerario_auditor_${index}`] && (
+                                                            <div className="text-red-600 text-sm">{errores[`itinerario_auditor_${index}`]}</div>
+                                                        )}
+                                                    </td>
+                                                    <td className="p-3">
+                                                        <input
+                                                            type="datetime-local"
+                                                            id={"horaInicio" + itinerario.id}
+                                                            placeholder="Hora inicio"
+                                                            value={itinerario.inicio?.slice(0, 16) || ""}
+                                                            onChange={(e) => {
+                                                                const valor = e.target.value;
+                                                                const validacion = validarFechaFutura(valor);
+                                                                const newItinerarios = [...itinerarios];
+                                                                newItinerarios[index].inicio = valor;
+                                                                setItinerarios(newItinerarios);
+                                                                setErrores({
+                                                                    ...errores,
+                                                                    [`itinerario_inicio_${index}`]: validacion.valido ? "" : validacion.mensaje,
+                                                                });
+                                                            }}
+                                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        />
+                                                        {errores[`itinerario_inicio_${index}`] && (
+                                                            <div className="text-red-600 text-sm">{errores[`itinerario_inicio_${index}`]}</div>
+                                                        )}
+                                                    </td>
+                                                    <td className="p-3">
+                                                        <input
+                                                            type="datetime-local"
+                                                            id={"horaFin" + itinerario.id}
+                                                            placeholder="Hora fin"
+                                                            value={itinerario.fin?.slice(0, 16) || ""}
+                                                            onChange={(e) => {
+                                                                const valor = e.target.value;
+                                                                const validacion = validarFechaFutura(valor);
+                                                                const newItinerarios = [...itinerarios];
+                                                                newItinerarios[index].fin = valor;
+                                                                setItinerarios(newItinerarios);
+                                                                setErrores({
+                                                                    ...errores,
+                                                                    [`itinerario_fin_${index}`]: validacion.valido ? "" : validacion.mensaje,
+                                                                });
+                                                            }}
+                                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        />
+                                                        {errores[`itinerario_fin_${index}`] && (
+                                                            <div className="text-red-600 text-sm">{errores[`itinerario_fin_${index}`]}</div>
+                                                        )}
+                                                    </td>
+                                                    <td className="p-3">
+                                                        <input
+                                                            type="text"
+                                                            id={"lugar" + itinerario.id}
+                                                            placeholder="Lugar"
+                                                            value={itinerario.lugar}
+                                                            onChange={(e) => {
+                                                                const valor = e.target.value;
+                                                                const validacion = validarTexto(valor);
+                                                                const newItinerarios = [...itinerarios];
+                                                                newItinerarios[index].lugar = valor;
+                                                                setItinerarios(newItinerarios);
+                                                                setErrores({
+                                                                    ...errores,
+                                                                    [`itinerario_lugar_${index}`]: validacion.vacio
+                                                                        ? "El campo es obligatorio"
+                                                                        : validacion.valido
+                                                                            ? ""
+                                                                            : `Caracteres inválidos`,
+                                                                });
+                                                            }}
+                                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        />
+                                                        {errores[`itinerario_lugar_${index}`] && (
+                                                            <div className="text-red-600 text-sm">{errores[`itinerario_lugar_${index}`]}</div>
+                                                        )}
+                                                    </td>
+                                                    <td className="p-3 text-center">
+                                                        <button
+                                                            className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                            onClick={() => {
+                                                                setItinerarios(prev => prev.filter((_, i) => i !== index));
+                                                                if (itinerario.id != null) { borrarItinerario(itinerario.id) };
+                                                                setErrores(prev => {
+                                                                    const newErrores = { ...prev };
+                                                                    delete newErrores[`itinerario_actividad_${index}`];
+                                                                    delete newErrores[`itinerario_auditado_${index}`];
+                                                                    delete newErrores[`itinerario_auditor_${index}`];
+                                                                    delete newErrores[`itinerario_inicio_${index}`];
+                                                                    delete newErrores[`itinerario_fin_${index}`];
+                                                                    delete newErrores[`itinerario_lugar_${index}`];
+                                                                    return newErrores;
+                                                            })
+                                                                }}
+                                                            
+                                                            >
+                                                                Eliminar
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        )}
+                                    </table>
+                                </div>
+                                <div className="flex justify-start">
+                                <button
+                                    className="bg-green-600 hover:bg-green-700 rounded-full text-white px-4 py-2 m-2 transition-colors duration-200"
+                                    onClick={() => agregarItinerario()}
+                                >
+                                    Agregar Actividad
+                                </button>
+                                </div>
+                            </div>
 
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-            
-                <button 
-                id="btn-guardar-edicion" 
-                className="btn"
+                            {/* VALIDACIÓN DE CAMPOS */}
+                            <div className="mt-8 flex flex-wrap justify-center gap-4">
 
-                onClick={async () => {
-                    await guardarPlanActividad();
-                    sleep(1000).then(() => window.location.reload());}}>
+                                <button 
+                                    id="btn-guardar-edicion" 
+                                    className="btn"
+                                    onClick={async () => {
+                                        // Validación antes de guardar
+                                        const validarCampos = () => {
+                                            let erroresVal = {};
+                                            let valido = true;
 
-                Guardar
-                </button>
+                                            // Validar campos principales
+                                            if (!plan.nombre || !validarTexto(plan.nombre).valido) {
+                                                erroresVal.nombre = "El campo es obligatorio y debe ser válido";
+                                                valido = false;
+                                            }
+                                            if (!plan.estado || !validarTexto(plan.estado).valido) {
+                                                erroresVal.estado = "El campo es obligatorio y debe ser válido";
+                                                valido = false;
+                                            }
+                                            if (!plan.fecha || !validarFechaFutura(plan.fecha).valido) {
+                                                erroresVal.fecha = "La fecha es obligatoria y debe ser futura";
+                                                valido = false;
+                                            }
+                                            if (!plan.alcance || !validarTexto(plan.alcance).valido) {
+                                                erroresVal.alcance = "El campo es obligatorio y debe ser válido";
+                                                valido = false;
+                                            }
+                                            if (!plan.proceso || !validarTexto(plan.proceso).valido) {
+                                                erroresVal.proceso = "El campo es obligatorio y debe ser válido";
+                                                valido = false;
+                                            }
+                                            if (!plan.lider_proceso || !validarTexto(plan.lider_proceso).valido) {
+                                                erroresVal.lider_proceso = "El campo es obligatorio y debe ser válido";
+                                                valido = false;
+                                            }
 
-                <button
-                id="eliminar-plan-cascada"
-                className="btn-gray"
-                onClick={() => {
+                                            // Validar propositos
+                                            propositos.forEach((p, i) => {
+                                                if (!p.descripcion || !validarTexto(p.descripcion).valido) {
+                                                    erroresVal[`propositos_${i}`] = "El campo es obligatorio y debe ser válido";
+                                                    valido = false;
+                                                }
+                                            });
+
+                                            // Validar auditados
+                                            auditados.forEach((a, i) => {
+                                                if (!a.auditado || !validarTexto(a.auditado).valido) {
+                                                    erroresVal[`auditados_${i}`] = "El campo es obligatorio y debe ser válido";
+                                                    valido = false;
+                                                }
+                                            });
+
+                                            // Validar reuniones
+                                            reuniones.forEach((r, i) => {
+                                                if (!r.fecha || r.fecha === "0000-00-00" || !validarFechaFutura(r.fecha).valido) {
+                                                    erroresVal[`reunion_fecha_${i}`] = "La fecha es obligatoria y debe ser futura";
+                                                    valido = false;
+                                                }
+                                                // Hora debe ser diferente de "00:00:00" y formato válido
+                                                const horaRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+                                                if (!r.hora || r.hora === "00:00:00" || !horaRegex.test(r.hora)) {
+                                                    erroresVal[`reunion_hora_${i}`] = "Hora inválida (formato HH:MM, solo números)";
+                                                    valido = false;
+                                                }
+                                                if (!r.lugar || !validarTexto(r.lugar).valido) {
+                                                    erroresVal[`reunion_lugar_${i}`] = "El campo es obligatorio y debe ser válido";
+                                                    valido = false;
+                                                }
+                                            });
+
+                                            // Validar itinerarios
+                                            itinerarios.forEach((it, i) => {
+                                                if (!it.actividad || !validarTexto(it.actividad).valido) {
+                                                    erroresVal[`itinerario_actividad_${i}`] = "El campo es obligatorio y debe ser válido";
+                                                    valido = false;
+                                                }
+                                                if (!it.auditado || !validarTexto(it.auditado).valido) {
+                                                    erroresVal[`itinerario_auditado_${i}`] = "El campo es obligatorio y debe ser válido";
+                                                    valido = false;
+                                                }
+                                                if (!it.auditor || !validarTexto(it.auditor).valido) {
+                                                    erroresVal[`itinerario_auditor_${i}`] = "El campo es obligatorio y debe ser válido";
+                                                    valido = false;
+                                                }
+                                                if (!it.inicio || it.inicio === "00:00:00" || !validarFechaFutura(it.inicio).valido) {
+                                                    erroresVal[`itinerario_inicio_${i}`] = "La fecha/hora es obligatoria y debe ser futura";
+                                                    valido = false;
+                                                }
+                                                if (!it.fin || it.fin === "00:00:00" || !validarFechaFutura(it.fin).valido) {
+                                                    erroresVal[`itinerario_fin_${i}`] = "La fecha/hora es obligatoria y debe ser futura";
+                                                    valido = false;
+                                                }
+                                                if (!it.lugar || !validarTexto(it.lugar).valido) {
+                                                    erroresVal[`itinerario_lugar_${i}`] = "El campo es obligatorio y debe ser válido";
+                                                    valido = false;
+                                                }
+                                            });
+
+                                            setErrores(erroresVal);
+                                            return valido;
+                                        };
+
+                                        if (!validarCampos()) {
+                                            // Construir un mensaje de error amigable
+                                            const mensajes = Object.values(errores).filter(Boolean);
+                                            let mensaje = "Por favor, complete todos los campos obligatorios correctamente antes de guardar.";
+                                            
+                                            // Mostrar alerta personalizada usando un modal simple
+                                            const alerta = document.createElement("div");
+                                            alerta.style.position = "fixed";
+                                            alerta.style.top = "0";
+                                            alerta.style.left = "0";
+                                            alerta.style.width = "100vw";
+                                            alerta.style.height = "100vh";
+                                            alerta.style.background = "rgba(0,0,0,0.3)";
+                                            alerta.style.display = "flex";
+                                            alerta.style.alignItems = "center";
+                                            alerta.style.justifyContent = "center";
+                                            alerta.style.zIndex = "9999";
+                                            alerta.innerHTML = `
+                                                <div style="background: white; padding: 2rem 2.5rem; border-radius: 12px; box-shadow: 0 2px 16px rgba(0,0,0,0.15); max-width: 90vw; min-width: 320px;">
+                                                    <h2 style="color: #1E3766; margin-bottom: 1rem; font-size: 1.2rem;">Campos incompletos o inválidos</h2>
+                                                    <pre style="white-space: pre-wrap; color: #333; font-size: 1rem; margin-bottom: 1.5rem;">${mensaje}</pre>
+                                                    <button style="background: #1E3766; color: white; border: none; border-radius: 6px; padding: 0.5rem 1.5rem; font-size: 1rem; cursor: pointer;">Cerrar</button>
+                                                </div>
+                                            `;
+                                            alerta.querySelector("button").onclick = () => document.body.removeChild(alerta);
+                                            document.body.appendChild(alerta);
+                                            return;
+                                        }
+
+                                        await guardarPlanActividad();
+                                        sleep(1000).then(() => window.location.reload());
+                                    }}
+                                >
+                                    Guardar
+                                </button>
+
+                                <button
+                                    id="eliminar-plan-cascada"
+                                    className="btn-gray"
+                                    onClick={() => {
                     console.log(prop.id);
                     borrarPlan(prop.id);
                     sleep(1000).then(() => window.location.reload());
