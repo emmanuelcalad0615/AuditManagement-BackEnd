@@ -232,9 +232,7 @@ const PlanEdit = (prop) => {
                             placeholder="Alcance"
                             value={plan.alcance}
                             onChange={(e) => {
-                                const newPlan = plan;
-                                newPlan.alcance = e.target.value;
-                                setPlan(newPlan);
+                                setPlan({ ...plan, alcance: e.target.value });
                             }}
                             className="flex-1 border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -300,9 +298,7 @@ const PlanEdit = (prop) => {
                             placeholder="Proceso a auditar"
                             value={plan.proceso}
                             onChange={(e) => {
-                                const newPlan = plan;
-                                newPlan.proceso = e.target.value;
-                                setPlan(newPlan);
+                                setPlan({ ...plan, proceso: e.target.value });
                             }}
                             className="w-full border border-gray-300 rounded px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -316,9 +312,7 @@ const PlanEdit = (prop) => {
                             placeholder="Líder del proceso auditado"
                             value={plan.lider_proceso}
                             onChange={(e) => {
-                                const newPlan = plan;
-                                newPlan.lider_proceso = e.target.value;
-                                setPlan(newPlan);
+                                setPlan({ ...plan, lider_proceso: e.target.value });
                             }}
                             className="w-full border border-gray-300 rounded px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -748,7 +742,8 @@ const PlanEdit = (prop) => {
                     <div className="bg-white w-[100%] rounded-xl flex flex-row mt-4">
                         <div className="flex flex-col w-[25%]">
                             <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Procesos</h3>
-                            <p id="proceso-planauditoria" className="w-full text-center px-4 py-2 m-2 border border-gray-300 rounded bg-gray-50">{plan.proceso}</p>
+                            <input id="proceso-planauditoria" type="text" className="w-full text-center px-4 py-2 m-2 border border-gray-300 rounded bg-gray-50">
+                            {plan.proceso}</input>
                         </div>
                         <div className="flex flex-col w-[25%]">
                             <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium rounded-t">Líder</h3>
