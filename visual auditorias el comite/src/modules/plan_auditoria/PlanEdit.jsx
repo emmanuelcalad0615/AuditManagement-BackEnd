@@ -1254,11 +1254,8 @@ const PlanEdit = (prop) => {
 
 
         </div>
-        
                 }
-
         </>
-
     )
 }
 
