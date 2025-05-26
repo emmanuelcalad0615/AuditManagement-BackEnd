@@ -985,7 +985,7 @@ const PlanEdit = (prop) => {
                                                 erroresVal.estado = "El campo es obligatorio y debe ser válido";
                                                 valido = false;
                                             }
-                                            if (!plan.fecha || !validarFechaFutura(plan.fecha).valido) {
+                                            if (!plan.fecha || plan.fecha === "00:00:00" || !validarFechaFutura(plan.fecha).valido) {
                                                 erroresVal.fecha = "La fecha es obligatoria y debe ser futura";
                                                 valido = false;
                                             }
@@ -1259,79 +1259,97 @@ const PlanEdit = (prop) => {
                             </div>
                         </div>
                         {/* Auditores */}
-                                                <div className="bg-white rounded-xl shadow-md overflow-hidden w-full md:w-[30%] flex-shrink-0 flex flex-col justify-start">
-                                                    <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium">Auditores</h3>
-                                                    {plan && trabajadores.length > 0 && (
-                                                        <table className="w-full text-center">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td className="bg-[#1E3766] text-white font-medium p-3">Líder auditoría</td>
-                                                                    <td className="p-3">
-                                                                        <span className="border border-gray-300 rounded px-3 py-2 bg-gray-50 block">
-                                                                            {trabajadores.find(trabajador => trabajador.id == plan.auditor_lider)?.nombre || ""}
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td className="bg-[#1E3766] text-white font-medium p-3">Auditor auxiliar</td>
-                                                                    <td className="p-3">
-                                                                        <span className="border border-gray-300 rounded px-3 py-2 bg-gray-50 block">
-                                                                            {trabajadores.find(trabajador => trabajador.id == plan.auditor)?.nombre || ""}
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    )}
-                                                </div>
-                                                </div>
-                                                </div>
-                                                
-                                                <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 rounded-xl p-4">
-                                                    <table className="w-full text-center">
-                                                        <thead className="bg-[#1E3766] text-white">
-                                                            <tr>
-                                                                <th className="py-3 px-4 text-lg">Aspecto</th>
-                                                                <th className="py-3 px-4 text-lg">Acciones</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {aspectos.map((aspecto, index) => (
-                                                                <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
-                                                                    <td className="py-2 px-4">
-                                                                        <input
-                                                                            type="text"
-                                                                            className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                                            value={aspecto.aspecto}
-                                                                            onChange={(e) => {
-                                                                                const nuevosAspectos = [...aspectos];
-                                                                                nuevosAspectos[index].aspecto = e.target.value;
-                                                                                setAspectos(nuevosAspectos);
-                                                                            }}
-                                                                        />
-                                                                    </td>
-                                                                    <td className="py-2 px-4">
-                                                                        <button
-                                                                            className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
-                                                                            onClick={() => {
-                                                                                setAspectos(prev => prev.filter((_, i) => i !== index));
-                                                                                if (aspecto.id != null) { borrarAspecto(aspecto.id) }
-                                                                            }}
-                                                                        >
-                                                                            Eliminar
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                        <div className="bg-white rounded-xl shadow-md overflow-hidden w-full md:w-[30%] flex-shrink-0 flex flex-col justify-start">
+                            <h3 className="bg-[#1E3766] text-white text-center p-2 font-medium">Auditores</h3>
+                            {plan && trabajadores.length > 0 && (
+                                <table className="w-full text-center">
+                                    <tbody>
+                                        <tr>
+                                            <td className="bg-[#1E3766] text-white font-medium p-3">Líder auditoría</td>
+                                            <td className="p-3">
+                                                <span className="border border-gray-300 rounded px-3 py-2 bg-gray-50 block">
+                                                    {trabajadores.find(trabajador => trabajador.id == plan.auditor_lider)?.nombre || ""}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="bg-[#1E3766] text-white font-medium p-3">Auditor auxiliar</td>
+                                            <td className="p-3">
+                                                <span className="border border-gray-300 rounded px-3 py-2 bg-gray-50 block">
+                                                    {trabajadores.find(trabajador => trabajador.id == plan.auditor)?.nombre || ""}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+                        </div>
+                        </div>
+
+                        <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 rounded-xl p-4">
+                            <table className="w-full text-center">
+                                <thead className="bg-[#1E3766] text-white">
+                                    <tr>
+                                        <th className="py-3 px-4 text-lg">Aspecto</th>
+                                        <th className="py-3 px-4 text-lg">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {aspectos.map((aspecto, index) => (
+                                        <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                                            <td className="py-2 px-4">
+                                                <input
+                                                    type="text"
+                                                    className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    value={aspecto.aspecto}
+                                                    onChange={(e) => {
+                                                        const valor = e.target.value;
+                                                        const validacion = validarTexto(valor);
+                                                        const nuevosAspectos = [...aspectos];
+                                                        nuevosAspectos[index].aspecto = valor;
+                                                        setAspectos(nuevosAspectos);
+                                                        setErrores({
+                                                            ...errores,
+                                                            [`aspecto_${index}`]: validacion.vacio
+                                                                ? "El campo es obligatorio"
+                                                                : validacion.valido
+                                                                    ? ""
+                                                                    : "Caracteres inválidos",
+                                                        });
+                                                    }}
+                                                />
+                                                {errores[`aspecto_${index}`] && (
+                                                    <div className="text-red-600 text-sm">{errores[`aspecto_${index}`]}</div>
+                                                )}
+                                            </td>
+                                            <td className="py-2 px-4">
                                                 <button
-                                                    className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
-                                                    onClick={agregarAspectoAuditado}
+                                                    className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                                    onClick={() => {
+                                                        setAspectos(prev => prev.filter((_, i) => i !== index));
+                                                        if (aspecto.id != null) { borrarAspecto(aspecto.id) }
+                                                        setErrores(prev => {
+                                                            const newErrores = { ...prev };
+                                                            delete newErrores[`aspecto_${index}`];
+                                                            return newErrores;
+                                                        });
+                                                    }}
                                                 >
-                                                    Agregar
+                                                    Eliminar
                                                 </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <button
+                            className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
+                            onClick={agregarAspectoAuditado}
+                        >
+                            Agregar
+                        </button>
                         {/* Tabla para seleccionar de la lista de verificación */}
                         <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl ">Lista de Verificación</h3>
                         <div className="w-[90%] bg-white  shadow-md overflow-hidden mb-6">
@@ -1473,219 +1491,400 @@ const PlanEdit = (prop) => {
                                 className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={fortaleza.virtud}
                                 onChange={(e) => {
+                                    const valor = e.target.value;
+                                    const validacion = validarTexto(valor);
                                     const newFortalezas = [...fortalezas];
-                                    newFortalezas[index].virtud = e.target.value;
+                                    newFortalezas[index].virtud = valor;
                                     setFortalezas(newFortalezas);
+                                    setErrores({
+                                        ...errores,
+                                        [`fortaleza_${index}`]: validacion.vacio
+                                            ? "El campo es obligatorio"
+                                            : validacion.valido
+                                                ? ""
+                                                : "Caracteres inválidos",
+                                    });
                                 }}
                             />
+                            {errores[`fortaleza_${index}`] && (
+                                <div className="text-red-600 text-sm">{errores[`fortaleza_${index}`]}</div>
+                            )}
                         </td>
                         <td className="py-2 px-4">
                             <button
                                 className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
                                 onClick={() => {
                                     setFortalezas(prev => prev.filter((_, i) => i !== index));
-                                    ;
-                                                                    }}
-                                                                >
-                                                                    Eliminar
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <button
-                                            className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
-                                            onClick={() => agregarFortalezas()}
+                                    setErrores(prev => {
+                                        const newErrores = { ...prev };
+                                        delete newErrores[`fortaleza_${index}`];
+                                        return newErrores;
+                                    })}}
+                                >
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+        <button
+            className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
+            onClick={() => agregarFortalezas()}
+        >
+            Agregar
+        </button>
+        {/* Tabla de Debilidades */}
+        <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl"> Debilidades </h3>
+        <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 ">
+            <table className="w-full text-center">
+                <thead className="bg-[#1E3766] text-white">
+                    <tr>
+                        <th className="py-3 px-4 text-lg">Descripción</th>
+                        <th className="py-3 px-4 text-lg">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {debilidades.map((debilidad, index) => (
+                        <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                            <td className="py-2 px-4">
+                                <input
+                                    type="text"
+                                    className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    value={debilidad.falta}
+                                    onChange={(e) => {
+                                        const valor = e.target.value;
+                                        const validacion = validarTexto(valor);
+                                        const newDebilidades = [...debilidades];
+                                        newDebilidades[index].falta = valor;
+                                        setDebilidades(newDebilidades);
+                                        setErrores({
+                                            ...errores,
+                                            [`debilidad_${index}`]: validacion.vacio
+                                                ? "El campo es obligatorio"
+                                                : validacion.valido
+                                                    ? ""
+                                                    : "Caracteres inválidos",
+                                        });
+                                    }}
+                                />
+                                {errores[`debilidad_${index}`] && (
+                                    <div className="text-red-600 text-sm">{errores[`debilidad_${index}`]}</div>
+                                )}
+                            </td>
+                            <td className="py-2 px-4">
+                                <button
+                                    className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                    onClick={() => {
+                                        setDebilidades(prev => prev.filter((_, i) => i !== index));
+                                        setErrores(prev => {
+                                            const newErrores = { ...prev };
+                                            delete newErrores[`debilidad_${index}`];
+                                            return newErrores;
+                                        });
+                                    }}
+                                >
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+        <button
+            className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
+            onClick={() => agregarDebilidades()}
+        >
+            Agregar
+        </button>
+
+        {/* Tabla de oportunidades */}
+        <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl "> Oportunidades de Mejora </h3>
+        <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 ">
+            <table className="w-full text-center">
+                <thead className='bg-[#1E3766] text-white'>
+                    <tr>
+                        <th className="py-3 px-4 text-lg">Descripción</th>
+                        <th className="py-3 px-4 text-lg">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {oportunidades.map((oportunidad, index) => (
+                        <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                            <td className="py-2 px-4">
+                                <input
+                                    type="text"
+                                    className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    value={oportunidad.oportunidad}
+                                    onChange={(e) => {
+                                        const valor = e.target.value;
+                                        const validacion = validarTexto(valor);
+                                        const newLista = [...oportunidades];
+                                        newLista[index].oportunidad = valor;
+                                        setOportunidades(newLista);
+                                        setErrores({
+                                            ...errores,
+                                            [`oportunidad_${index}`]: validacion.vacio
+                                                ? "El campo es obligatorio"
+                                                : validacion.valido
+                                                    ? ""
+                                                    : "Caracteres inválidos",
+                                        });
+                                    }}
+                                />
+                                {errores[`oportunidad_${index}`] && (
+                                    <div className="text-red-600 text-sm">{errores[`oportunidad_${index}`]}</div>
+                                )}
+                            </td>
+                            <td className="py-2 px-4">
+                                <button
+                                    className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                    onClick={() => {
+                                        setOportunidades(prev => prev.filter((_, i) => i !== index));
+                                        if (oportunidad.id != null) { borrarOportunidades(oportunidad.id) };
+                                        setErrores(prev => {
+                                            const newErrores = { ...prev };
+                                            delete newErrores[`oportunidad_${index}`];
+                                            return newErrores;
+                                        })}}
+                                    >
+                                        Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            <button
+                className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
+                onClick={() => agregarOportunidades()}
+            >
+                Agregar
+            </button>
+
+            {/* Tabla de Compromisos */}
+            <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl "> Compromisos </h3>
+            <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 ">
+                <table className="w-full text-center">
+                    <thead className='bg-[#1E3766] text-white'>
+                        <tr>
+                            <th className="py-3 px-4 text-lg">Compromiso</th>
+                            <th className="py-3 px-4 text-lg">Responsable</th>
+                            <th className="py-3 px-4 text-lg">Fecha Limite</th>
+                            <th className="py-3 px-4 text-lg">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {compromisos.map((compromiso, index) => (
+                            <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
+                                <td className="py-2 px-4">
+                                    <input
+                                        type="text"
+                                        className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        value={compromiso.compromiso}
+                                        onChange={(e) => {
+                                            const valor = e.target.value;
+                                            const validacion = validarTexto(valor);
+                                            const newLista = [...compromisos];
+                                            newLista[index].compromiso = valor;
+                                            setCompromisos(newLista);
+                                            setErrores({
+                                                ...errores,
+                                                [`compromiso_${index}`]: validacion.vacio
+                                                    ? "El campo es obligatorio"
+                                                    : validacion.valido
+                                                        ? ""
+                                                        : "Caracteres inválidos",
+                                            });
+                                        }}
+                                    />
+                                    {errores[`compromiso_${index}`] && (
+                                        <div className="text-red-600 text-sm">{errores[`compromiso_${index}`]}</div>
+                                    )}
+                                </td>
+                                <td className="py-2 px-4">
+                                    <input
+                                        type="text"
+                                        className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        value={compromiso.responsable}
+                                        onChange={(e) => {
+                                            const valor = e.target.value;
+                                            const validacion = validarTexto(valor);
+                                            const newLista = [...compromisos];
+                                            newLista[index].responsable = valor;
+                                            setCompromisos(newLista);
+                                            setErrores({
+                                                ...errores,
+                                                [`compromiso_responsable_${index}`]: validacion.vacio
+                                                    ? "El campo es obligatorio"
+                                                    : validacion.valido
+                                                        ? ""
+                                                        : "Caracteres inválidos",
+                                            });
+                                        }}
+                                    />
+                                    {errores[`compromiso_responsable_${index}`] && (
+                                        <div className="text-red-600 text-sm">{errores[`compromiso_responsable_${index}`]}</div>
+                                    )}
+                                </td>
+                                <td className="py-2 px-4">
+                                    <input
+                                        type="datetime-local"
+                                        value={compromiso.fechalimite?.slice(0, 16) || ""}
+                                        onChange={(e) => {
+                                            const valor = e.target.value;
+                                            // Validar que la fecha no esté vacía ni tenga el valor por defecto
+                                            let validacion;
+                                            if (!valor || valor === "0000-00-00T00:00" || valor === "00:00:00") {
+                                                validacion = { valido: false, mensaje: "La fecha es obligatoria" };
+                                            } else {
+                                                validacion = validarFechaFutura(valor);
+                                            }
+                                            const newLista = [...compromisos];
+                                            newLista[index].fechalimite = valor;
+                                            setCompromisos(newLista);
+                                            setErrores({
+                                                ...errores,
+                                                [`compromiso_fecha_${index}`]: validacion.valido ? "" : validacion.mensaje,
+                                            });
+                                        }}
+                                        className="border border-gray-300 rounded px-3 py-2 w-full"
+                                    />
+                                    {errores[`compromiso_fecha_${index}`] && (
+                                        <div className="text-red-600 text-sm">{errores[`compromiso_fecha_${index}`]}</div>
+                                    )}
+                                </td>
+                                <td className="py-2 px-4">
+                                    <button
+                                        className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
+                                        onClick={() => {
+                                            setCompromisos(prev => prev.filter((_, i) => i !== index));
+                                            if (compromiso.id != null) { borrarCompromisos(compromiso.id) };
+                                            setErrores(prev => {
+                                                const newErrores = { ...prev };
+                                                delete newErrores[`compromiso_${index}`];
+                                                delete newErrores[`compromiso_responsable_${index}`];
+                                                delete newErrores[`compromiso_fecha_${index}`];
+                                                return newErrores;
+                                            })}}
                                         >
-                                            Agregar
+                                            Eliminar
                                         </button>
-                                        {/* Tabla de Debilidades */}
-                                        <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl"> Debilidades </h3>
-                                        <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 ">
-                                            <table className="w-full text-center">
-                                                <thead className="bg-[#1E3766] text-white">
-                                                    <tr>
-                                                        <th className="py-3 px-4 text-lg">Descripción</th>
-                                                        <th className="py-3 px-4 text-lg">Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {debilidades.map((debilidad, index) => (
-                                                        <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
-                                                            <td className="py-2 px-4">
-                                                                <input
-                                                                    type="text"
-                                                                    className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                                    value={debilidad.falta}
-                                                                    onChange={(e) => {
-                                                                        const newDebilidades = [...debilidades];
-                                                                        newDebilidades[index].falta = e.target.value;
-                                                                        setDebilidades(newDebilidades);
-                                                                    }}
-                                                                />
-                                                            </td>
-                                                            <td className="py-2 px-4">
-                                                                <button
-                                                                    className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
-                                                                    onClick={() => {
-                                                                        setDebilidades(prev => prev.filter((_, i) => i !== index));
-                                                                        }}
-                                                                    >
-                                                                        Eliminar
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <button
-                                                className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
-                                                onClick={() => agregarDebilidades()}
-                                            >
-                                                Agregar
-                                            </button>
-
-    {/* Tabla de oportunidades */}
-    <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl "> Oportunidades de Mejora </h3>
-    <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 ">
-        <table className="w-full text-center">
-            <thead className='bg-[#1E3766] text-white'>
-                <tr>
-                    <th className="py-3 px-4 text-lg">Descripción</th>
-                    <th className="py-3 px-4 text-lg">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {oportunidades.map((oportunidad, index) => (
-                    <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
-                        <td className="py-2 px-4">
-                            <input
-                                type="text"
-                                className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={oportunidad.oportunidad}
-                                onChange={(e) => {
-                                    const newLista = [...oportunidades];
-                                    newLista[index].oportunidad = e.target.value;
-                                    setOportunidades(newLista);
-                                }}
-                            />
-                        </td>
-                        <td className="py-2 px-4">
-                            <button
-                                className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
-                                onClick={() => {
-                                    setOportunidades(prev => prev.filter((_, i) => i !== index));
-                                    if (oportunidad.id != null) { borrarOportunidades(oportunidad.id) };
-                                }}
-                            >
-                                Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    </div>
-    <button
-        className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
-        onClick={() => agregarOportunidades()}
-    >
-        Agregar
-    </button>
-
-    {/* Tabla de Compromisos */}
-    <h3 className="text-white bg-[#1E3766] w-[90%] mt-3 text-center text-xl "> Compromisos </h3>
-    <div className="w-[90%] bg-white shadow-md overflow-hidden mb-6 ">
-        <table className="w-full text-center">
-            <thead className='bg-[#1E3766] text-white'>
-                <tr>
-                    <th className="py-3 px-4 text-lg">Compromiso</th>
-                    <th className="py-3 px-4 text-lg">Responsable</th>
-                    <th className="py-3 px-4 text-lg">Fecha Limite</th>
-                    <th className="py-3 px-4 text-lg">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {compromisos.map((compromiso, index) => (
-                    <tr key={index} className="border-t border-gray-200 hover:bg-gray-50">
-                        <td className="py-2 px-4">
-                            <input
-                                type="text"
-                                className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={compromiso.compromiso}
-                                onChange={(e) => {
-                                    const newLista = [...compromisos];
-                                    newLista[index].compromiso = e.target.value;
-                                    setCompromisos(newLista);
-                                }}
-                            />
-                        </td>
-                        <td className="py-2 px-4">
-                            <input
-                                type="text"
-                                className="bg-gray-200 w-full m-2 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={compromiso.responsable}
-                                onChange={(e) => {
-                                    const newLista = [...compromisos];
-                                    newLista[index].responsable = e.target.value;
-                                    setCompromisos(newLista);
-                                }}
-                            />
-                        </td>
-                        <td className="py-2 px-4">
-                            <input
-                                type="datetime-local"
-                                value={compromiso.fecha_limite?.slice(0, 16) || ""}
-                                onChange={(e) => {
-                                    const newLista = [...compromisos];
-                                    newLista[index].fecha_limite = e.target.value;
-                                    setCompromisos(newLista);
-                                }}
-                                className="border border-gray-300 rounded px-3 py-2 w-full"
-                            />
-                        </td>
-                        <td className="py-2 px-4">
-                            <button
-                                className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
-                                onClick={() => {
-                                    setCompromisos(prev => prev.filter((_, i) => i !== index));
-                                    if (compromiso.id != null) { borrarCompromisos(compromiso.id) };
-                                }}
-                            >
-                                Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    </div>
-    <button
-        className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
-        onClick={agregarCompromisos}
-    >
-        Agregar
-    </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <button
+                    className="btn text-white px-4 py-2 m-2 transition-colors duration-200 ml-5"
+                    onClick={agregarCompromisos}
+                >
+                    Agregar
+                </button>
 
                 <div className="mt-10"
-                
                 >
-                    <button id="btn-guardar-edicion" 
-                    className="btn text-xl ml-5 p-2"
+                    <button
+                        id="btn-guardar-edicion"
+                        className="btn text-xl ml-5 p-2"
+                        onClick={async () => {
+                            // Validación antes de guardar auditoría
+                            const validarCamposAuditoria = () => {
+                                let erroresVal = {};
+                                let valido = true;
 
-                    onClick={async () => {
-                    await guardarAuditoria();
-                    sleep(1000).then(() => window.location.reload());}}>
+                                // Validar aspectos
+                                aspectos.forEach((a, i) => {
+                                    if (!a.aspecto || !validarTexto(a.aspecto).valido) {
+                                        erroresVal[`aspecto_${i}`] = "El campo es obligatorio y debe ser válido";
+                                        valido = false;
+                                    }
+                                });
 
-                Guardar
-                </button>
-                <button
-                id="btn-cancelar-edicion"
-                className="btn-gray text-xl ml-5 p-2"
-                onClick={() => {
+                                // Validar fortalezas
+                                fortalezas.forEach((f, i) => {
+                                    if (!f.virtud || !validarTexto(f.virtud).valido) {
+                                        erroresVal[`fortaleza_${i}`] = "El campo es obligatorio y debe ser válido";
+                                        valido = false;
+                                    }
+                                });
+
+                                // Validar debilidades
+                                debilidades.forEach((d, i) => {
+                                    if (!d.falta || !validarTexto(d.falta).valido) {
+                                        erroresVal[`debilidad_${i}`] = "El campo es obligatorio y debe ser válido";
+                                        valido = false;
+                                    }
+                                });
+
+                                // Validar oportunidades
+                                oportunidades.forEach((o, i) => {
+                                    if (!o.oportunidad || !validarTexto(o.oportunidad).valido) {
+                                        erroresVal[`oportunidad_${i}`] = "El campo es obligatorio y debe ser válido";
+                                        valido = false;
+                                    }
+                                });
+
+                                // Validar compromisos
+                                compromisos.forEach((c, i) => {
+                                    if (!c.compromiso || !validarTexto(c.compromiso).valido) {
+                                        erroresVal[`compromiso_${i}`] = "El campo es obligatorio y debe ser válido";
+                                        valido = false;
+                                    }
+                                    if (!c.responsable || !validarTexto(c.responsable).valido) {
+                                        erroresVal[`compromiso_responsable_${i}`] = "El campo es obligatorio y debe ser válido";
+                                        valido = false;
+                                    }
+                                    if (!c.fechalimite || c.fechalimite === "0000-00-00T00:00" || c.fechalimite === "00:00:00" || !validarFechaFutura(c.fechalimite).valido) {
+                                        erroresVal[`compromiso_fecha_${i}`] = "La fecha es obligatoria y debe ser futura";
+                                        valido = false;
+                                    }
+                                });
+
+                                setErrores(erroresVal);
+                                return valido;
+                            };
+
+                            if (!validarCamposAuditoria()) {
+                                // Mostrar alerta personalizada usando un modal simple
+                                const mensaje = "Por favor, complete todos los campos obligatorios correctamente antes de guardar.";
+                                const alerta = document.createElement("div");
+                                alerta.style.position = "fixed";
+                                alerta.style.top = "0";
+                                alerta.style.left = "0";
+                                alerta.style.width = "100vw";
+                                alerta.style.height = "100vh";
+                                alerta.style.background = "rgba(0,0,0,0.3)";
+                                alerta.style.display = "flex";
+                                alerta.style.alignItems = "center";
+                                alerta.style.justifyContent = "center";
+                                alerta.style.zIndex = "9999";
+                                alerta.innerHTML = `
+                                    <div style="background: white; padding: 2rem 2.5rem; border-radius: 12px; box-shadow: 0 2px 16px rgba(0,0,0,0.15); max-width: 90vw; min-width: 320px;">
+                                        <h2 style="color: #1E3766; margin-bottom: 1rem; font-size: 1.2rem;">Campos incompletos o inválidos</h2>
+                                        <pre style="white-space: pre-wrap; color: #333; font-size: 1rem; margin-bottom: 1.5rem;">${mensaje}</pre>
+                                        <button style="background: #1E3766; color: white; border: none; border-radius: 6px; padding: 0.5rem 1.5rem; font-size: 1rem; cursor: pointer;">Cerrar</button>
+                                    </div>
+                                `;
+                                alerta.querySelector("button").onclick = () => document.body.removeChild(alerta);
+                                document.body.appendChild(alerta);
+                                return;
+                            }
+
+                            await guardarAuditoria();
+                            sleep(1000).then(() => window.location.reload());
+                        }}
+                    >
+                        Guardar
+                    </button>
+                    <button
+                    id="btn-cancelar-edicion"
+                    className="btn-gray text-xl ml-5 p-2"
+                    onClick={() => {
                     window.location.reload();}}
                 >
                 Cancelar
