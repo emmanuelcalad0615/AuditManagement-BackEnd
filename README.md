@@ -2,8 +2,12 @@
 
 AuditManagement-BackEnd es un sistema desarrollado para gestionar auditorías de manera eficiente, brindando una interfaz de usuario amigable y un backend sólido que facilita la administración de auditorías.
 
----
 
+
+### Nota:
+- Abre y revisa la rama [master](https://github.com/emmanuelcalad0615/AuditManagement-BackEnd/tree/master) del proyecto que es donde estará toda la información y desarrollo.
+
+---
 ## 🚀 Características
 
 - **API RESTful:** Permite operaciones CRUD sobre registros de auditoría.
