@@ -213,7 +213,7 @@ export const traerListaxAuditoria = async function(id){
 
 export const guardarListaxAuditoria = async function(lista){
     for(const auditoriaxlista of lista){
-       
+        console.log(auditoriaxlista)
         if(auditoriaxlista.id != null){             
               const requestOptions = {
                 method: "PUT",

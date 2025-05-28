@@ -18,6 +18,8 @@ class AuditoriaXListaService:
         for key, value in data.items():
             if hasattr(obj, key):
                 setattr(obj, key, value)
+        print("guardando objeto")
+        print(vars(obj))
         return json.dumps(vars(self.repository.save(obj)))
 
     def delete(self, id_auditoria, id_listaverificacion):

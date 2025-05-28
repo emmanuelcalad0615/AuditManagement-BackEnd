@@ -123,7 +123,8 @@ const Trabajador = () => {
       nombre: e.target.nombre.value,
       celular: e.target.celular.value,
       correo: e.target.correo.value,
-      id_sector: e.target.sector.value
+      id_sector: e.target.sector.value,
+      password: e.target.password.value
     };
     if (!validarFormulario(formData)) return;
     await guardartrabajador({
@@ -166,7 +167,7 @@ const Trabajador = () => {
               </tbody>
             </table>
             <div className="flex justify-end">
-              <button className="btn" onClick={() => { setVista('formulario'); setErrores({}); setForm({ nombre: '', celular: '', correo: '', id_sector: '' }); }}>➕ Agregar Trabajador</button>
+              <button className="btn" onClick={() => { setVista('formulario'); setErrores({}); setForm({ nombre: '', celular: '', correo: '', id_sector: '' , password: ''}); }}>➕ Agregar Trabajador</button>
             </div>
           </div>
         </section>
@@ -195,6 +196,10 @@ const Trabajador = () => {
               Correo
               <input name="correo" type="email" className="input" required />
               {errores.correo && <span className="text-red-500 text-sm">{errores.correo}</span>}
+            </label>
+            <label className="w-full max-w-md">
+              Password
+              <input name="password" type="password" className="input" required />
             </label>
             <label className="w-full max-w-md">
               Sector

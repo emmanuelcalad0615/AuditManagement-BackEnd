@@ -57,27 +57,27 @@ export const traerSectores = async function(){
 }
 
 export const guardartrabajador = async function(e){
-    e.preventDefault();
-    var form = e.target; // el formulario enviado
-    var formData = new FormData(form); // obtiene los datos
+    //var form = e.target; // el formulario enviado
+    //var formData = new FormData(form); // obtiene los datos
   
     // Si solo necesitas un campo:
-    var nombre = formData.get('nombre');
-    var celular = formData.get('celular');
-    var correo = formData.get('correo');
-    var sector = formData.get('sector');
-
+    //var nombre = formData.get('nombre');
+    //var celular = formData.get('celular');
+    //var correo = formData.get('correo');
+    //var sector = formData.get('sector');
+    console.log(e);
+/*
     const raw = JSON.stringify({
         "nombre": nombre,
         "celular": celular,
         "correo": correo,
         "id_sector": sector
       });
-
+*/
     const requestOptionsPost = {
     method: "POST",
     headers: myHeaders,
-    body: raw,
+    body: JSON.stringify(e),
     redirect: "follow"
     };
 
