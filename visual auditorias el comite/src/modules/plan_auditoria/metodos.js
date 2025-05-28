@@ -21,7 +21,7 @@ const plan = {
 }
 
 export const traerTodoTrabajador = async function(){
-    const respuesta = await fetch("http://localhost:5000/trabajador/getAll", requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/trabajador/getAll", requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -31,7 +31,7 @@ export const traerTodoTrabajador = async function(){
 /* Reuniones */
 
 export const traerReunionPlan = async function(id){
-    const respuesta = await fetch("http://localhost:5000/reunion/getByPlan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/reunion/getByPlan/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -48,7 +48,7 @@ export const guardarReuniones = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/reunion/update", requestOptions)
+            await fetch("http://127.0.0.1:5000/reunion/update", requestOptions)
         }else{
             const requestOptions = {
                 method: "POST",
@@ -57,7 +57,7 @@ export const guardarReuniones = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/reunion/save", requestOptions)
+            await fetch("http://127.0.0.1:5000/reunion/save", requestOptions)
         }
     }
 }
@@ -67,7 +67,7 @@ export const borrarReunion = async function(id){
         method: "DELETE",
         redirect: "follow"
     };
-    const respuesta = await fetch("http://localhost:5000/reunion/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://127.0.0.1:5000/reunion/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -76,7 +76,7 @@ export const borrarReunion = async function(id){
 /* Itinerarios */
 
 export const traerItinerarioPlan = async function(id){
-    const respuesta = await fetch("http://localhost:5000/itinerario/getByPlan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/itinerario/getByPlan/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -94,7 +94,7 @@ export const guardarItinerarios = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/itinerario/update", requestOptions)
+            await fetch("http://127.0.0.1:5000/itinerario/update", requestOptions)
         }else{
             const requestOptions = {
                 method: "POST",
@@ -103,7 +103,7 @@ export const guardarItinerarios = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/itinerario/save", requestOptions)
+            await fetch("http://127.0.0.1:5000/itinerario/save", requestOptions)
         }
     }
 }
@@ -113,7 +113,7 @@ export const borrarItinerario = async function(id){
         method: "DELETE",
         redirect: "follow"
     };
-    const respuesta = await fetch("http://localhost:5000/itinerario/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://127.0.0.1:5000/itinerario/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -122,7 +122,7 @@ export const borrarItinerario = async function(id){
 /* Auditados en el plan */
 
 export const traerAuditadosPlan = async function(id){
-    const respuesta = await fetch("http://localhost:5000/auditado_plan/getidplan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/auditado_plan/getidplan/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -140,7 +140,7 @@ export const guardarAuditadosPlan = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/auditado_plan/update", requestOptions)
+            await fetch("http://127.0.0.1:5000/auditado_plan/update", requestOptions)
         }else{
             const requestOptions = {
                 method: "POST",
@@ -149,7 +149,7 @@ export const guardarAuditadosPlan = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/auditado_plan/save", requestOptions)
+            await fetch("http://127.0.0.1:5000/auditado_plan/save", requestOptions)
         }
     }
 }
@@ -159,7 +159,7 @@ export const borrarAuditado = async function(id){
         method: "DELETE",
         redirect: "follow"
     };
-    const respuesta = await fetch("http://localhost:5000/auditado_plan/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://127.0.0.1:5000/auditado_plan/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -179,7 +179,7 @@ export const traerAuditoria = async function(id) {
         redirect: "follow"
     };
 
-    const respuesta = await fetch("http://localhost:5000/auditoria/getByPlan/" + id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/auditoria/getByPlan/" + id, requestOptionsGet)
         .then((response) => response.json());
 
     console.log("Respuesta de auditoría:", respuesta);
@@ -193,7 +193,7 @@ export const traerAuditoria = async function(id) {
     }
 
     if (!existente) {
-        existente = await fetch("http://localhost:5000/auditoria/save", requestOptions)
+        existente = await fetch("http://127.0.0.1:5000/auditoria/save", requestOptions)
             .then((response) => response.json());
     }
 
@@ -204,7 +204,7 @@ export const traerAuditoria = async function(id) {
 /* auditoria x lista de verificacion */
 
 export const traerListaxAuditoria = async function(id){
-    const respuesta = await fetch("http://localhost:5000/auditoriaxlista/getByPlan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/auditoriaxlista/getByPlan/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -222,7 +222,7 @@ export const guardarListaxAuditoria = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/auditoriaxlista/update", requestOptions)
+            await fetch("http://127.0.0.1:5000/auditoriaxlista/update", requestOptions)
         }else{
             const requestOptions = {
                 method: "POST",
@@ -231,7 +231,7 @@ export const guardarListaxAuditoria = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/auditoriaxlista/save", requestOptions)
+            await fetch("http://127.0.0.1:5000/auditoriaxlista/save", requestOptions)
         }
     }
 }
@@ -239,7 +239,7 @@ export const guardarListaxAuditoria = async function(lista){
 /*aspectos */
 
 export const traerAspectos = async function(id){
-    const respuesta = await fetch("http://localhost:5000/aspecto/getByPlan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/aspecto/getByPlan/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -257,7 +257,7 @@ export const guardarAspectos = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/aspecto/update", requestOptions)
+            await fetch("http://127.0.0.1:5000/aspecto/update", requestOptions)
         }else{
             const requestOptions = {
                 method: "POST",
@@ -266,7 +266,7 @@ export const guardarAspectos = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/aspecto/save", requestOptions)
+            await fetch("http://127.0.0.1:5000/aspecto/save", requestOptions)
         }
     }
 }
@@ -277,7 +277,7 @@ export const borrarAspecto = async function(id){
         redirect: "follow"
     };
 
-    const respuesta = await fetch("http://localhost:5000/aspecto/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://127.0.0.1:5000/aspecto/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -287,7 +287,7 @@ export const borrarAspecto = async function(id){
 /* Propositos */
 
 export const traerPropositos = async function(id){
-    const respuesta = await fetch("http://localhost:5000/proposito/getByPlan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/proposito/getByPlan/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -306,7 +306,7 @@ export const guardarPropositos = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/proposito/update", requestOptions)
+            await fetch("http://127.0.0.1:5000/proposito/update", requestOptions)
         }else{
             const requestOptions = {
                 method: "POST",
@@ -315,7 +315,7 @@ export const guardarPropositos = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/proposito/save", requestOptions)
+            await fetch("http://127.0.0.1:5000/proposito/save", requestOptions)
         }
     }
 }
@@ -327,7 +327,7 @@ export const borrarProposito = async function(id){
     };
 
     
-    const respuesta = await fetch("http://localhost:5000/proposito/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://127.0.0.1:5000/proposito/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -335,7 +335,7 @@ export const borrarProposito = async function(id){
 }
 /* lista verificacion */
 export const traerListasV = async function(){
-    const respuesta = await fetch("http://localhost:5000/lista_verificacion/getAll", requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/lista_verificacion/getAll", requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -345,7 +345,7 @@ export const traerListasV = async function(){
 /* plan info */
 
 export const traerID = async function(id){
-    const respuesta = await fetch("http://localhost:5000/plan/getid/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/plan/getid/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -359,7 +359,7 @@ export const borrarID = async function(id){
     };
 
     
-    const respuesta = await fetch("http://localhost:5000/plan/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://127.0.0.1:5000/plan/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -367,7 +367,7 @@ export const borrarID = async function(id){
 }
 
 export const traerTodo = async function(){
-    const respuesta = await fetch("http://localhost:5000/plan/getAll", requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/plan/getAll", requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -403,7 +403,7 @@ export const guardarplan = async function(plan){
     redirect: "follow"
     };
 
-    const respuesta = await fetch("http://localhost:5000/plan/save", requestOptionsPost)
+    const respuesta = await fetch("http://127.0.0.1:5000/plan/save", requestOptionsPost)
         .then((response) => response.json());
     return respuesta
   }
@@ -431,7 +431,7 @@ export const actualizarplan = async function(plan){
         redirect: "follow"
       };
       
-    const respuesta = await  fetch("http://localhost:5000/plan/update", requestOptions)
+    const respuesta = await  fetch("http://127.0.0.1:5000/plan/update", requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -445,12 +445,12 @@ export const borrarPlan = (id) => {
     redirect: "follow"
     };
 
-    fetch("http://localhost:5000/plan/delete/"+id, requestOptions)
+    fetch("http://127.0.0.1:5000/plan/delete/"+id, requestOptions)
 }
 /*compromisos */
 
 export const traerCompromisos = async function(id){
-    const respuesta = await fetch("http://localhost:5000/compromiso/getByPlan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/compromiso/getByPlan/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -468,7 +468,7 @@ export const guardarCompromisos = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/compromiso/update", requestOptions)
+            await fetch("http://127.0.0.1:5000/compromiso/update", requestOptions)
         }else{
             const requestOptions = {
                 method: "POST",
@@ -477,7 +477,7 @@ export const guardarCompromisos = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/compromiso/save", requestOptions)
+            await fetch("http://127.0.0.1:5000/compromiso/save", requestOptions)
         }
     }
 }
@@ -489,7 +489,7 @@ export const borrarCompromisos = async function(id){
     };
 
     
-    const respuesta = await fetch("http://localhost:5000/compromiso/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://127.0.0.1:5000/compromiso/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -500,7 +500,7 @@ export const borrarCompromisos = async function(id){
 /*fortaleza */
 
 export const traerFortalezas = async function(id){
-    const respuesta = await fetch("http://localhost:5000/fortaleza/getByPlan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/fortaleza/getByPlan/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -526,8 +526,8 @@ export const guardarFortalezas = async function(lista) {
     };
 
     const url = tieneId 
-      ? "http://localhost:5000/fortaleza/update" 
-      : "http://localhost:5000/fortaleza/save";
+      ? "http://127.0.0.1:5000/fortaleza/update" 
+      : "http://127.0.0.1:5000/fortaleza/save";
 
     try {
       const response = await fetch(url, requestOptions);
@@ -552,7 +552,7 @@ export const borrarFortalezas = async function(id){
     };
 
     
-    const respuesta = await fetch("http://localhost:5000/fortaleza/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://127.0.0.1:5000/fortaleza/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -563,7 +563,7 @@ export const borrarFortalezas = async function(id){
 /*debilidad */
 
 export const traerDebilidades = async function(id){
-    const respuesta = await fetch("http://localhost:5000/debilidad/getByPlan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/debilidad/getByPlan/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -581,7 +581,7 @@ export const guardarDebilidades = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/debilidad/update", requestOptions)
+            await fetch("http://127.0.0.1:5000/debilidad/update", requestOptions)
         }else{
             const requestOptions = {
                 method: "POST",
@@ -590,7 +590,7 @@ export const guardarDebilidades = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/debilidad/save", requestOptions)
+            await fetch("http://127.0.0.1:5000/debilidad/save", requestOptions)
         }
     }
 }
@@ -602,7 +602,7 @@ export const borrarDebilidades = async function(id){
     };
 
     
-    const respuesta = await fetch("http://localhost:5000/debilidad/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://127.0.0.1:5000/debilidad/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -612,7 +612,7 @@ export const borrarDebilidades = async function(id){
 /*oportunidad */
 
 export const traerOportunidades = async function(id){
-    const respuesta = await fetch("http://localhost:5000/oportunidad/getByPlan/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://127.0.0.1:5000/oportunidad/getByPlan/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -630,7 +630,7 @@ export const guardarOportunidades = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/oportunidad/update", requestOptions)
+            await fetch("http://127.0.0.1:5000/oportunidad/update", requestOptions)
         }else{
             const requestOptions = {
                 method: "POST",
@@ -639,7 +639,7 @@ export const guardarOportunidades = async function(lista){
                 redirect: "follow"
               };
 
-            await fetch("http://localhost:5000/oportunidad/save", requestOptions)
+            await fetch("http://127.0.0.1:5000/oportunidad/save", requestOptions)
         }
     }
 }
@@ -651,7 +651,7 @@ export const borrarOportunidades = async function(id){
     };
 
     
-    const respuesta = await fetch("http://localhost:5000/oportunidad/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://127.0.0.1:5000/oportunidad/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
