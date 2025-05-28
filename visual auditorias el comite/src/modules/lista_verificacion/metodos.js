@@ -18,7 +18,7 @@ const lista_verificacion = {
 
 
 export const traerID = async function(id){
-    const respuesta = await fetch("http://127.0.0.1:5000/lista_verificacion/getid/"+id, requestOptionsGet)
+    const respuesta = await fetch("http://3.143.204.151:5000/lista_verificacion/getid/"+id, requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -32,7 +32,7 @@ export const borrarID = async function(id){
     };
 
     
-    const respuesta = await fetch("http://127.0.0.1:5000/lista_verificacion/delete/"+id, requestOptions)
+    const respuesta = await fetch("http://3.143.204.151:5000/lista_verificacion/delete/"+id, requestOptions)
         .then((response) => response.json());
 
     return respuesta;
@@ -40,7 +40,7 @@ export const borrarID = async function(id){
 }
 
 export const traerTodo = async function(){
-    const respuesta = await fetch("http://127.0.0.1:5000/lista_verificacion/getAll", requestOptionsGet)
+    const respuesta = await fetch("http://3.143.204.151:5000/lista_verificacion/getAll", requestOptionsGet)
         .then((response) => response.json());
 
     return respuesta;
@@ -70,7 +70,7 @@ export const guardarlista_verificacion = async function(e){
     redirect: "follow"
     };
 
-    const respuesta = await fetch("http://127.0.0.1:5000/lista_verificacion/save", requestOptionsPost)
+    const respuesta = await fetch("http://3.143.204.151:5000/lista_verificacion/save", requestOptionsPost)
         .then((response) => response.json());
     return respuesta
   }
@@ -92,7 +92,7 @@ export const actualizarlista_verificacion = async function(id, datos) {
     redirect: "follow"
   };
 
-  const respuesta = await fetch("http://127.0.0.1:5000/lista_verificacion/update", requestOptions)
+  const respuesta = await fetch("http://3.143.204.151:5000/lista_verificacion/update", requestOptions)
     .then((response) => response.json());
 
   return respuesta;
