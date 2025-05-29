@@ -8,7 +8,7 @@ import LoginForm from './modules/login/LoginForm';
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // <- Nuevo estado para login(Cambiar a false y se va a exigir loguearse antes de hacer cualquier cosa)
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // <- Nuevo estado para login(Cambiar a false y se va a exigir loguearse antes de hacer cualquier cosa)
   const [moduloActual, setModuloActual] = useState("planAuditoria");
 
   const renderModulo = () => {
