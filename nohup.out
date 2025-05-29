@@ -50,3 +50,157 @@ Emitted 'error' event on ReadStream instance at:
 }
 
 Node.js v20.19.0
+17:26:22.184 [MainThread] INFO    thonny: Thonny version: 4.1.7
+17:26:22.184 [MainThread] INFO    thonny: cwd: /home/windows/Documents/AuditManagement-BackEnd
+17:26:22.184 [MainThread] INFO    thonny: original argv: ['/usr/bin/python3', '/usr/bin/thonny']
+17:26:22.184 [MainThread] INFO    thonny: sys.executable: /usr/bin/python3
+17:26:22.184 [MainThread] INFO    thonny: sys.argv: ['/usr/bin/thonny']
+17:26:22.184 [MainThread] INFO    thonny: sys.path: ['/usr/bin', '/usr/lib/python313.zip', '/usr/lib/python3.13', '/usr/lib/python3.13/lib-dynload', '/usr/local/lib/python3.13/dist-packages', '/usr/lib/python3/dist-packages', '/usr/lib/python3.13/dist-packages']
+17:26:22.184 [MainThread] INFO    thonny: sys.flags: sys.flags(debug=0, inspect=0, interactive=0, optimize=0, dont_write_bytecode=0, no_user_site=0, no_site=0, ignore_environment=0, verbose=0, bytes_warning=0, quiet=0, hash_randomization=1, isolated=0, dev_mode=False, utf8_mode=0, warn_default_encoding=0, safe_path=False, int_max_str_digits=4300)
+17:26:22.213 [MainThread] INFO    thonny.workbench: Starting Workbench
+17:26:22.349 [MainThread] INFO    thonny.workbench: Creating runner
+17:26:22.351 [MainThread] INFO    thonny.workbench: Start loading plugins
+17:26:22.390 [MainThread] INFO    thonny.workbench: Done loading plugins
+17:26:22.443 [MainThread] INFO    thonny.workbench: Opening views
+17:26:22.566 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+17:26:22.581 [MainThread] INFO    thonny.running: Starting the backend: ['/usr/bin/python3', '-s', '-u', '-B', '/usr/lib/python3/dist-packages/thonny/plugins/esp/esp_back.py', "{'clean': False, 'port': '/dev/ttyUSB0', 'dtr': None, 'rts': None, 'submit_mode': None, 'interrupt_on_connect': True, 'write_block_size': None, 'write_block_delay': None, 'proxy_class': 'ESP32Proxy', 'sync_time': True, 'validate_time': False, 'local_rtc': True}"] /home/windows
+17:26:23.245 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+17:26:25.807 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:26:25.807 [MainThread] INFO    thonny.ui_utils: Placing .!nodechoicedialog with geometry +822+457
+17:26:26.723 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:26:26.723 [MainThread] INFO    thonny.ui_utils: Placing .!backendfiledialog with geometry +607+243
+17:26:29.429 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:26:29.429 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog with geometry +755+487
+17:26:46.596 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:26:46.596 [MainThread] INFO    thonny.ui_utils: Placing .!nodechoicedialog2 with geometry +822+457
+17:26:57.233 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:26:57.233 [MainThread] INFO    thonny.ui_utils: Placing .!backendfiledialog2 with geometry +607+243
+17:27:00.480 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:27:00.480 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog2 with geometry +755+487
+17:27:17.967 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:27:17.968 [MainThread] INFO    thonny.ui_utils: Placing .!nodechoicedialog3 with geometry +822+457
+17:27:18.908 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:27:18.908 [MainThread] INFO    thonny.ui_utils: Placing .!backendfiledialog3 with geometry +607+243
+17:27:21.575 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:27:21.575 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog3 with geometry +755+487
+17:27:33.135 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:27:33.135 [MainThread] INFO    thonny.ui_utils: Placing .!nodechoicedialog4 with geometry +822+457
+17:27:34.001 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:27:34.002 [MainThread] INFO    thonny.ui_utils: Placing .!backendfiledialog4 with geometry +607+243
+17:27:38.653 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:27:38.653 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog4 with geometry +755+487
+17:27:50.465 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:27:50.465 [MainThread] INFO    thonny.ui_utils: Placing .!nodechoicedialog5 with geometry +822+457
+17:27:51.366 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:27:51.366 [MainThread] INFO    thonny.ui_utils: Placing .!backendfiledialog5 with geometry +607+243
+17:27:57.953 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:27:57.953 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog5 with geometry +755+487
+17:28:18.692 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:28:18.693 [MainThread] INFO    thonny.ui_utils: Placing .!nodechoicedialog6 with geometry +822+457
+17:28:19.823 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:28:19.823 [MainThread] INFO    thonny.ui_utils: Placing .!backendfiledialog6 with geometry +607+243
+17:28:21.706 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+17:28:21.706 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog6 with geometry +755+487
+17:37:32.365 [Thread-2 (_listen_stdout)] INFO    thonny.running: Reader got EOF
+17:37:32.485 [MainThread] INFO    thonny.shell: BaseShellText._on_backend_terminated
+20:34:44.203 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:34:44.207 [MainThread] INFO    thonny.running: Starting the backend: ['/usr/bin/python3', '-s', '-u', '-B', '/usr/lib/python3/dist-packages/thonny/plugins/esp/esp_back.py', "{'clean': True, 'port': '/dev/ttyUSB0', 'dtr': None, 'rts': None, 'submit_mode': None, 'interrupt_on_connect': True, 'write_block_size': None, 'write_block_delay': None, 'proxy_class': 'ESP32Proxy', 'sync_time': True, 'validate_time': False, 'local_rtc': True}"] /home/windows
+20:34:44.265 [MainThread] INFO    thonny.shell: BaseShellText.restart(False)
+20:34:44.977 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:39:20.549 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+20:39:20.549 [MainThread] INFO    thonny.ui_utils: Placing .!nodechoicedialog7 with geometry +822+457
+20:39:21.440 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+20:39:21.440 [MainThread] INFO    thonny.ui_utils: Placing .!backendfiledialog7 with geometry +607+243
+20:39:23.262 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+20:39:23.262 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog7 with geometry +755+487
+20:39:52.761 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+20:39:52.761 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog8 with geometry +755+487
+20:42:08.499 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+20:42:08.499 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog9 with geometry +755+487
+20:43:23.977 [MainThread] INFO    thonny: TIME/MODS 11821.795 Before Run (+177 modules)
+20:43:23.978 [MainThread] INFO    thonny: NEW MODS ['_blake2', '_datetime', '_hashlib', '_heapq', '_locale', '_posixsubprocess', '_queue', '_socket', '_ssl', '_tkinter', 'array', 'base64', 'configparser', 'datetime', 'email._encoded_words', 'email._parseaddr', 'email._policybase', 'email.base64mime', 'email.charset', 'email.encoders', 'email.errors', 'email.feedparser', 'email.header', 'email.iterators', 'email.message', 'email.parser', 'email.quoprimime', 'email.utils', 'encodings.ascii', 'faulthandler', 'fcntl', 'gettext', 'hashlib', 'heapq', 'http', 'http.client', 'ipaddress', 'locale', 'pkgutil', 'platform', 'queue', 'quopri', 'runpy', 'select', 'selectors', 'serial', 'serial.serialposix', 'serial.serialutil', 'serial.tools', 'serial.tools.list_ports', 'serial.tools.list_ports_common', 'serial.tools.list_ports_linux', 'serial.tools.list_ports_posix', 'shlex', 'signal', 'socket', 'ssl', 'subprocess', 'termios', 'thonny.assistance', 'thonny.ast_utils', 'thonny.backend', 'thonny.base_file_browser', 'thonny.codeview', 'thonny.config', 'thonny.config_ui', 'thonny.editor_helpers', 'thonny.editors', 'thonny.languages', 'thonny.memory', 'thonny.misc_utils', 'thonny.plugins', 'thonny.plugins.about', 'thonny.plugins.assistant_config_page', 'thonny.plugins.ast_view', 'thonny.plugins.autocomplete', 'thonny.plugins.backend', 'thonny.plugins.backend_config_page', 'thonny.plugins.base_syntax_themes', 'thonny.plugins.base_ui_themes', 'thonny.plugins.birdseye_frontend', 'thonny.plugins.calltip', 'thonny.plugins.cells', 'thonny.plugins.circuitpython', 'thonny.plugins.circuitpython.cirpy_front', 'thonny.plugins.clean_ui_themes', 'thonny.plugins.coloring', 'thonny.plugins.commenting_indenting', 'thonny.plugins.common_editing_commands', 'thonny.plugins.cpython_backend', 'thonny.plugins.cpython_backend.cp_back', 'thonny.plugins.cpython_frontend', 'thonny.plugins.cpython_frontend.cp_front', 'thonny.plugins.cpython_ssh', 'thonny.plugins.cpython_ssh.cps_front', 'thonny.plugins.debugger', 'thonny.plugins.dock_user_windows_frontend', 'thonny.plugins.editor_config_page', 'thonny.plugins.esp', 'thonny.plugins.esp.esp_back', 'thonny.plugins.ev3', 'thonny.plugins.event_logging', 'thonny.plugins.event_view', 'thonny.plugins.files', 'thonny.plugins.find_replace', 'thonny.plugins.general_config_page', 'thonny.plugins.goto_definition', 'thonny.plugins.heap', 'thonny.plugins.help', 'thonny.plugins.highlight_names', 'thonny.plugins.locals_marker', 'thonny.plugins.microbit', 'thonny.plugins.micropython', 'thonny.plugins.micropython.bare_metal_backend', 'thonny.plugins.micropython.base_flashing_dialog', 'thonny.plugins.micropython.connection', 'thonny.plugins.micropython.esptool_dialog', 'thonny.plugins.micropython.mp_back', 'thonny.plugins.micropython.mp_common', 'thonny.plugins.micropython.mp_front', 'thonny.plugins.micropython.uf2dialog', 'thonny.plugins.micropython.webrepl_connection', 'thonny.plugins.misc_analyzers', 'thonny.plugins.mypy', 'thonny.plugins.notes', 'thonny.plugins.object_inspector', 'thonny.plugins.outline', 'thonny.plugins.paren_matcher', 'thonny.plugins.pgzero_frontend', 'thonny.plugins.pi', 'thonny.plugins.pip_gui', 'thonny.plugins.prime_inventor', 'thonny.plugins.printing', 'thonny.plugins.pylint', 'thonny.plugins.pylint.messages', 'thonny.plugins.pythontutor', 'thonny.plugins.remove_old_data_dir', 'thonny.plugins.replayer', 'thonny.plugins.rp2040', 'thonny.plugins.rpi_pico', 'thonny.plugins.run_debug_config_page', 'thonny.plugins.shell_config_page', 'thonny.plugins.shell_macro', 'thonny.plugins.statement_boxes', 'thonny.plugins.stdlib_error_helpers', 'thonny.plugins.system_shell', 'thonny.plugins.terminal_config_page', 'thonny.plugins.theme_and_font_config_page', 'thonny.plugins.thonny_folders', 'thonny.plugins.todo_view', 'thonny.plugins.tomorrow_syntax_theme', 'thonny.plugins.variables', 'thonny.roughparse', 'thonny.rst_utils', 'thonny.running', 'thonny.shell', 'thonny.terminal', 'thonny.tktextext', 'thonny.token_utils', 'thonny.ui_utils', 'thonny.workbench', 'thonny.workdlg', 'tkinter', 'tkinter.commondialog', 'tkinter.constants', 'tkinter.dialog', 'tkinter.filedialog', 'tkinter.font', 'tkinter.messagebox', 'tkinter.simpledialog', 'tkinter.ttk', 'urllib', 'urllib.error', 'urllib.parse', 'urllib.request', 'urllib.response', 'webbrowser']
+20:43:23.982 [MainThread] INFO    thonny.running: Prepared clean state for executing ToplevelCommand(args=['-c'], args_str='-c $EDITOR_CONTENT', cmd_line='%Run -c $EDITOR_CONTENT', tty_mode=True, source='\nfrom Buzzer import Buzzer\nfrom Led import Led\nfrom UartLector import UartLector\nfrom HTTPSender import HTTPSender, load_settings, connect_wifi\nfrom Motor import Motor\nimport _thread\nimport time\nimport gc\n\n        \nclass Program:\n    def __init__(self):\n        self.uart = UartLector(2, 9600, 17, 16)\n        self.buzzer = Buzzer(13)\n        self.ledTrue = Led(23)\n        self.ledFalse = Led(22)\n        self.ledTrue.on()\n        self.ledFalse.on()\n        self.motor = Motor(14,50)\n        self.settings = load_settings()\n        \n        connect_wifi(self.settings)\n        _thread.start_new_thread(self.checkLector, ())\n        self.ledTrue.off()\n        self.ledFalse.off()\n        \n    def sendToApi(self,tag):\n        print("resultado:", tag)\n        http_sensor = HTTPSender(host = self.settings["host"],\n                             token = self.settings["token"],\n                             device_label = self.settings["device_label"],\n                             variable_label = self.settings["variable_label"])\n    \n        retorno = http_sensor.post_var(tag)\n        print(retorno.status_code)\n        \n        if int(retorno.status_code) == 200:\n            _thread.start_new_thread(self.motor.abrir, ())\n            self.ledTrue.on()\n            time.sleep(0.1)\n            self.ledTrue.off()\n            time.sleep(0.1)\n            self.ledTrue.on()\n            time.sleep(0.1)\n        else:\n            self.ledFalse.on()\n            time.sleep(0.1)\n            self.ledFalse.off()\n            time.sleep(0.1)\n            self.ledFalse.on()\n            time.sleep(0.1)\n            \n\n        self.ledTrue.off()\n        self.ledFalse.off()\n        \n        gc.collect()\n    \n\n    def checkLector(self):\n\n        print("Esperando tarjeta...")\n        self.buzzer.off()\n        while True:\n            tag = self.uart.checkEntry()\n            if tag:    \n                self.buzzer.on()\n                self.sendToApi(tag)\n                self.buzzer.off()\n                time.sleep(5)\n                _thread.start_new_thread(self.motor.cerrar, ())\n            time.sleep(1)\n\nProgram()\n\n', name='Run', argv=[], id='cmd_66', local_cwd='/home/windows')
+20:43:23.983 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:43:23.984 [MainThread] INFO    thonny: TIME/MODS 0.007 After Run 
+20:43:52.974 [MainThread] INFO    thonny.running: Killing backend process
+20:43:53.032 [Thread-4 (_listen_stdout)] INFO    thonny.running: Reader got EOF
+20:43:53.074 [MainThread] INFO    thonny.shell: BaseShellText._on_backend_terminated
+20:43:53.094 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:43:53.095 [MainThread] INFO    thonny.running: Starting the backend: ['/usr/bin/python3', '-s', '-u', '-B', '/usr/lib/python3/dist-packages/thonny/plugins/esp/esp_back.py', "{'clean': True, 'port': '/dev/ttyUSB0', 'dtr': None, 'rts': None, 'submit_mode': None, 'interrupt_on_connect': True, 'write_block_size': None, 'write_block_delay': None, 'proxy_class': 'ESP32Proxy', 'sync_time': True, 'validate_time': False, 'local_rtc': True}"] /home/windows
+20:43:53.158 [MainThread] INFO    thonny.shell: BaseShellText.restart(False)
+20:43:53.914 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:44:00.788 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+20:44:00.789 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog10 with geometry +755+487
+20:45:06.540 [MainThread] INFO    thonny: TIME/MODS 102.556 Before Run 
+20:45:06.545 [MainThread] INFO    thonny.running: Prepared clean state for executing ToplevelCommand(args=['-c'], args_str='-c $EDITOR_CONTENT', cmd_line='%Run -c $EDITOR_CONTENT', tty_mode=True, source='\nfrom Buzzer import Buzzer\nfrom Led import Led\nfrom UartLector import UartLector\nfrom HTTPSender import HTTPSender, load_settings, connect_wifi\nfrom Motor import Motor\nimport _thread\nimport time\nimport gc\n\n        \nclass Program:\n    def __init__(self):\n        self.uart = UartLector(2, 9600, 17, 16)\n        self.buzzer = Buzzer(13)\n        self.ledTrue = Led(23)\n        self.ledFalse = Led(22)\n        self.ledTrue.on()\n        self.ledFalse.on()\n        self.motor = Motor(14,50)\n        self.settings = load_settings()\n        \n        connect_wifi(self.settings)\n        _thread.start_new_thread(self.checkLector, ())\n        self.ledTrue.off()\n        self.ledFalse.off()\n        \n    def sendToApi(self,tag):\n        print("resultado:", tag)\n        http_sensor = HTTPSender(host = self.settings["host"],\n                             token = self.settings["token"],\n                             device_label = self.settings["device_label"],\n                             variable_label = self.settings["variable_label"])\n    \n        retorno = http_sensor.post_var(tag)\n        print(retorno.status_code)\n        \n        if int(retorno.status_code) == 200:\n            _thread.start_new_thread(self.motor.abrir, ())\n            self.ledTrue.on()\n            time.sleep(0.1)\n            self.ledTrue.off()\n            time.sleep(0.1)\n            self.ledTrue.on()\n            time.sleep(0.1)\n        else:\n            self.ledFalse.on()\n            time.sleep(0.1)\n            self.ledFalse.off()\n            time.sleep(0.1)\n            self.ledFalse.on()\n            time.sleep(0.1)\n            \n\n        self.ledTrue.off()\n        self.ledFalse.off()\n        \n        gc.collect()\n    \n\n    def checkLector(self):\n\n        print("Esperando tarjeta...")\n        self.buzzer.off()\n        while True:\n            tag = self.uart.checkEntry()\n            if tag:    \n                self.buzzer.on()\n                self.sendToApi(tag)\n                self.buzzer.off()\n                time.sleep(5)\n                _thread.start_new_thread(self.motor.cerrar, ())\n            time.sleep(1)\n\nProgram()\n\n', name='Run', argv=[], id='cmd_72', local_cwd='/home/windows')
+20:45:06.546 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:45:06.550 [MainThread] INFO    thonny: TIME/MODS 0.010 After Run 
+20:45:24.604 [MainThread] INFO    thonny.running: Killing backend process
+20:45:24.662 [Thread-6 (_listen_stdout)] INFO    thonny.running: Reader got EOF
+20:45:24.705 [MainThread] INFO    thonny.shell: BaseShellText._on_backend_terminated
+20:45:24.725 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:45:24.727 [MainThread] INFO    thonny.running: Starting the backend: ['/usr/bin/python3', '-s', '-u', '-B', '/usr/lib/python3/dist-packages/thonny/plugins/esp/esp_back.py', "{'clean': True, 'port': '/dev/ttyUSB0', 'dtr': None, 'rts': None, 'submit_mode': None, 'interrupt_on_connect': True, 'write_block_size': None, 'write_block_delay': None, 'proxy_class': 'ESP32Proxy', 'sync_time': True, 'validate_time': False, 'local_rtc': True}"] /home/windows
+20:45:24.782 [MainThread] INFO    thonny.shell: BaseShellText.restart(False)
+20:45:25.535 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:45:35.177 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+20:45:35.177 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog11 with geometry +755+487
+20:45:42.927 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+20:45:42.927 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog12 with geometry +755+487
+20:45:46.618 [MainThread] INFO    thonny: TIME/MODS 40.068 Before Run 
+20:45:46.623 [MainThread] INFO    thonny.running: Prepared clean state for executing ToplevelCommand(args=['-c'], args_str='-c $EDITOR_CONTENT', cmd_line='%Run -c $EDITOR_CONTENT', tty_mode=True, source='\nfrom Buzzer import Buzzer\nfrom Led import Led\nfrom UartLector import UartLector\nfrom HTTPSender import HTTPSender, load_settings, connect_wifi\nfrom Motor import Motor\nimport _thread\nimport time\nimport gc\n\n        \nclass Program:\n    def __init__(self):\n        self.uart = UartLector(2, 9600, 17, 16)\n        self.buzzer = Buzzer(13)\n        self.ledTrue = Led(23)\n        self.ledFalse = Led(22)\n        self.ledTrue.on()\n        self.ledFalse.on()\n        self.motor = Motor(14,50)\n        self.settings = load_settings()\n        \n        connect_wifi(self.settings)\n        _thread.start_new_thread(self.checkLector, ())\n        self.ledTrue.off()\n        self.ledFalse.off()\n        \n    def sendToApi(self,tag):\n        print("resultado:", tag)\n        http_sensor = HTTPSender(host = self.settings["host"],\n                             token = self.settings["token"],\n                             device_label = self.settings["device_label"],\n                             variable_label = self.settings["variable_label"])\n    \n        retorno = http_sensor.post_var(tag)\n        print(retorno.status_code)\n        \n        if int(retorno.status_code) == 200:\n            _thread.start_new_thread(self.motor.abrir, ())\n            self.ledTrue.on()\n            time.sleep(0.1)\n            self.ledTrue.off()\n            time.sleep(0.1)\n            self.ledTrue.on()\n            time.sleep(0.1)\n        else:\n            self.ledFalse.on()\n            time.sleep(0.1)\n            self.ledFalse.off()\n            time.sleep(0.1)\n            self.ledFalse.on()\n            time.sleep(0.1)\n            \n\n        self.ledTrue.off()\n        self.ledFalse.off()\n        \n        gc.collect()\n    \n\n    def checkLector(self):\n\n        print("Esperando tarjeta...")\n        self.buzzer.off()\n        while True:\n            tag = self.uart.checkEntry()\n            if tag:    \n                self.buzzer.on()\n                self.sendToApi(tag)\n                self.buzzer.off()\n                time.sleep(5)\n                _thread.start_new_thread(self.motor.cerrar, ())\n            time.sleep(1)\n\nProgram()\n\n', name='Run', argv=[], id='cmd_76', local_cwd='/home/windows')
+20:45:46.623 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:45:46.624 [MainThread] INFO    thonny: TIME/MODS 0.006 After Run 
+20:46:10.176 [MainThread] INFO    thonny.running: Killing backend process
+20:46:10.234 [Thread-8 (_listen_stdout)] INFO    thonny.running: Reader got EOF
+20:46:10.277 [MainThread] INFO    thonny.shell: BaseShellText._on_backend_terminated
+20:46:10.286 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:46:10.287 [MainThread] INFO    thonny.running: Starting the backend: ['/usr/bin/python3', '-s', '-u', '-B', '/usr/lib/python3/dist-packages/thonny/plugins/esp/esp_back.py', "{'clean': True, 'port': '/dev/ttyUSB0', 'dtr': None, 'rts': None, 'submit_mode': None, 'interrupt_on_connect': True, 'write_block_size': None, 'write_block_delay': None, 'proxy_class': 'ESP32Proxy', 'sync_time': True, 'validate_time': False, 'local_rtc': True}"] /home/windows
+20:46:10.350 [MainThread] INFO    thonny.shell: BaseShellText.restart(False)
+20:47:02.460 [MainThread] WARNING thonny.ui_utils: Dialog without parent:
+  File "/usr/bin/thonny", line 33, in <module>
+    sys.exit(load_entry_point('thonny==4.1.7', 'gui_scripts', 'thonny')())
+  File "/usr/lib/python3/dist-packages/thonny/__init__.py", line 280, in launch
+    bench.mainloop()
+  File "/usr/lib/python3.13/tkinter/__init__.py", line 1602, in mainloop
+    self.tk.mainloop(n)
+  File "/usr/lib/python3.13/tkinter/__init__.py", line 2071, in __call__
+    return self.func(*args)
+  File "/usr/lib/python3/dist-packages/thonny/workbench.py", line 1041, in dispatch
+    handler()
+  File "/usr/lib/python3/dist-packages/thonny/editors.py", line 933, in _cmd_save_file
+    self.get_current_editor().save_file()
+  File "/usr/lib/python3/dist-packages/thonny/editors.py", line 312, in save_file
+    result = self.write_remote_file(save_filename, content_bytes, save_copy)
+  File "/usr/lib/python3/dist-packages/thonny/editors.py", line 414, in write_remote_file
+    messagebox.showerror(tr("Could not save"), tr("Back-end is not ready"))
+  File "/usr/lib/python3/dist-packages/thonny/ui_utils.py", line 2451, in wrapper
+    _check_dialog_parent(options)
+  File "/usr/lib/python3/dist-packages/thonny/ui_utils.py", line 2067, in _check_dialog_parent
+    logger.warning("Dialog without parent:\n%s", "".join(traceback.format_stack()))
+
+20:47:04.814 [MainThread] INFO    thonny.running: Killing backend process
+20:47:04.869 [Thread-10 (_listen_stdout)] INFO    thonny.running: Reader got EOF
+20:47:04.914 [MainThread] INFO    thonny.shell: BaseShellText._on_backend_terminated
+20:47:04.925 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:47:04.926 [MainThread] INFO    thonny.running: Starting the backend: ['/usr/bin/python3', '-s', '-u', '-B', '/usr/lib/python3/dist-packages/thonny/plugins/esp/esp_back.py', "{'clean': True, 'port': '/dev/ttyUSB0', 'dtr': None, 'rts': None, 'submit_mode': None, 'interrupt_on_connect': True, 'write_block_size': None, 'write_block_delay': None, 'proxy_class': 'ESP32Proxy', 'sync_time': True, 'validate_time': False, 'local_rtc': True}"] /home/windows
+20:47:04.981 [MainThread] INFO    thonny.shell: BaseShellText.restart(False)
+20:47:09.774 [Thread-12 (_listen_stdout)] INFO    thonny.running: Reader got EOF
+20:47:09.889 [MainThread] INFO    thonny.shell: BaseShellText._on_backend_terminated
+20:47:20.281 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:47:20.285 [MainThread] INFO    thonny.running: Starting the backend: ['/usr/bin/python3', '-s', '-u', '-B', '/usr/lib/python3/dist-packages/thonny/plugins/esp/esp_back.py', "{'clean': True, 'port': '/dev/ttyUSB0', 'dtr': None, 'rts': None, 'submit_mode': None, 'interrupt_on_connect': True, 'write_block_size': None, 'write_block_delay': None, 'proxy_class': 'ESP32Proxy', 'sync_time': True, 'validate_time': False, 'local_rtc': True}"] /home/windows
+20:47:20.345 [MainThread] INFO    thonny.shell: BaseShellText.restart(False)
+20:47:21.079 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:47:42.967 [MainThread] INFO    thonny.ui_utils: Parent y: 61, rooty: 61, vrooty: 0
+20:47:42.967 [MainThread] INFO    thonny.ui_utils: Placing .!inlinecommanddialog13 with geometry +755+487
+20:47:46.477 [MainThread] INFO    thonny: TIME/MODS 119.853 Before Run 
+20:47:46.481 [MainThread] INFO    thonny.running: Prepared clean state for executing ToplevelCommand(args=['-c'], args_str='-c $EDITOR_CONTENT', cmd_line='%Run -c $EDITOR_CONTENT', tty_mode=True, source='\nfrom Buzzer import Buzzer\nfrom Led import Led\nfrom UartLector import UartLector\nfrom HTTPSender import HTTPSender, load_settings, connect_wifi\nfrom Motor import Motor\nimport _thread\nimport time\nimport gc\n\n        \nclass Program:\n    def __init__(self):\n        self.uart = UartLector(2, 9600, 17, 16)\n        self.buzzer = Buzzer(13)\n        self.ledTrue = Led(23)\n        self.ledFalse = Led(22)\n        self.ledTrue.on()\n        self.ledFalse.on()\n        self.motor = Motor(14,50)\n        self.settings = load_settings()\n        \n        connect_wifi(self.settings)\n        _thread.start_new_thread(self.checkLector, ())\n        self.ledTrue.off()\n        self.ledFalse.off()\n        \n    def sendToApi(self,tag):\n        print("resultado:", tag)\n        http_sensor = HTTPSender(host = self.settings["host"],\n                             token = self.settings["token"],\n                             device_label = self.settings["device_label"],\n                             variable_label = self.settings["variable_label"])\n    \n        retorno = http_sensor.post_var(tag)\n        print(retorno.status_code)\n        \n        if int(retorno.status_code) == 200:\n            _thread.start_new_thread(self.motor.abrir, ())\n            self.ledTrue.on()\n            time.sleep(0.1)\n            self.ledTrue.off()\n            time.sleep(0.1)\n            self.ledTrue.on()\n            time.sleep(0.1)\n        else:\n            self.ledFalse.on()\n            time.sleep(0.1)\n            self.ledFalse.off()\n            time.sleep(0.1)\n            self.ledFalse.on()\n            time.sleep(0.1)\n            \n\n        self.ledTrue.off()\n        self.ledFalse.off()\n        \n        gc.collect()\n    \n\n    def checkLector(self):\n\n        print("Esperando tarjeta...")\n        self.buzzer.off()\n        while True:\n            tag = self.uart.checkEntry()\n            if tag:    \n                self.buzzer.on()\n                self.sendToApi(tag)\n                self.buzzer.off()\n                time.sleep(5)\n                _thread.start_new_thread(self.motor.cerrar, ())\n            time.sleep(1)\n\nProgram()\n\n', name='Run', argv=[], id='cmd_80', local_cwd='/home/windows')
+20:47:46.482 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:47:46.485 [MainThread] INFO    thonny: TIME/MODS 0.009 After Run 
+20:55:17.467 [MainThread] INFO    thonny.running: Killing backend process
+20:55:17.523 [Thread-14 (_listen_stdout)] INFO    thonny.running: Reader got EOF
+20:55:17.567 [MainThread] INFO    thonny.shell: BaseShellText._on_backend_terminated
+20:55:17.577 [MainThread] INFO    thonny.plugins.micropython.mp_front: Listing serial ports
+20:55:17.579 [MainThread] INFO    thonny.running: Starting the backend: ['/usr/bin/python3', '-s', '-u', '-B', '/usr/lib/python3/dist-packages/thonny/plugins/esp/esp_back.py', "{'clean': True, 'port': '/dev/ttyUSB0', 'dtr': None, 'rts': None, 'submit_mode': None, 'interrupt_on_connect': True, 'write_block_size': None, 'write_block_delay': None, 'proxy_class': 'ESP32Proxy', 'sync_time': True, 'validate_time': False, 'local_rtc': True}"] /home/windows
+20:55:17.636 [MainThread] INFO    thonny.shell: BaseShellText.restart(False)
+20:55:51.055 [Thread-16 (_listen_stdout)] INFO    thonny.running: Reader got EOF
+20:55:51.167 [MainThread] INFO    thonny.shell: BaseShellText._on_backend_terminated

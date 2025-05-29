@@ -1,12 +1,14 @@
-import { useState } from 'react'
-import { FaClipboardList, FaUserTie, FaProjectDiagram, FaTasks } from 'react-icons/fa'
-import Proceso from './modules/proceso/Proceso'
-import Trabajador from './modules/trabajador/Trabajador'
-import PlanAuditoria from './modules/plan_auditoria/PlanAuditoria'
-import ListaVerificacion from './modules/lista_verificacion/ListaVerificacion'
-import './App.css'
+import { useEffect, useState } from 'react';
+import { FaClipboardList, FaUserTie, FaProjectDiagram, FaTasks } from 'react-icons/fa';
+import Proceso from './modules/proceso/Proceso';
+import Trabajador from './modules/trabajador/Trabajador';
+import PlanAuditoria from './modules/plan_auditoria/PlanAuditoria';
+import ListaVerificacion from './modules/lista_verificacion/ListaVerificacion';
+import LoginForm from './modules/login/LoginForm';
+import './App.css';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // <- Nuevo estado para login(Cambiar a false y se va a exigir loguearse antes de hacer cualquier cosa)
   const [moduloActual, setModuloActual] = useState("planAuditoria");
 
   const renderModulo = () => {
@@ -23,7 +25,19 @@ function App() {
         return <h2>Bienvenido</h2>;
     }
   };
+  useEffect(() => {
+    
+  }, [isLoggedIn]);
 
+  // ⛔ Si no ha iniciado sesión, mostramos solo el Login
+  if (!isLoggedIn) {
+    return <LoginForm setIsLoggedIn={setIsLoggedIn} />;
+  }
+
+ 
+
+
+  // ✅ Si inició sesión, mostramos el dashboard
   return (
     <div className="flex flex-row h-screen">
       <div className="sidebar">
@@ -55,8 +69,14 @@ function App() {
       </div>
 
       <div className="w-[82%] bg-gray-100 overflow-auto">
-        <header className="p-4 shadow bg-white">
+        <header className="p-4 shadow bg-white flex justify-between items-center">
           <h1 className="text-2xl font-semibold text-gray-800">Panel de Control</h1>
+          <button
+            onClick={() => setIsLoggedIn(false)}
+            className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+          >
+            Cerrar sesión
+          </button>
         </header>
 
         <div className="p-6">
