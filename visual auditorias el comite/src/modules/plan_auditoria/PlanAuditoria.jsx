@@ -25,7 +25,7 @@ const PlanAuditoria = () => {
             <table className="tabla-trabajadores w-full text-center mb-4">
               <thead className="bg-[#1E3766] text-white">
                 <tr>
-                  <th>Tipo</th>
+                  <th>Típo</th>
                   <th>Subtipo</th>
                   <th>Auditoría</th>
                   <th>Proceso</th>

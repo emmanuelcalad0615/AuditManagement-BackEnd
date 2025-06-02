@@ -1,13 +1,14 @@
 import { useState } from "react";
 
-export default function LoginForm({setIsLoggedIn}) {
+export default function LoginForm({setIsLoggedIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
 const handleLogin = async (e) => {
   e.preventDefault();
   try {
-    const response = await fetch("http://3.143.204.151:5000/trabajador/login", {
+    //const response = await fetch("http://3.143.204.151:5000/trabajador/login", {
+    const response = await fetch("http://127.0.0.1:5000/trabajador/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,6 +25,7 @@ const handleLogin = async (e) => {
       alert("¡Bienvenido!");
       console.log("Usuario logueado:", data);
       setIsLoggedIn(true);
+
       // Aquí puedes guardar token o redirigir, según el caso
     } else {
       alert("Correo o contraseña incorrectos");

@@ -6,12 +6,29 @@ class AuditoriaXListaRepository:
 
     def save(self, auditoriaxlista):
         with SessionLocal() as session:
-            session.add(auditoriaxlista)
-            session.commit()
-            auditoriaxlista = session.query(AuditoriaXLista).filter(AuditoriaXLista.id_auditoria == auditoriaxlista.id_auditoria, 
-                                                                  AuditoriaXLista.id_listaverificacion == auditoriaxlista.id_listaverificacion).first()
-            auditoriaxlista.__delattr__('_sa_instance_state')
-            return auditoriaxlista
+            # Buscar si ya existe la combinación
+            existente = session.query(AuditoriaXLista).filter_by(
+                id_auditoria=auditoriaxlista.id_auditoria,
+                id_listaverificacion=auditoriaxlista.id_listaverificacion
+            ).first()
+
+            if existente:
+                # Actualizar los campos necesarios
+                existente.cumple = auditoriaxlista.cumple
+                existente.aplica = auditoriaxlista.aplica
+                # Si hay más campos, agrégalos aquí
+
+                session.commit()
+                result = existente
+            else:
+                session.add(auditoriaxlista)
+                session.commit()
+                result = auditoriaxlista
+
+            # Limpiar el objeto antes de retornar
+            if hasattr(result, '_sa_instance_state'):
+                delattr(result, '_sa_instance_state')
+            return result
 
     def delete(self, id_auditoria, id_listaverificacion):
         with SessionLocal() as session:

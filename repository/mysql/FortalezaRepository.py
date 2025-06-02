@@ -13,11 +13,11 @@ class FortalezaRepository:
             fortaleza.__delattr__('_sa_instance_state')  
             return fortaleza
 
-    def delete(self, id_auditoria):
+    def delete(self, id):
         with SessionLocal() as session:
-            session.query(Fortaleza).filter(Fortaleza.id_auditoria == id_auditoria).delete()
+            session.query(Fortaleza).filter(Fortaleza.id == id).delete()
             session.commit()
-            return {"id_auditoria": id_auditoria}
+            return {"id_auditoria": id}
 
     def update(self, fortaleza):
         

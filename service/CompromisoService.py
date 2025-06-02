@@ -20,7 +20,7 @@ class CompromisoService:
         for key, value in compromiso.items():
             if hasattr(obj, key):
                 setattr(obj, key, value)
-        # Serializar y convertir datetime a string
+        print(vars(obj))
         return json.dumps(vars(self.repository.save(obj)), default=serialize_datetime)
 
     def delete(self, id):
@@ -31,6 +31,7 @@ class CompromisoService:
         for key, value in compromiso.items():
             if hasattr(obj, key):
                 setattr(obj, key, value)
+        print(vars(obj))
         return json.dumps(vars(self.repository.update(obj)), default=serialize_datetime)
 
     def getId(self, id):

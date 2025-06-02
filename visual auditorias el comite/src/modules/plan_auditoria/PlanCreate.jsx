@@ -17,29 +17,47 @@ const PlanCreate = () => {
     const [auditorAuxiliar, setAuditorAuxiliar] = useState(1)
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     
-    const actualizarIdPlan = () => {
-        guardarplan().then((e)=>{
+    const savePlan = () => {
+        guardarplan().then((e) => {
             setPlan(e);
-            for(var proposito of propositos){
-                proposito.id_plan = e.id;
-            };
-            for(var auditado of auditados){
-                auditado.id_plan = e.id;
-            };
-            for(var itinerario of itinerarios){
-                itinerario.id_plan = e.id;
-            };
-            for(var reunion of reuniones){
-                reunion.id_plan = e.id;
-            };
-            guardarItinerarios(itinerarios);
-            guardarReuniones(reuniones);
-            guardarAuditadosPlan(auditados);
-            guardarPropositos(propositos);
-        })
-    }
 
-       const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:¡!¿?\-'"()]+$/;
+            // Asigna el id_plan a todos los elementos
+            const propositosConId = propositos.map(p => ({ ...p, id_plan: e.id }));
+            const auditadosConId = auditados.map(a => ({ ...a, id_plan: e.id }));
+            const itinerariosConId = itinerarios.map(i => ({ ...i, id_plan: e.id }));
+            const reunionesConId = reuniones.map(r => ({ ...r, id_plan: e.id }));
+
+            // Ejecuta todas las funciones de guardado en paralelo
+            return Promise.all([
+                guardarItinerarios(itinerariosConId),
+                guardarReuniones(reunionesConId),
+                guardarAuditadosPlan(auditadosConId),
+                guardarPropositos(propositosConId)
+            ]);
+        }).then(() => {
+            console.log("Todos los datos guardados exitosamente.");
+        }).catch((err) => {
+            console.error("Ocurrió un error al guardar los datos:");
+        });
+    }
+    
+    const formatearHora = (valor) => {
+        if (!valor) return "";
+        if (typeof valor !== "string") return "";
+
+        // Caso HH:MM (ej: "22:53")
+        if (/^\d{2}:\d{2}$/.test(valor)) return valor;
+
+        // Caso HH:MM:SS (ej: "22:53:00") -> devuelve solo HH:MM
+        if (/^\d{2}:\d{2}:\d{2}$/.test(valor)) return valor.slice(0, 5);
+
+        // Caso ISO con fecha (ej: "2024-06-01T22:53:00") -> extrae HH:MM
+        if (valor.includes("T") && valor.length >= 16) return valor.slice(11, 16);
+
+        return "";
+        };
+
+    const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:¡!¿?\-'"()]+$/;
     function validarTexto(valor) {
         if (!valor || valor.trim() === "") {
             return { valido: false, invalidos: "", vacio: true };
@@ -195,7 +213,7 @@ const PlanCreate = () => {
         const resultado = await traerTodoTrabajador();
         setTrabajadores(resultado);
         } catch (error) {
-        console.error("Error al traer los trabajadores:", error);
+        console.error("Error al traer los trabajadores:");
         }
     };
 
@@ -793,47 +811,41 @@ const PlanCreate = () => {
                                                 )}
                                             </td>
                                             <td className="p-3">
+                      
                                                 <input
-                                                    type="datetime-local"
-                                                    id={"horaInicio" + itinerario.id}
-                                                    placeholder="Hora inicio"
-                                                    value={itinerario.inicio?.slice(0, 16) || ""}
-                                                    onChange={(e) => {
-                                                        const valor = e.target.value;
-                                                        const validacion = validarFechaFutura(valor);
-                                                        const newItinerarios = [...itinerarios];
-                                                        newItinerarios[index].inicio = valor;
-                                                        setItinerarios(newItinerarios);
-                                                        setErrores({
-                                                            ...errores,
-                                                            [`itinerario_inicio_${index}`]: validacion.valido ? "" : validacion.mensaje,
-                                                        });
-                                                    }}
-                                                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                type="time"
+                                                id={"horaInicio" + itinerario.id}
+                                                placeholder="Hora inicio"
+                                                value={formatearHora(itinerario.inicio) || ""}
+                                                onChange={(e) => {
+                                                    const valor = e.target.value; // ej: "14:30"
+                                                    const newItinerarios = [...itinerarios];
+                                                    newItinerarios[index].inicio = valor;
+                                        
+                                                    setItinerarios(newItinerarios);
+
+                                                    
+                                                }}
+                                                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 />
                                                 {errores[`itinerario_inicio_${index}`] && (
                                                     <div className="text-red-600 text-sm">{errores[`itinerario_inicio_${index}`]}</div>
                                                 )}
                                             </td>
                                             <td className="p-3">
-                                                <input
-                                                    type="datetime-local"
+                                                    <input
+                                                    type="time"
                                                     id={"horaFin" + itinerario.id}
                                                     placeholder="Hora fin"
-                                                    value={itinerario.fin?.slice(0, 16) || ""}
+                                                    value={formatearHora(itinerario.fin) || ""}
                                                     onChange={(e) => {
-                                                        const valor = e.target.value;
-                                                        const validacion = validarFechaFutura(valor);
+                                                        const valor = e.target.value; // ej: "15:45"
                                                         const newItinerarios = [...itinerarios];
                                                         newItinerarios[index].fin = valor;
                                                         setItinerarios(newItinerarios);
-                                                        setErrores({
-                                                            ...errores,
-                                                            [`itinerario_fin_${index}`]: validacion.valido ? "" : validacion.mensaje,
-                                                        });
                                                     }}
                                                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                />
+                                                    />
                                                 {errores[`itinerario_fin_${index}`] && (
                                                     <div className="text-red-600 text-sm">{errores[`itinerario_fin_${index}`]}</div>
                                                 )}
@@ -1095,7 +1107,7 @@ const PlanCreate = () => {
                                 return;
                             }
 
-                            await guardarPlanActividad();
+                            await savePlan();
                             sleep(1000).then(() => window.location.reload());
                         }}
                     >

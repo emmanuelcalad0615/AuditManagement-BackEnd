@@ -8,8 +8,12 @@ import LoginForm from './modules/login/LoginForm';
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // <- Nuevo estado para login(Cambiar a false y se va a exigir loguearse antes de hacer cualquier cosa)
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('isLoggedIn')  === 'true' || false;
+  });
   const [moduloActual, setModuloActual] = useState("planAuditoria");
+
+
 
   const renderModulo = () => {
     switch (moduloActual) {
@@ -25,19 +29,21 @@ function App() {
         return <h2>Bienvenido</h2>;
     }
   };
-  useEffect(() => {
-    
-  }, [isLoggedIn]);
 
-  // ⛔ Si no ha iniciado sesión, mostramos solo el Login
+
+  useEffect(() => {
+  
+    localStorage.setItem('isLoggedIn', isLoggedIn.toString());
+  }, [isLoggedIn]
+);
+
+
   if (!isLoggedIn) {
-    return <LoginForm setIsLoggedIn={setIsLoggedIn} />;
+    return <LoginForm setIsLoggedIn={setIsLoggedIn}  />;
   }
 
  
 
-
-  // ✅ Si inició sesión, mostramos el dashboard
   return (
     <div className="flex flex-row h-screen">
       <div className="sidebar">

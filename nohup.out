@@ -204,3 +204,46 @@ Node.js v20.19.0
 20:55:17.636 [MainThread] INFO    thonny.shell: BaseShellText.restart(False)
 20:55:51.055 [Thread-16 (_listen_stdout)] INFO    thonny.running: Reader got EOF
 20:55:51.167 [MainThread] INFO    thonny.shell: BaseShellText._on_backend_terminated
+node:events:502
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event on ReadStream instance at:
+    at emitErrorNT (node:internal/streams/destroy:169:8)
+    at errorOrDestroy (node:internal/streams/destroy:238:7)
+    at node:internal/fs/streams:272:9
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:685:5) {
+  errno: -9,
+  code: 'EBADF',
+  syscall: 'read'
+}
+
+Node.js v20.19.0
+node:events:502
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event on ReadStream instance at:
+    at emitErrorNT (node:internal/streams/destroy:169:8)
+    at errorOrDestroy (node:internal/streams/destroy:238:7)
+    at node:internal/fs/streams:272:9
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:685:5) {
+  errno: -9,
+  code: 'EBADF',
+  syscall: 'read'
+}
+
+Node.js v20.19.0
+[95490:95490:0601/200351.009796:ERROR:brave/components/p3a/star_randomness_points.cc:120] StarRandomnessPoints: no response body for randomness request, net error: ERR_HTTP_RESPONSE_CODE_FAILURE
+[95490:95490:0601/200406.165006:ERROR:brave/components/p3a/star_randomness_points.cc:120] StarRandomnessPoints: no response body for randomness request, net error: ERR_HTTP_RESPONSE_CODE_FAILURE
+[95490:95490:0601/200443.029958:ERROR:brave/components/p3a/star_randomness_points.cc:120] StarRandomnessPoints: no response body for randomness request, net error: ERR_HTTP_RESPONSE_CODE_FAILURE
+[95490:95490:0601/200617.039727:ERROR:brave/components/p3a/star_randomness_points.cc:120] StarRandomnessPoints: no response body for randomness request, net error: ERR_HTTP_RESPONSE_CODE_FAILURE
+[95490:95490:0601/200718.476084:ERROR:brave/components/p3a/star_randomness_points.cc:120] StarRandomnessPoints: no response body for randomness request, net error: ERR_HTTP_RESPONSE_CODE_FAILURE
+[95490:95490:0601/200916.446199:ERROR:brave/components/p3a/star_randomness_points.cc:120] StarRandomnessPoints: no response body for randomness request, net error: ERR_HTTP_RESPONSE_CODE_FAILURE
+[95490:95490:0601/201100.220048:ERROR:brave/components/p3a/star_randomness_points.cc:120] StarRandomnessPoints: no response body for randomness request, net error: ERR_HTTP_RESPONSE_CODE_FAILURE
+[95490:95490:0601/201243.914326:ERROR:brave/components/p3a/star_randomness_points.cc:120] StarRandomnessPoints: no response body for randomness request, net error: ERR_HTTP_RESPONSE_CODE_FAILURE
+[95490:95490:0601/201259.089994:ERROR:brave/components/p3a/star_randomness_points.cc:120] StarRandomnessPoints: no response body for randomness request, net error: ERR_HTTP_RESPONSE_CODE_FAILURE
+[95490:95490:0601/203807.105254:ERROR:CONSOLE:1] "Uncaught (in promise) SyntaxError: Unexpected token 'H', "HTTP/1.1 4"... is not valid JSON", source: devtools://devtools/bundled/devtools_app.html?remoteBase=https://devtools.brave.com/serve_file/@9161158db1676f5fb4a6e048cc98d776dcbf9ba/&targetType=tab&can_dock=true&panel=elements (1)
+[95490:95490:0601/210447.406777:ERROR:mojo/public/cpp/bindings/lib/interface_endpoint_client.cc:725] Message 0 rejected by interface blink.mojom.WidgetHost

@@ -8,7 +8,7 @@ import { traerID, traerPropositos, traerAuditadosPlan, traerTodoTrabajador,
     traerDebilidades, guardarDebilidades, borrarDebilidades,
     traerFortalezas, guardarFortalezas, borrarFortalezas, borrarPlan,
     traerCompromisos, guardarCompromisos, borrarCompromisos,
-    guardarplan,
+    
  } from "./metodos";
 
 const PlanEdit = (prop) => {
@@ -33,6 +33,19 @@ const PlanEdit = (prop) => {
 
     // Permite letras (con tildes), números, espacios, comas, puntos y signos de puntuación del español
     const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s.,;:¡!¿?\-'"()]+$/;
+
+    const formatearFechaLocal = (valor) => {
+        if (!valor) return "";
+        try {
+            const fecha = new Date(valor);
+            const offset = fecha.getTimezoneOffset() * 60000; // ajusta a hora local
+            const local = new Date(fecha.getTime() - offset).toISOString().slice(0, 16);
+            return local;
+        } catch (err) {
+            return "";
+        }
+        };
+
     function validarTexto(valor) {
         if (!valor || valor.trim() === "") {
             return { valido: false, invalidos: "", vacio: true };
@@ -43,6 +56,27 @@ const PlanEdit = (prop) => {
         }
         return { valido: true, invalidos: "", vacio: false };
     }
+    const transformarHora = (horaBackend) => {
+        if (!horaBackend) return "";
+        if (horaBackend.length >= 5) return horaBackend.slice(0, 5);
+        return horaBackend;
+        };
+
+    const formatearHora = (valor) => {
+        if (!valor) return "";
+        if (typeof valor !== "string") return "";
+
+        // Caso HH:MM (ej: "22:53")
+        if (/^\d{2}:\d{2}$/.test(valor)) return valor;
+
+        // Caso HH:MM:SS (ej: "22:53:00") -> devuelve solo HH:MM
+        if (/^\d{2}:\d{2}:\d{2}$/.test(valor)) return valor.slice(0, 5);
+
+        // Caso ISO con fecha (ej: "2024-06-01T22:53:00") -> extrae HH:MM
+        if (valor.includes("T") && valor.length >= 16) return valor.slice(11, 16);
+
+        return "";
+        };
 
     function validarFechaFutura(valor) {
         if (!valor) return { valido: false, mensaje: "La fecha es obligatoria" };
@@ -170,13 +204,15 @@ const PlanEdit = (prop) => {
           virtud: ""
         };
         setFortalezas([...fortalezas, nuevo]);
-        console.log(fortalezas)
+        
     };
 
     const agregarDebilidades = () => {
         const nuevo = {
+
           id_auditoria: auditoria.id, 
           falta: ""
+
         };
         setDebilidades([...debilidades, nuevo]);
     };
@@ -233,7 +269,7 @@ const PlanEdit = (prop) => {
 
     
     const agregarAuditado = () => {
-        console.log(auditados)
+      
         const nuevo = {
           
           id_plan: prop.id, // o usa un UUID si prefieres
@@ -272,23 +308,26 @@ const PlanEdit = (prop) => {
 
 
     const  guardarPlanActividad = async () => {
-        
-        await guardarItinerarios(itinerarios);
-        await guardarReuniones(reuniones);
-        await guardarAuditadosPlan(auditados);
-        await guardarPropositos(propositos);
-        await actualizarplan(plan);
-    }
+        await Promise.all([
+        guardarItinerarios(itinerarios),
+        guardarReuniones(reuniones),
+        guardarAuditadosPlan(auditados),
+        guardarPropositos(propositos),
+        actualizarplan(plan),
+        ]);
+    };
 
     const guardarAuditoria = async () => {
 
+        await Promise.all([
 
-        await guardarAspectos(aspectos);
-        await guardarCompromisos(compromisos);
-        await guardarFortalezas(fortalezas);
-        await guardarDebilidades(debilidades);
-        await guardarOportunidades(oportunidades);
-        await guardarListaxAuditoria(listaAuditada);
+        guardarAspectos(aspectos),
+        guardarCompromisos(compromisos),
+        guardarFortalezas(fortalezas),
+        guardarDebilidades(debilidades),
+        guardarOportunidades(oportunidades),
+        guardarListaxAuditoria(listaAuditada),
+        ]);
 
     };
 
@@ -300,12 +339,20 @@ const PlanEdit = (prop) => {
    
             setPlan(e);});
         traerAuditadosPlan(prop.id).then((e)=>setAuditados(e));
-        traerItinerarioPlan(prop.id).then((e)=>setItinerarios(e));
+        traerItinerarioPlan(prop.id).then((e) => {
+        const itinerariosFormateados = e.map((it) => ({
+            ...it,
+            inicio: transformarHora(it.inicio),
+            fin: transformarHora(it.fin),
+        }));
+        setItinerarios(itinerariosFormateados);
+       
+        });
         traerReunionPlan(prop.id).then((e)=>setReuniones(e));
         traerListasV().then((e) => setListas(e));
-
+  
         traerAuditoria(prop.id).then((e)=>{
-            console.log(e)
+          
             setAuditoria(e);
             traerAspectos(e.id).then((e)=>setAspectos(e));
             traerListaxAuditoria(e.id).then((e)=>setListaAuditada(e));
@@ -334,7 +381,7 @@ const PlanEdit = (prop) => {
                                 type="text"
                                 id="input-editar-plan"
                                 value={plan.nombre}
-                                onChange={(e) => {console.log(e);setPlan({ ...plan, nombre: e.target.value });{handleNombreChange(e)}}}
+                                onChange={(e) => {setPlan({ ...plan, nombre: e.target.value });{handleNombreChange(e)}}}
                                 className="flex-1 border border-gray-300 rounded px-4 py-2 m-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             {errores.nombre && (
@@ -636,10 +683,6 @@ const PlanEdit = (prop) => {
                                         const newReuniones = [...reuniones];
                                         newReuniones[index].hora = valor;
                                         setReuniones(newReuniones);
-                                        setErrores({
-                                            ...errores,
-                                            [`reunion_hora_${index}`]: valido ? "" : "Hora inválida (formato HH:MM, solo números)",
-                                        });
                                     }}
                                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
@@ -833,10 +876,12 @@ const PlanEdit = (prop) => {
                                                             placeholder="Auditor"
                                                             value={itinerario.auditor}
                                                             onChange={(e) => {
+
                                                                 const valor = e.target.value;
                                                                 const validacion = validarTexto(valor);
                                                                 const newItinerarios = [...itinerarios];
                                                                 newItinerarios[index].auditor = valor;
+
                                                                 setItinerarios(newItinerarios);
                                                                 setErrores({
                                                                     ...errores,
@@ -855,22 +900,20 @@ const PlanEdit = (prop) => {
                                                     </td>
                                                     <td className="p-3">
                                                         <input
-                                                            type="datetime-local"
-                                                            id={"horaInicio" + itinerario.id}
-                                                            placeholder="Hora inicio"
-                                                            value={itinerario.inicio?.slice(0, 16) || ""}
-                                                            onChange={(e) => {
-                                                                const valor = e.target.value;
-                                                                const validacion = validarFechaFutura(valor);
-                                                                const newItinerarios = [...itinerarios];
-                                                                newItinerarios[index].inicio = valor;
-                                                                setItinerarios(newItinerarios);
-                                                                setErrores({
-                                                                    ...errores,
-                                                                    [`itinerario_inicio_${index}`]: validacion.valido ? "" : validacion.mensaje,
-                                                                });
-                                                            }}
-                                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        type="time"
+                                                        id={"horaInicio" + itinerario.id}
+                                                        placeholder="Hora inicio"
+                                                        value={formatearHora(itinerario.inicio) || ""}
+                                                        onChange={(e) => {
+                                                            const valor = e.target.value; // ej: "14:30"
+                                                            const newItinerarios = [...itinerarios];
+                                                            newItinerarios[index].inicio = valor;
+                                                        
+                                                            setItinerarios(newItinerarios);
+
+                                                          
+                                                        }}
+                                                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         />
                                                         {errores[`itinerario_inicio_${index}`] && (
                                                             <div className="text-red-600 text-sm">{errores[`itinerario_inicio_${index}`]}</div>
@@ -878,22 +921,17 @@ const PlanEdit = (prop) => {
                                                     </td>
                                                     <td className="p-3">
                                                         <input
-                                                            type="datetime-local"
-                                                            id={"horaFin" + itinerario.id}
-                                                            placeholder="Hora fin"
-                                                            value={itinerario.fin?.slice(0, 16) || ""}
-                                                            onChange={(e) => {
-                                                                const valor = e.target.value;
-                                                                const validacion = validarFechaFutura(valor);
-                                                                const newItinerarios = [...itinerarios];
-                                                                newItinerarios[index].fin = valor;
-                                                                setItinerarios(newItinerarios);
-                                                                setErrores({
-                                                                    ...errores,
-                                                                    [`itinerario_fin_${index}`]: validacion.valido ? "" : validacion.mensaje,
-                                                                });
-                                                            }}
-                                                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        type="time"
+                                                        id={"horaFin" + itinerario.id}
+                                                        placeholder="Hora fin"
+                                                        value={formatearHora(itinerario.fin) || ""}
+                                                        onChange={(e) => {
+                                                            const valor = e.target.value; // ej: "15:45"
+                                                            const newItinerarios = [...itinerarios];
+                                                            newItinerarios[index].fin = valor;
+                                                            setItinerarios(newItinerarios);
+                                                        }}
+                                                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         />
                                                         {errores[`itinerario_fin_${index}`] && (
                                                             <div className="text-red-600 text-sm">{errores[`itinerario_fin_${index}`]}</div>
@@ -912,12 +950,14 @@ const PlanEdit = (prop) => {
                                                                 newItinerarios[index].lugar = valor;
                                                                 setItinerarios(newItinerarios);
                                                                 setErrores({
+
                                                                     ...errores,
                                                                     [`itinerario_lugar_${index}`]: validacion.vacio
                                                                         ? "El campo es obligatorio"
                                                                         : validacion.valido
                                                                             ? ""
                                                                             : `Caracteres inválidos`,
+
                                                                 });
                                                             }}
                                                             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -933,6 +973,7 @@ const PlanEdit = (prop) => {
                                                                 setItinerarios(prev => prev.filter((_, i) => i !== index));
                                                                 if (itinerario.id != null) { borrarItinerario(itinerario.id) };
                                                                 setErrores(prev => {
+
                                                                     const newErrores = { ...prev };
                                                                     delete newErrores[`itinerario_actividad_${index}`];
                                                                     delete newErrores[`itinerario_auditado_${index}`];
@@ -941,9 +982,9 @@ const PlanEdit = (prop) => {
                                                                     delete newErrores[`itinerario_fin_${index}`];
                                                                     delete newErrores[`itinerario_lugar_${index}`];
                                                                     return newErrores;
-                                                            })
+
+                                                                })
                                                                 }}
-                                                            
                                                             >
                                                                 Eliminar
                                                             </button>
@@ -1002,6 +1043,7 @@ const PlanEdit = (prop) => {
                                                 valido = false;
                                             }
 
+
                                             // Validar propositos
                                             propositos.forEach((p, i) => {
                                                 if (!p.descripcion || !validarTexto(p.descripcion).valido) {
@@ -1026,10 +1068,6 @@ const PlanEdit = (prop) => {
                                                 }
                                                 // Hora debe ser diferente de "00:00:00" y formato válido
                                                 const horaRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-                                                if (!r.hora || r.hora === "00:00:00" || !horaRegex.test(r.hora)) {
-                                                    erroresVal[`reunion_hora_${i}`] = "Hora inválida (formato HH:MM, solo números)";
-                                                    valido = false;
-                                                }
                                                 if (!r.lugar || !validarTexto(r.lugar).valido) {
                                                     erroresVal[`reunion_lugar_${i}`] = "El campo es obligatorio y debe ser válido";
                                                     valido = false;
@@ -1048,14 +1086,6 @@ const PlanEdit = (prop) => {
                                                 }
                                                 if (!it.auditor || !validarTexto(it.auditor).valido) {
                                                     erroresVal[`itinerario_auditor_${i}`] = "El campo es obligatorio y debe ser válido";
-                                                    valido = false;
-                                                }
-                                                if (!it.inicio || it.inicio === "00:00:00" || !validarFechaFutura(it.inicio).valido) {
-                                                    erroresVal[`itinerario_inicio_${i}`] = "La fecha/hora es obligatoria y debe ser futura";
-                                                    valido = false;
-                                                }
-                                                if (!it.fin || it.fin === "00:00:00" || !validarFechaFutura(it.fin).valido) {
-                                                    erroresVal[`itinerario_fin_${i}`] = "La fecha/hora es obligatoria y debe ser futura";
                                                     valido = false;
                                                 }
                                                 if (!it.lugar || !validarTexto(it.lugar).valido) {
@@ -1108,7 +1138,7 @@ const PlanEdit = (prop) => {
                                     id="eliminar-plan-cascada"
                                     className="btn-gray"
                                     onClick={() => {
-                    console.log(prop.id);
+                  
                     borrarPlan(prop.id);
                     sleep(1000).then(() => window.location.reload());
                 }}
@@ -1515,11 +1545,18 @@ const PlanEdit = (prop) => {
                                 className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
                                 onClick={() => {
                                     setFortalezas(prev => prev.filter((_, i) => i !== index));
+                                  
+                                    if (fortaleza.id != null){
+                                    
+                                        borrarFortalezas(fortaleza.id); };
+
                                     setErrores(prev => {
                                         const newErrores = { ...prev };
                                         delete newErrores[`fortaleza_${index}`];
                                         return newErrores;
-                                    })}}
+                                    });
+                                  
+                                }}
                                 >
                                     Eliminar
                                 </button>
@@ -1578,6 +1615,7 @@ const PlanEdit = (prop) => {
                                     className="bg-red-600 hover:bg-red-700 rounded-full text-white px-4 py-1 transition-colors duration-200"
                                     onClick={() => {
                                         setDebilidades(prev => prev.filter((_, i) => i !== index));
+                                        if (debilidad.id != null) { borrarDebilidades(debilidad.id) };
                                         setErrores(prev => {
                                             const newErrores = { ...prev };
                                             delete newErrores[`debilidad_${index}`];
@@ -1673,7 +1711,7 @@ const PlanEdit = (prop) => {
                         <tr>
                             <th className="py-3 px-4 text-lg">Compromiso</th>
                             <th className="py-3 px-4 text-lg">Responsable</th>
-                            <th className="py-3 px-4 text-lg">Fecha Limite</th>
+                            <th className="py-3 px-4 text-lg">Fecha Límite</th>
                             <th className="py-3 px-4 text-lg">Acciones</th>
                         </tr>
                     </thead>
@@ -1691,6 +1729,7 @@ const PlanEdit = (prop) => {
                                             const newLista = [...compromisos];
                                             newLista[index].compromiso = valor;
                                             setCompromisos(newLista);
+                                            
                                             setErrores({
                                                 ...errores,
                                                 [`compromiso_${index}`]: validacion.vacio
@@ -1699,6 +1738,7 @@ const PlanEdit = (prop) => {
                                                         ? ""
                                                         : "Caracteres inválidos",
                                             });
+
                                         }}
                                     />
                                     {errores[`compromiso_${index}`] && (
@@ -1732,26 +1772,24 @@ const PlanEdit = (prop) => {
                                 </td>
                                 <td className="py-2 px-4">
                                     <input
-                                        type="datetime-local"
-                                        value={compromiso.fechalimite?.slice(0, 16) || ""}
-                                        onChange={(e) => {
-                                            const valor = e.target.value;
-                                            // Validar que la fecha no esté vacía ni tenga el valor por defecto
-                                            let validacion;
-                                            if (!valor || valor === "0000-00-00T00:00" || valor === "00:00:00") {
-                                                validacion = { valido: false, mensaje: "La fecha es obligatoria" };
-                                            } else {
-                                                validacion = validarFechaFutura(valor);
-                                            }
-                                            const newLista = [...compromisos];
-                                            newLista[index].fechalimite = valor;
-                                            setCompromisos(newLista);
-                                            setErrores({
-                                                ...errores,
-                                                [`compromiso_fecha_${index}`]: validacion.valido ? "" : validacion.mensaje,
-                                            });
-                                        }}
-                                        className="border border-gray-300 rounded px-3 py-2 w-full"
+                                    type="datetime-local"
+                                    value={formatearFechaLocal(compromiso.fecha_limite) || ""}
+                                    onChange={(e) => {
+                                        const valor = e.target.value;
+                                        const validacion = !valor || valor === "0000-00-00T00:00"
+                                        ? { valido: false, mensaje: "La fecha es obligatoria" }
+                                        : validarFechaFutura(valor);
+                                   
+                                        const newLista = [...compromisos];
+                                        newLista[index].fecha_limite = valor;
+                                        setCompromisos(newLista);
+
+                                        setErrores({
+                                        ...errores,
+                                        [`compromiso_fecha_${index}`]: validacion.valido ? "" : validacion.mensaje,
+                                        });
+                                    }}
+                                    className="border border-gray-300 rounded px-3 py-2 w-full"
                                     />
                                     {errores[`compromiso_fecha_${index}`] && (
                                         <div className="text-red-600 text-sm">{errores[`compromiso_fecha_${index}`]}</div>
@@ -1792,6 +1830,7 @@ const PlanEdit = (prop) => {
                         id="btn-guardar-edicion"
                         className="btn text-xl ml-5 p-2"
                         onClick={async () => {
+
                             // Validación antes de guardar auditoría
                             const validarCamposAuditoria = () => {
                                 let erroresVal = {};
@@ -1839,9 +1878,15 @@ const PlanEdit = (prop) => {
                                         erroresVal[`compromiso_responsable_${i}`] = "El campo es obligatorio y debe ser válido";
                                         valido = false;
                                     }
-                                    if (!c.fechalimite || c.fechalimite === "0000-00-00T00:00" || c.fechalimite === "00:00:00" || !validarFechaFutura(c.fechalimite).valido) {
-                                        erroresVal[`compromiso_fecha_${i}`] = "La fecha es obligatoria y debe ser futura";
-                                        valido = false;
+                                    if (
+                                    !c.fecha_limite ||                               // vacío o null
+                                    c.fecha_limite.trim() === "" ||                 // string vacío
+                                    c.fecha_limite === "0000-00-00T00:00" ||         // valor por defecto inválido
+                                    isNaN(Date.parse(c.fecha_limite)) ||            // no es una fecha válida
+                                    !validarFechaFutura(c.fecha_limite).valido       // fecha no es futura
+                                    ) {
+                                    erroresVal[`compromiso_fecha_${i}`] = "La fecha es obligatoria y debe ser futura";
+                                    valido = false;
                                     }
                                 });
 

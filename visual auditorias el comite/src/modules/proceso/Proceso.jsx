@@ -145,7 +145,7 @@ const Proceso = () => {
                         className="btn btn-green"
                         onClick={() => handleEditar(proceso.id)}
                       >
-                        🖉 Editar
+                         Editar
                       </button>
                       <button
                         className="btn btn-red"

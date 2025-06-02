@@ -1,0 +1,8 @@
+mysql \
+  -h database-2.cls28w4sc51e.us-east-2.rds.amazonaws.com \
+  -P 3306 \
+  -u guttentag \
+  -p \
+  --ssl-ca=rds-combined-ca-bundle.pem \
+  auditorias
+

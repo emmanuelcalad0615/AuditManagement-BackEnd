@@ -2,7 +2,14 @@ import json
 from model.Itinerario import Itinerario
 from repository.mysql.ItinerarioRepository import ItinerarioRepository
 
-from datetime import time
+from datetime import time,datetime
+
+def parse_hora(hora_str):
+    """Convierte 'HH:MM' a datetime.time, o devuelve None si falla"""
+    try:
+        return datetime.strptime(hora_str, "%H:%M").time()
+    except (ValueError, TypeError):
+        return None
 
 def serialize_time(obj):
     """Convierte objetos de tipo 'time' a una cadena en formato HH:MM:SS."""
@@ -21,6 +28,8 @@ class ItinerarioService:
         for key, value in itinerario.items():
             if hasattr(obj, key):
                 setattr(obj, key, value)
+        print("SAVE DE ITINERARIOS")
+        print(vars(obj))
         return json.dumps(vars(self.repository.save(obj)), default=serialize_time)
 
     def delete(self, id):
@@ -30,7 +39,15 @@ class ItinerarioService:
         obj = Itinerario()
         for key, value in itinerario.items():
             if hasattr(obj, key):
-                setattr(obj, key, value)
+                # Si es campo de hora, conviértelo
+                if key in ("inicio", "fin") and isinstance(value, str):
+                    hora_obj = parse_hora(value)
+                    setattr(obj, key, hora_obj)
+                else:
+                    setattr(obj, key, value)
+
+        print("UPDATE DE ITINERARIOS")
+        print(vars(obj))
         return json.dumps(vars(self.repository.update(obj)), default=serialize_time)
 
     def getId(self, id):
